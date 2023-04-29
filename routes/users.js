@@ -11,5 +11,10 @@ router.patch(
   isAuth,
   handleErrorAsync(userController.updateProfile)
 );
+router.put(
+  "/reset-pwd",
+  isAuth,
+  handleErrorAsync(userController.updatePassword)
+);
 
 module.exports = router;

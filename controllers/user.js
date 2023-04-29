@@ -114,6 +114,35 @@ const user = {
 
     handleSuccess(res, "使用者資料更新成功");
   },
+
+  //更新個人密碼---------------------------------------------------------------------------
+  async updatePassword(req, res, next) {
+    const { password, confirmPassword } = req.body;
+    const userID = req.user;
+    //檢查欄位
+    if (!password || !confirmPassword) {
+      return appError(400, "欄位輸入錯誤，請重新輸入", next);
+    }
+
+    if (!validator.isLength(password, { min: 8, max: 12 })) {
+      errorArray.push("密碼至少需要輸入8到12碼");
+    }
+
+    if (password !== confirmPassword) {
+      errorArray.push("2次密碼輸入不一致，請重新輸入");
+    }
+
+    const hashPassword = await bcrypt.hash(password, 12);
+    const updateUser = await User.findOneAndUpdate(
+      { _id: req.user },
+      { password: hashPassword }
+    );
+    if (!updateUser) {
+      return appError(400, "密碼更新錯誤", next);
+    }
+
+    handleSuccess(res, "更新密碼成功");
+  },
 };
 
 module.exports = user;
