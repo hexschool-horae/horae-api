@@ -74,11 +74,6 @@ const user = {
       return appError(400, errorArray, next);
     }
     const findUser = await User.findOne({ email }).select("+email +password");
-    //console.log("findUser.email", findUser.email);
-    // if (findUser.email != email.toLowerCase()) {
-    //   return appError(400, "您不是輸入當初註冊的email", next);
-    // }
-
     const checkPassword = await bcrypt.compare(password, findUser.password);
     if (!checkPassword || !findUser) {
       return appError(400, "您輸入的密碼錯誤", next);
@@ -89,13 +84,15 @@ const user = {
 
   //取得個人資料---------------------------------------------------------------------------
   async getProfile(req, res, next) {
-    console.log(req.user);
+    //console.log(req.user);
 
-    const findUser = await User.findOne({ _id: req.user }).select("+email");
+    const findUser = await User.findOne({ _id: req.user }).select(
+      "name +email"
+    );
     if (!findUser) {
       return appError(400, "使用者資料不存在", next);
     }
-    handleSuccess(res, "使用者資料取得成功", findUser);
+    handleSuccess(res, "成功", findUser);
   },
   //更新個人資料---------------------------------------------------------------------------
   async updateProfile(req, res, next) {
@@ -106,17 +103,16 @@ const user = {
       return appError(400, "欄位輸入錯誤，請重新輸入", next);
     }
 
-    if (validator.isLength(name, { max: 20 })) {
-      return appError(400, "暱稱不可超過10個字", next);
+    if (!validator.isLength(name, { max: 8 })) {
+      return appError(400, "名字不可超過10個字", next);
     }
-    console.log("up:", req.user);
 
     const updateUser = await User.findOneAndUpdate({ _id: req.user }, { name });
     if (!updateUser) {
       return appError(400, "使用者資料更新錯誤", next);
     }
 
-    handleSuccess(res, "使用者資料更新成功", updateUser);
+    handleSuccess(res, "使用者資料更新成功");
   },
 };
 
