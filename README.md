@@ -8,5 +8,5 @@
 
 ## Run
 
-- 正式：npm run start:prod
+- 正式：npm start
 - 測試：npm run start:dev
