@@ -32,7 +32,9 @@ const errorHandle = (err, req, res, next) => {
   err.status = err.status || "error";
   if (process.env.NODE_ENV === "dev") {
     resErrorDev(err, res);
-  } else if (process.env.NODE_ENV === "prod") {
+  }
+  //else if (process.env.NODE_ENV === "prod") {
+  else {
     if (err.isAxiosError == true) {
       err.message = "axios 連線錯誤";
       err.isOperational = true;
