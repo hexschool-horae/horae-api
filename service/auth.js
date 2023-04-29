@@ -30,8 +30,8 @@ const isAuth = handleErrorAsync(async (req, res, next) => {
 
   //decoded.id回傳resolve(payload)
   const currentUser = await User.findById(decoded.id);
-
   req.user = currentUser;
+
   next();
 });
 

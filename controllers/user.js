@@ -53,7 +53,7 @@ const user = {
   async login(req, res, next) {
     const errorArray = [];
     const { email, password } = req.body;
-    const userID = req.user;
+
     //檢查欄位
     if (!email || !password) {
       return appError(400, "欄位輸入錯誤，請重新輸入", next);
@@ -73,13 +73,11 @@ const user = {
     if (errorArray.length > 0) {
       return appError(400, errorArray, next);
     }
-    const findUser = await User.findOne({ _id: userID }).select(
-      "+email +password"
-    );
+    const findUser = await User.findOne({ email }).select("+email +password");
     //console.log("findUser.email", findUser.email);
-    if (findUser.email != email.toLowerCase()) {
-      return appError(400, "您不是輸入當初註冊的email", next);
-    }
+    // if (findUser.email != email.toLowerCase()) {
+    //   return appError(400, "您不是輸入當初註冊的email", next);
+    // }
 
     const checkPassword = await bcrypt.compare(password, findUser.password);
     if (!checkPassword || !findUser) {
@@ -87,6 +85,38 @@ const user = {
     }
 
     generateSendJWT(findUser, 200, res);
+  },
+
+  //取得個人資料---------------------------------------------------------------------------
+  async getProfile(req, res, next) {
+    console.log(req.user);
+
+    const findUser = await User.findOne({ _id: req.user }).select("+email");
+    if (!findUser) {
+      return appError(400, "使用者資料不存在", next);
+    }
+    handleSuccess(res, "使用者資料取得成功", findUser);
+  },
+  //更新個人資料---------------------------------------------------------------------------
+  async updateProfile(req, res, next) {
+    const name = req.body.name;
+
+    //檢查欄位
+    if (!name) {
+      return appError(400, "欄位輸入錯誤，請重新輸入", next);
+    }
+
+    if (validator.isLength(name, { max: 20 })) {
+      return appError(400, "暱稱不可超過10個字", next);
+    }
+    console.log("up:", req.user);
+
+    const updateUser = await User.findOneAndUpdate({ _id: req.user }, { name });
+    if (!updateUser) {
+      return appError(400, "使用者資料更新錯誤", next);
+    }
+
+    handleSuccess(res, "使用者資料更新成功", updateUser);
   },
 };
 

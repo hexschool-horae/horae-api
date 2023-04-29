@@ -28,6 +28,7 @@ const userSchema = new mongoose.Schema({
   },
   googleId: {
     type: String,
+    select: false,
   },
   emailVerify: {
     type: String,
