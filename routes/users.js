@@ -16,5 +16,5 @@ router.put(
   isAuth,
   handleErrorAsync(userController.updatePassword)
 );
-
+router.post("/logout", isAuth, handleErrorAsync(userController.logout));
 module.exports = router;

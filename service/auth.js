@@ -30,17 +30,28 @@ const isAuth = handleErrorAsync(async (req, res, next) => {
 
   //decoded.id回傳resolve(payload)
   const currentUser = await User.findById(decoded.id);
+  if (currentUser.token == "") {
+    return next(appError(400, "您目前為登出狀態請先登入", next));
+  }
   req.user = currentUser;
 
   next();
 });
 
-//產生JWT並回傳
-const generateSendJWT = (user, statusCode, res) => {
+// //產生JWT並回傳
+const generateSendJWT = async (user, statusCode, res) => {
   const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_DAY,
   });
+  //更新User的token
+  const updateToken = await User.findOneAndUpdate(
+    { _id: user._id },
+    { token: token }
+  );
 
+  if (!updateToken) {
+    return next(appError(400, "系統異常，請洽管理員", next));
+  }
   user.password = undefined;
   res.status(statusCode).json({
     success: "true",
