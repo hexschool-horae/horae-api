@@ -10,6 +10,7 @@ dotenv.config({ path: "./config.env" });
 //router區塊
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
+var workSpaceRouter = require("./routes/workSpace");
 
 //express
 var app = express();
@@ -26,6 +27,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/user", usersRouter);
+app.use("/work-space", workSpaceRouter);
 
 app.use(errorHandler); //環境變數指令切換Dev或Prod、客製錯誤訊息(要放在router下面)
 
