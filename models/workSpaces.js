@@ -17,11 +17,13 @@ const workSpaceSchema = new mongoose.Schema({
     type: String,
     enum: ["private", "public"],
     default: "public",
+    lowercase: true,
   },
-  isClose: {
+  status: {
     type: String,
-    enum: ["Y", "N"],
-    default: "N",
+    enum: ["open", "close"],
+    default: "open",
+    lowercase: true,
   },
   members: [
     {

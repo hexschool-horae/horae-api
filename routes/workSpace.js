@@ -16,4 +16,10 @@ router.delete(
   isAuth,
   handleErrorAsync(workSpaceController.deleteOneWorkSpace)
 );
+router.patch(
+  "/:wID",
+  isAuth,
+  handleErrorAsync(workSpaceController.updateOneWorkSpace)
+);
+
 module.exports = router;
