@@ -141,6 +141,75 @@ const workSpace = {
     });
     handleSuccess(res, "查詢成功", findWorkSpace);
   },
+
+  //新增單一工作區成員----------------------------------------------------------------------------------
+  async addWorkSpaceMembers(req, res, next) {
+    const userId = req.user.id;
+    const workSpacdID = req.params.wID;
+    const reqhashData = req.params.hashData;
+    const role = "editor";
+
+    // const findUser = await WorkSpaceModel.findById(userID);
+    // const checkData = await bcrypt.compare(
+    //   reqhashData,
+    //   findUser.inviteHashData
+    // );
+
+    // if (!checkData) {
+    //   return appError(400, "您使用的邀請加入工作區連結異常", next);
+    // }
+    const findWorkSpace = await WorkSpaceModel.findById(workSpacdID);
+
+    if (!findWorkSpace) {
+      return appError(400, "工作區不存在", next);
+    }
+
+    // 檢查是否已經存在該成員
+    const existingMember = findWorkSpace.members.some(
+      (member) => member.userId === userId
+    );
+
+    if (existingMember) {
+      return appError(400, "成員已經存在，不可新增", next);
+    }
+
+    // const existingMember = await WorkSpaceModel.find({
+    //   "members.userId": userId,
+    // });
+    // console.log("existingMember", existingMember);
+
+    // if (existingMember.length > 0) {
+    //   return appError(400, "成員已經存在，不可新增", next);
+    // }
+
+    // 新增成員
+    const addMember = await findWorkSpace.members.push({ userId, role });
+    await findWorkSpace
+      .save()
+      .then(() => {
+        handleSuccess(res, "工作區成員新增成功", findWorkSpace);
+      })
+      .catch((err) => {
+        return appError(400, err, next);
+      });
+
+    // await findWorkSpace.save((err, updatedWorkSpace) => {
+    //   if (err) {
+    //     return appError(400, err.message, next);
+    //   }
+    //   handleSuccess(res, "工作區成員新增成功", findWorkSpace);
+    // });
+  },
+
+  //修改單一工作區成員權限----------------------------------------------------------------------------------
+  async updateWorkSpaceMembers(req, res, next) {
+    const workSpacdID = req.params.wID;
+    const findWorkSpace = await WorkSpaceModel.findById(workSpacdID).populate({
+      path: "members.userId",
+      select: "name",
+    });
+    handleSuccess(res, "查詢成功", findWorkSpace);
+  },
 };
 
 module.exports = workSpace;

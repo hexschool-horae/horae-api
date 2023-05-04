@@ -21,5 +21,21 @@ router.patch(
   isAuth,
   handleErrorAsync(workSpaceController.updateOneWorkSpace)
 );
+//工作區成員相關
+router.get(
+  "/:wID/members",
+  isAuth,
+  handleErrorAsync(workSpaceController.getWorkSpaceMembers)
+);
 
+router.post(
+  "/:wID/members/:hashData",
+  isAuth,
+  handleErrorAsync(workSpaceController.addWorkSpaceMembers)
+);
+router.patch(
+  "/:wID/members",
+  isAuth,
+  handleErrorAsync(workSpaceController.updateWorkSpaceMembers)
+);
 module.exports = router;
