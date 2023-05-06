@@ -37,6 +37,10 @@ const workSpaceSchema = new mongoose.Schema({
       },
     },
   ],
+  inviteHashData: {
+    type: String,
+    default: "",
+  },
   //   boards: [
   //     {
   //       boardId: {

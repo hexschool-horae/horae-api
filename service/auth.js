@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const appError = require("../service/appError");
 const handleErrorAsync = require("../service/handleErrorAsync");
 const User = require("../models/users");
+const WorkSpaceModel = require("../models/workSpaces");
 
 //檢查是否有權限的middleware
 const isAuth = handleErrorAsync(async (req, res, next) => {
@@ -30,6 +31,9 @@ const isAuth = handleErrorAsync(async (req, res, next) => {
 
   //decoded.id回傳resolve(payload)
   const currentUser = await User.findById(decoded.id);
+  if (!currentUser) {
+    return next(appError(400, "查無此使用者，請重新登入", next));
+  }
   if (currentUser.token == "") {
     return next(appError(400, "您目前為登出狀態請先登入", next));
   }
@@ -60,4 +64,30 @@ const generateSendJWT = async (user, statusCode, res) => {
   });
 };
 
-module.exports = { isAuth, generateSendJWT };
+//檢查userID是否有工作區使用權限的middleware
+const isAuthWorkspace = handleErrorAsync(async (req, res, next) => {
+  const workSpaceID = req.params.wID;
+  const userID = req.user.id;
+
+  if (workSpaceID.length < 24) {
+    return appError(400, "您的請求參數有誤", next);
+  }
+  const findWorkSpace = await WorkSpaceModel.findById(workSpaceID);
+  if (!findWorkSpace || findWorkSpace.length == 0) {
+    return appError(400, "查無此工作區", next);
+  }
+
+  let isMember = false;
+  findWorkSpace.members.forEach((element) => {
+    if (element.userId == userID) {
+      isMember = true;
+    }
+  });
+  if (isMember === false) {
+    return appError(400, "您沒有此工作區權限", next);
+  }
+
+  next();
+});
+
+module.exports = { isAuth, generateSendJWT, isAuthWorkspace };
