@@ -55,7 +55,7 @@ const workSpace = {
     const findWorkSpace = await WorkSpaceModel.find({
       "members.userId": { $in: userID },
     })
-      .select("title -_id")
+      .select("title _id")
       .sort({ createdAt: -1 });
 
     if (!findWorkSpace || findWorkSpace.length == 0) {
