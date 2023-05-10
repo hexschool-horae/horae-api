@@ -17,11 +17,13 @@ const BoardSchema = new mongoose.Schema({
     type: String,
     enum: ["private", "public"],
     default: "public",
+    lowercase: true,
   },
-  isClose: {
+  status: {
     type: String,
-    enum: ["Y", "N"],
-    default: "N",
+    enum: ["open", "close"],
+    default: "open",
+    lowercase: true,
   },
   members: [
     {
@@ -35,6 +37,11 @@ const BoardSchema = new mongoose.Schema({
       },
     },
   ],
+  inviteHashData: {
+    type: String,
+    default: "",
+  },
+  lists: [{ type: Schema.Types.ObjectId, ref: "List" }],
   creareUser: {
     type: mongoose.Schema.ObjectId,
     ref: "user",

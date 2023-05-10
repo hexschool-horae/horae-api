@@ -41,14 +41,7 @@ const workSpaceSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
-  //   boards: [
-  //     {
-  //       boardId: {
-  //         type: mongoose.Schema.ObjectId,
-  //         ref: "user",
-  //       },
-  //     },
-  //   ],
+  boards: [{ type: Schema.Types.ObjectId, ref: "Board" }],
   creareUser: {
     type: mongoose.Schema.ObjectId,
     ref: "user",
