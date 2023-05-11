@@ -18,8 +18,8 @@ const ListSchema = new mongoose.Schema(
       lowercase: true,
     },
     position: Number,
-    cards: [{ type: Schema.Types.ObjectId, ref: "Card" }],
-    board: { type: Schema.Types.ObjectId, ref: "Board" },
+    cards: [{ type: mongoose.Schema.ObjectId, ref: "Card" }],
+    board: { type: mongoose.Schema.ObjectId, ref: "Board" },
     creareUser: {
       type: mongoose.Schema.ObjectId,
       ref: "user",

@@ -41,7 +41,7 @@ const BoardSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
-  lists: [{ type: Schema.Types.ObjectId, ref: "List" }],
+  lists: [{ type: mongoose.Schema.Types.ObjectId, ref: "List" }],
   creareUser: {
     type: mongoose.Schema.ObjectId,
     ref: "user",
@@ -49,6 +49,13 @@ const BoardSchema = new mongoose.Schema({
   },
 });
 // Board
+BoardSchema.virtual("cards", {
+  ref: "Card",
+  localField: "_id",
+  foreignField: "list",
+  justOne: false,
+});
+
 const Board = mongoose.model("Board", BoardSchema);
 
 module.exports = Board;

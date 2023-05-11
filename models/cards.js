@@ -27,7 +27,7 @@ const CardSchema = new mongoose.Schema(
       lowercase: true,
     },
     position: Number,
-    list: { type: Schema.Types.ObjectId, ref: "List" },
+    list: { type: mongoose.Schema.ObjectId, ref: "List" },
     creareUser: {
       type: mongoose.Schema.ObjectId,
       ref: "user",

@@ -32,7 +32,7 @@ const workSpace = {
     }
     //工作區成員是建立者，並且是管理員
     const member = [{ userId: userID, role: "admin" }];
-    const addWorkSpace = WorkSpaceModel.create(
+    const addWorkSpace = await WorkSpaceModel.create(
       {
         title,
         discribe,
