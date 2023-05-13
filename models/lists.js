@@ -20,7 +20,7 @@ const ListSchema = new mongoose.Schema(
     position: Number,
     cards: [{ type: mongoose.Schema.ObjectId, ref: "Card" }],
     board: { type: mongoose.Schema.ObjectId, ref: "Board" },
-    creareUser: {
+    createUser: {
       type: mongoose.Schema.ObjectId,
       ref: "user",
       required: [true, "使用者id未填寫"],

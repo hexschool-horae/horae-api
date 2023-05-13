@@ -13,6 +13,10 @@ const BoardSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
+  coverPath: {
+    type: String,
+    default: "",
+  },
   viewSet: {
     type: String,
     enum: ["private", "public"],
@@ -42,7 +46,7 @@ const BoardSchema = new mongoose.Schema({
     default: "",
   },
   lists: [{ type: mongoose.Schema.Types.ObjectId, ref: "List" }],
-  creareUser: {
+  createUser: {
     type: mongoose.Schema.ObjectId,
     ref: "user",
     required: [true, "使用者id未填寫"],

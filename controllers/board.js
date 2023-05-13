@@ -38,55 +38,44 @@ const board = {
     }
     //看板成員是建立者，並且是管理員
     const member = [{ userId: userID, role: "admin" }];
-    // const newBoard = await BoardModel.create(
-    //   {
-    //     title: "ddd",
-    //     discribe,
-    //     viewSet,
-    //     creareUser: "ssss",
-    //     members: member,
-    //   },
-    //   { new: true }
-    // );
-    // if (!newBoard) {
-    //   return appError(400, "新增看板失敗", next);
-    // }
-    const addWorkSpace = await WorkSpaceModel.create(
-      {
-        title,
-        discribe,
-        viewSet,
-        creareUser: userID,
-        members: member,
-      },
-      { new: true }
-    );
-    console.log("newBoard:");
-    handleSuccess(res, "新增看板成功");
-    // const updateWorkSpace =
-    //   WorkSpaceModel.findById(workSpaceId).select("boards");
-    // if (!updateWorkSpace || updateWorkSpace.length == 0) {
-    //   return appError(400, "查無此工作區", next);
-    // }
+    const newBoard = await new BoardModel({
+      title,
+      discribe,
+      viewSet,
+      createUser: userID,
+      members: member,
+    });
 
-    // //新增看板ID到所屬工作區
-    // await updateWorkSpace.boards.push(addBoard._id);
-    // await updateWorkSpace
-    //   .save()
-    //   .then(() => {
-    //     handleSuccess(res, "新增看板成功", addBoard);
-    //   })
-    //   .catch((err) => {
-    //     return appError(400, "新增看板失敗", next);
-    //   });
+    await newBoard
+      .save()
+      .then()
+      .catch((error) => {
+        return appError(400, `新增看板失敗${error}`, next);
+      });
+
+    const findWorkSpace = await WorkSpaceModel.findById(workSpaceId);
+    if (!findWorkSpace || findWorkSpace.length == 0) {
+      return appError(400, "查無此工作區", next);
+    }
+
+    //新增看板ID到所屬工作區
+    await findWorkSpace.boards.push(newBoard._id);
+    await findWorkSpace
+      .save()
+      .then(() => {
+        handleSuccess(res, "新增看板成功", newBoard._id);
+      })
+      .catch((err) => {
+        return appError(400, "新增看板失敗", next);
+      });
   },
 
   //
   async getBoards(req, res, next) {
-    console.log("getBoards");
-
     const getBoards = BoardModel.find();
-    handleSuccess(res, "ok", getBoards);
+    console.log("getBoards", getBoards);
+
+    handleSuccess(res, "ok", "");
   },
 };
 

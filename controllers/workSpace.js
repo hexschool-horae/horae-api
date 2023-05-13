@@ -30,23 +30,46 @@ const workSpace = {
     if (errorArray.length > 0) {
       return appError(400, errorArray, next);
     }
-    //工作區成員是建立者，並且是管理員
-    const member = [{ userId: userID, role: "admin" }];
-    const addWorkSpace = await WorkSpaceModel.create(
-      {
-        title,
-        discribe,
-        viewSet,
-        creareUser: userID,
-        members: member,
-      },
-      { new: true }
-    );
-    if (!addWorkSpace) {
-      return appError(400, "新增工作區失敗", next);
-    }
 
-    handleSuccess(res, "新增工作區成功", addWorkSpace);
+    // //工作區成員是建立者，並且是管理員
+    const member = [{ userId: userID, role: "admin" }];
+    const newWorkSpace = new WorkSpaceModel({
+      title,
+      discribe,
+      viewSet,
+      createUser: userID,
+      members: member,
+    });
+    await newWorkSpace
+      .save()
+      .then(() => {
+        handleSuccess(res, "新增工作區成功", newWorkSpace._id);
+      })
+      .catch((error) => {
+        return appError(400, `新增工作區失敗${error}`, next);
+      });
+
+    //下面的語法可以新增資料庫但是會出現 validation 錯誤
+    // const member = [{ userId: userID, role: "admin" }];
+    // const addWorkSpace = await WorkSpaceModel.create(
+    //   {
+    //     title,
+    //     discribe,
+    //     viewSet,
+    //     createUser: userID,
+    //     members: member,
+    //   },
+    //   { new: true }
+    // );
+    // console.log("addWorkSpace", addWorkSpace);
+    // try {
+    //   await newWorkSpace.save(); // 將新的工作區文檔保存到資料庫
+    //   console.log(newWorkSpace._id);
+    //   handleSuccess(res, "新增工作區成功", addWorkSpace);
+    // } catch (err) {
+    //   console.log(err);
+    //   return appError(400, "新增工作區失敗", next);
+    // }
   },
 
   //B02-2	取得登入者所有工作區清單----------------------------------------------------------------------------------
@@ -124,15 +147,28 @@ const workSpace = {
   //B02-5	取得單一工作區----------------------------------------------------------------------------------
   async getOneWorkSpace(req, res, next) {
     const workSpaceID = req.params.wID;
-    const findWorkSpace = await WorkSpaceModel.findById(workSpaceID).populate({
-      path: "members.userId",
-      select: "name",
-    });
+    const findWorkSpace = await WorkSpaceModel.findById(workSpaceID)
+      // .populate({
+      //   path: "members.userId",
+      //   select: "name",
+      // })
+      .populate({
+        path: "boards",
+        select: "title",
+      })
+      .select("title discribe viewSet status boards");
 
     if (!findWorkSpace) {
       return appError(400, "工作區不存在", next);
     }
-    handleSuccess(res, "查詢成功", findWorkSpace);
+
+    const finalRes = {
+      ...findWorkSpace._doc,
+      yourRole: req.workSpaceRole,
+      yourPermission: "edit",
+    };
+
+    handleSuccess(res, "查詢成功", finalRes);
   },
 
   //B02-6	取得單一工作區成員----------------------------------------------------------------------------------
@@ -162,7 +198,7 @@ const workSpace = {
         },
         { inviteHashData }
       );
-      console.log("updateWorkSpace", updateWorkSpace);
+      //console.log("updateWorkSpace", updateWorkSpace);
 
       if (!updateWorkSpace) {
         return appError(400, "產生工作區連結失敗", next);

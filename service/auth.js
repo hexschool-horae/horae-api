@@ -78,15 +78,17 @@ const isAuthWorkspace = handleErrorAsync(async (req, res, next) => {
   }
 
   let isMember = false;
+  let workSpaceRole = "";
   findWorkSpace.members.forEach((element) => {
     if (element.userId == userID) {
       isMember = true;
+      workSpaceRole = element.role;
     }
   });
   if (isMember === false) {
     return appError(400, "您沒有此工作區權限", next);
   }
-
+  req.workSpaceRole = workSpaceRole;
   next();
 });
 

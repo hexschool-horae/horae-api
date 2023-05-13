@@ -28,7 +28,7 @@ const CardSchema = new mongoose.Schema(
     },
     position: Number,
     list: { type: mongoose.Schema.ObjectId, ref: "List" },
-    creareUser: {
+    createUser: {
       type: mongoose.Schema.ObjectId,
       ref: "user",
       required: [true, "使用者id未填寫"],

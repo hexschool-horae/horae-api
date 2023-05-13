@@ -41,8 +41,16 @@ const workSpaceSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
-  boards: [{ type: mongoose.Schema.ObjectId, ref: "Board" }],
-  creareUser: {
+  //   boards: [
+  //     {
+  //       boardId: {
+  //         type: mongoose.Schema.ObjectId,
+  //         ref: "user",
+  //       },
+  //     },
+  //   ],
+  boards: [{ type: mongoose.Schema.ObjectId, ref: "Board", default: "" }],
+  createUser: {
     type: mongoose.Schema.ObjectId,
     ref: "user",
     required: [true, "使用者id未填寫"],
