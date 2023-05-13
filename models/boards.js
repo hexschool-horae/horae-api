@@ -60,6 +60,6 @@ BoardSchema.virtual("cards", {
   justOne: false,
 });
 
-const Board = mongoose.model("Board", BoardSchema);
+const Board = mongoose.model("board", BoardSchema);
 
 module.exports = Board;
