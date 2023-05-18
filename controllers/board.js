@@ -1,11 +1,13 @@
+const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const BoardModel = require("../models/boards");
 const WorkSpaceModel = require("../models/workSpaces");
+const listModel = require("../models/lists");
 const validator = require("validator");
-// const { isAuth } = require("../service/auth");
 const appError = require("../service/appError");
 const handleSuccess = require("../service/handleSuccess");
 const User = require("../models/users");
+
 const board = {
   //B03-1	新增看板 ----------------------------------------------------------------------------------
   async addBoard(req, res, next) {
@@ -23,7 +25,7 @@ const board = {
     if (!validator.isLength(discribe, { max: 100 })) {
       errorArray.push("看板描述不可超過長度100！");
     }
-    if (!["private", "public"].includes(viewSet)) {
+    if (!["private", "public", "workspace"].includes(viewSet)) {
       errorArray.push("不正確的看板權限設定！");
     }
 
@@ -64,7 +66,7 @@ const board = {
       });
   },
 
-  //
+  //B03-5 取得單一看板----------------------------------------------------------------------------------
   async getOneBoard(req, res, next) {
     const boardID = req.params.bID;
     let userID = "";
@@ -112,14 +114,15 @@ const board = {
 
       //decoded.id回傳resolve(payload)
       const currentUser = await User.findById(decoded.id);
-      if (!currentUser) {
-        return next(appError(401, "查無此使用者，請重新登入", next));
+      // if (!currentUser) {
+      //   return next(appError(401, "查無此使用者，請重新登入", next));
+      // }
+      // if (currentUser.token == "") {
+      //   return next(appError(401, "您目前為登出狀態請先登入", next));
+      // }
+      if (currentUser) {
+        userID = currentUser._id;
       }
-      if (currentUser.token == "") {
-        return next(appError(401, "您目前為登出狀態請先登入", next));
-      }
-
-      userID = currentUser._id;
     }
 
     //#endregion
@@ -154,6 +157,56 @@ const board = {
     };
 
     handleSuccess(res, message, finalRes);
+  },
+
+  //B04-1	新增列表中列表----------------------------------------------------------------------------------
+  async addlist(req, res, next) {
+    const boardId = req.params.bID;
+    const errorArray = [];
+    const userID = req.user.id;
+    const { title, position } = req.body;
+
+    //檢查欄位
+    if (!title || !position) {
+      return appError(400, "欄位輸入錯誤，請重新輸入", next);
+    }
+    if (!validator.isLength(title, { max: 30 })) {
+      errorArray.push("列表名稱不可超過長度30！");
+    }
+
+    if (errorArray.length > 0) {
+      return appError(400, errorArray, next);
+    }
+    //列表建立
+    const newlist = await new listModel({
+      title,
+      position,
+      board: boardId,
+      createUser: userID,
+    });
+
+    const findBoard = await BoardModel.findById(boardId);
+    if (!findBoard || findBoard.length == 0) {
+      return appError(400, "查無此看板，請重新輸入看板編號", next);
+    }
+
+    await newlist
+      .save()
+      .then(() => {})
+      .catch((error) => {
+        return appError(400, `新增列表失敗${error}`, next);
+      });
+
+    //新增列表ID到所屬看板
+    await findBoard.lists.push(newlist._id);
+    await findBoard
+      .save()
+      .then(() => {
+        handleSuccess(res, "新增列表成功", newlist._id);
+      })
+      .catch((error) => {
+        return appError(400, `新增列表ID到所屬看板失敗${error}`, next);
+      });
   },
 };
 

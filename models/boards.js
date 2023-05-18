@@ -19,7 +19,7 @@ const BoardSchema = new mongoose.Schema({
   },
   viewSet: {
     type: String,
-    enum: ["private", "public"],
+    enum: ["private", "public", "workspace"],
     default: "public",
     lowercase: true,
   },
@@ -46,6 +46,7 @@ const BoardSchema = new mongoose.Schema({
     default: "",
   },
   lists: [{ type: mongoose.Schema.Types.ObjectId, ref: "List" }],
+  // workspace: { type: mongoose.Schema.ObjectId, ref: "workSpace", default: "" },
   createUser: {
     type: mongoose.Schema.ObjectId,
     ref: "user",

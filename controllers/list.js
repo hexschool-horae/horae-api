@@ -15,8 +15,8 @@ const list = {
     if (!title || !position || !boardId) {
       return appError(400, "欄位輸入錯誤，請重新輸入", next);
     }
-    if (!validator.isLength(title, { max: 10 })) {
-      errorArray.push("列表名稱不可超過長度10！");
+    if (!validator.isLength(title, { max: 30 })) {
+      errorArray.push("列表名稱不可超過長度30！");
     }
 
     if (errorArray.length > 0) {
@@ -49,7 +49,7 @@ const list = {
       .then(() => {
         handleSuccess(res, "新增列表成功", newlist._id);
       })
-      .catch((err) => {
+      .catch((error) => {
         return appError(400, `新增列表ID到所屬看板失敗${error}`, next);
       });
   },

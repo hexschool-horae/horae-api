@@ -1,4 +1,6 @@
 const User = require("../models/users");
+const WorkSpaceModel = require("../models/workSpaces");
+
 const bcrypt = require("bcryptjs");
 const validator = require("validator");
 const { isAuth, generateSendJWT } = require("../service/auth");
@@ -7,7 +9,7 @@ const handleSuccess = require("../service/handleSuccess");
 const passwordRule = /^([a-zA-Z]+\d+|\d+[a-zA-Z]+)[a-zA-Z0-9]*$/;
 
 const user = {
-  //註冊---------------------------------------------------------------------------
+  //B01-1 註冊---------------------------------------------------------------------------
   async signUp(req, res, next) {
     const { email, password } = req.body;
     const errorArray = [];
@@ -50,7 +52,7 @@ const user = {
     generateSendJWT(newUser, 201, res);
   },
 
-  //登入---------------------------------------------------------------------------
+  //B01-2 登入---------------------------------------------------------------------------
   async login(req, res, next) {
     const errorArray = [];
     const { email, password } = req.body;
@@ -86,7 +88,7 @@ const user = {
     generateSendJWT(findUser, 201, res);
   },
 
-  //取得個人資料---------------------------------------------------------------------------
+  //B01-8 取得個人資料---------------------------------------------------------------------------
   async getProfile(req, res, next) {
     //console.log(req.user);
 
@@ -98,7 +100,7 @@ const user = {
     }
     handleSuccess(res, "成功", findUser);
   },
-  //更新個人資料---------------------------------------------------------------------------
+  //B01-7 更新個人資料---------------------------------------------------------------------------
   async updateProfile(req, res, next) {
     const name = req.body.name;
 
@@ -119,7 +121,7 @@ const user = {
     handleSuccess(res, "使用者資料更新成功");
   },
 
-  //更新個人密碼---------------------------------------------------------------------------
+  //B01-10 更新個人密碼---------------------------------------------------------------------------
   async updatePassword(req, res, next) {
     const { password, confirmPassword } = req.body;
     const userID = req.user;
@@ -148,7 +150,7 @@ const user = {
     handleSuccess(res, "更新密碼成功");
   },
 
-  //登出----------------------------------------------------------------------------------
+  //B01-6 登出----------------------------------------------------------------------------------
   //在User的 token 為空字串，代表使用者已經登出
   //在更新使用者資料時，我們要加上{ new: true }參數，表示要回傳更新後的使用者資料。最後，我們回傳成功訊息。
   async logout(req, res, next) {
@@ -164,6 +166,71 @@ const user = {
     }
 
     handleSuccess(res, "您已登出系統");
+  },
+
+  //B01-9	取得使用者所有工作區看板----------------------------------------------------------------------------------
+  async getAllBoards(req, res, next) {
+    const userID = req.user.id;
+
+    const allBoard = await WorkSpaceModel.find({
+      "members.userId": { $in: userID },
+    })
+      .populate({
+        path: "boards",
+        match: {
+          $or: [
+            { "members.userId": { $in: userID } },
+            { viewSet: "workspace" },
+          ],
+        },
+
+        select: "title coverPath",
+      })
+      .select("title _id boards")
+      .sort({ createdAt: -1 });
+
+    // console.log("userID", userID);
+    // console.log("allBoard", allBoard);
+
+    handleSuccess(res, "查詢成功", allBoard);
+
+    //嘗試用 aggregate寫法只是資料怪怪的
+    //const allBoard = await WorkSpaceModel.aggregate([
+    //   {
+    //     $lookup: {
+    //       from: "boards",
+    //       localField: "boards",
+    //       foreignField: "_id",
+    //       as: "myBoards",
+    //     },
+    //     // $match: {
+    //     //   $and: [
+    //     //     { "members.userId": { $in: userID } },
+
+    //     //     { "myBoards.viewSet": "workspace" },
+    //     //   ],
+    //     // },
+    //     //$project: { title: 1, boards: 1 },
+    //   },
+    //   {
+    //     $match: { "myBoards.viewSet": "workspace" },
+    //   },
+    //   {
+    //     $unwind: "$myBoards",
+    //   },
+    //   {
+    //     $addFields: {
+    //       "myBoards.title": "$myBoards.title",
+    //       "myBoards.coverPath": "$myBoards.coverPath",
+    //     },
+    //   },
+    // ])
+    //   .then((boards) => {
+    //     console.log("boards", boards);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   },
 };
 

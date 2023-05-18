@@ -17,4 +17,5 @@ router.put(
   handleErrorAsync(userController.updatePassword)
 );
 router.post("/logout", isAuth, handleErrorAsync(userController.logout));
+router.get("/boards", isAuth, handleErrorAsync(userController.getAllBoards));
 module.exports = router;
