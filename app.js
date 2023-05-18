@@ -13,6 +13,7 @@ var usersRouter = require("./routes/users");
 var workSpaceRouter = require("./routes/workSpace");
 var boardRouter = require("./routes/board");
 var listRouter = require("./routes/list");
+var cardRouter = require("./routes/card");
 
 //express
 var app = express();
@@ -32,6 +33,7 @@ app.use("/user", usersRouter);
 app.use("/work-space", workSpaceRouter);
 app.use("/board", boardRouter);
 app.use("/list", listRouter);
+app.use("/card", cardRouter);
 
 app.use(errorHandler); //環境變數指令切換Dev或Prod、客製錯誤訊息(要放在router下面)
 

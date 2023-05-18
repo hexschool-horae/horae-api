@@ -18,8 +18,8 @@ const ListSchema = new mongoose.Schema(
       lowercase: true,
     },
     position: Number,
-    cards: [{ type: mongoose.Schema.ObjectId, ref: "Card", default: "" }],
-    board: { type: mongoose.Schema.ObjectId, ref: "Board", default: "" },
+    cards: [{ type: mongoose.Schema.Types.ObjectId, ref: "card", default: [] }],
+    board: { type: mongoose.Schema.Types.ObjectId, ref: "board" },
     createUser: {
       type: mongoose.Schema.ObjectId,
       ref: "user",
@@ -29,7 +29,15 @@ const ListSchema = new mongoose.Schema(
   { versionKey: "version" }
 );
 
+//定義虛擬 cardsInfo
+ListSchema.virtual("cardsInfo", {
+  ref: "card",
+  localField: "cards",
+  foreignField: "_id",
+  justOne: false,
+});
+
 // List
-const List = mongoose.model("List", ListSchema);
+const List = mongoose.model("list", ListSchema);
 
 module.exports = List;

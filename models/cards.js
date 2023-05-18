@@ -26,8 +26,26 @@ const CardSchema = new mongoose.Schema(
       default: "open",
       lowercase: true,
     },
-    position: Number,
-    list: { type: mongoose.Schema.ObjectId, ref: "List" },
+    members: [{ type: mongoose.Schema.ObjectId, ref: "user", default: [] }],
+    comments: [{ type: mongoose.Schema.ObjectId, ref: "comment", default: [] }],
+    tags: [{ type: mongoose.Schema.ObjectId, ref: "tag", default: [] }],
+    todolists: [
+      { type: mongoose.Schema.ObjectId, ref: "todolist", default: [] },
+    ],
+    // dateSetting: [{ type: mongoose.Schema.ObjectId, ref: "dateSetting" }], 設定日期
+    attachments: [
+      { type: mongoose.Schema.ObjectId, ref: "attachment", default: [] },
+    ],
+    proiority: {
+      type: String,
+      default: "",
+    },
+    coverPath: {
+      type: String,
+      default: "",
+    },
+    position: { type: Number, require: true },
+    list: { type: mongoose.Schema.ObjectId, ref: "list" },
     createUser: {
       type: mongoose.Schema.ObjectId,
       ref: "user",
@@ -38,6 +56,6 @@ const CardSchema = new mongoose.Schema(
 );
 
 // Card
-const Card = mongoose.model("List", CardSchema);
+const Card = mongoose.model("card", CardSchema);
 
 module.exports = Card;

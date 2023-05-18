@@ -4,6 +4,5 @@ const listController = require("../controllers/list");
 const handleErrorAsync = require("../service/handleErrorAsync");
 const { isAuth } = require("../service/auth");
 
-router.post("/", isAuth, handleErrorAsync(listController.addlist));
-
+router.post("/:lID/card", isAuth, handleErrorAsync(listController.addCard)); //B05-1 新增列表中卡片
 module.exports = router;

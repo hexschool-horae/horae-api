@@ -45,7 +45,7 @@ const BoardSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
-  lists: [{ type: mongoose.Schema.Types.ObjectId, ref: "List" }],
+  lists: [{ type: mongoose.Schema.Types.ObjectId, ref: "list", default: [] }],
   // workspace: { type: mongoose.Schema.ObjectId, ref: "workSpace", default: "" },
   createUser: {
     type: mongoose.Schema.ObjectId,
@@ -53,11 +53,12 @@ const BoardSchema = new mongoose.Schema({
     required: [true, "使用者id未填寫"],
   },
 });
-// Board
-BoardSchema.virtual("cards", {
-  ref: "Card",
-  localField: "_id",
-  foreignField: "list",
+
+// 定義虛擬 lists
+BoardSchema.virtual("listsInfo", {
+  ref: "list",
+  localField: "lists",
+  foreignField: "_id",
   justOne: false,
 });
 
