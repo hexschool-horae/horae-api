@@ -190,7 +190,8 @@ const workSpace = {
     let inviteHashData = "";
 
     if (findWorkSpace.inviteHashData == "") {
-      inviteHashData = await bcrypt.hash(workSpaceID, 12);
+      //inviteHashData = await bcrypt.hash(workSpaceID, 12);
+      inviteHashData = Math.floor(Math.random() * 1000000000000);
 
       const updateWorkSpace = await WorkSpaceModel.findOneAndUpdate(
         {
@@ -207,7 +208,7 @@ const workSpace = {
       inviteHashData = findWorkSpace.inviteHashData;
     }
     // 產生邀請連結
-    const invitationLink = `${process.env.FONT_END}/workspace/${workSpaceID}/member/${inviteHashData}`;
+    const invitationLink = `${process.env.FONT_END}/workspace/${workSpaceID}/members/${inviteHashData}`;
 
     handleSuccess(res, "產生邀請連結成功", { invitationLink: invitationLink });
   },
@@ -216,9 +217,14 @@ const workSpace = {
 
   //B02-9	單一工作區新增成員----------------------------------------------------------------------------------
   async addWorkSpaceMembers(req, res, next) {
+    console.log("addWorkSpaceMembers");
+
     const userId = req.user.id;
     const workSpaceID = req.params.wID;
     const reqhashData = req.params.hashData;
+    console.log("userId", userId);
+    console.log("workSpaceID", workSpaceID);
+    console.log("reqhashData", reqhashData);
 
     if (workSpaceID.length < 24) {
       return appError(400, "您的請求參數有誤", next);
