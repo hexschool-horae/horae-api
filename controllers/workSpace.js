@@ -293,6 +293,15 @@ const workSpace = {
       return appError(400, "查無此成員，設定成員權限失敗", next);
     }
 
+    //檢查修改後的member角色有沒有admin
+    const adminIndex = findWorkSpace.members.findIndex(
+      (element) => element.role.toString() == "admin"
+    );
+
+    if (adminIndex == -1) {
+      return appError(400, "設定成員權限失敗，工作區至少要一個管理員", next);
+    }
+
     await findWorkSpace
       .save()
       .then(() => {
@@ -316,7 +325,6 @@ const workSpace = {
       return appError(400, "參數錯誤，請重新輸入", next);
     }
     //找到members是否有包含此id
-
     const index = findWorkSpace.members.findIndex(
       (element) => element.userId._id.toString() == deleteUserID
     );
@@ -326,6 +334,15 @@ const workSpace = {
       findWorkSpace.members.splice(index, 1); //.splice(要刪除的索引開始位置, 要刪除的元素數量)
     } else {
       return appError(400, "查無此成員，移除失敗", next);
+    }
+
+    //檢查修改後的member角色有沒有admin
+    const adminIndex = findWorkSpace.members.findIndex(
+      (element) => element.role.toString() == "admin"
+    );
+
+    if (adminIndex == -1) {
+      return appError(400, "成員移除失敗，工作區至少要一個管理員", next);
     }
 
     await findWorkSpace
