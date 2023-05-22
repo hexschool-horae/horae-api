@@ -43,6 +43,14 @@ router.post(
   isAuth,
   handleErrorAsync(workSpaceController.addWorkSpaceMembers)
 );
+
+router.patch(
+  "/:wID/members",
+  isAuth,
+  isAuthWorkspace,
+  handleErrorAsync(workSpaceController.updateWorkSpaceMembers)
+);
+
 router.delete(
   "/:wID/members",
   isAuth,

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const ObjectId = require("mongoose").Types.ObjectId;
 const jwt = require("jsonwebtoken");
 const BoardModel = require("../models/boards");
 const WorkSpaceModel = require("../models/workSpaces");
@@ -159,7 +160,7 @@ const board = {
     handleSuccess(res, message, finalRes);
   },
 
-  //B04-1	新增列表中列表----------------------------------------------------------------------------------
+  //B04-1	新增看板中列表----------------------------------------------------------------------------------
   async addlist(req, res, next) {
     const boardId = req.params.bID;
     const errorArray = [];
@@ -181,7 +182,7 @@ const board = {
     const newlist = await new listModel({
       title,
       position,
-      board: boardId,
+      boardId,
       createUser: userID,
     });
 

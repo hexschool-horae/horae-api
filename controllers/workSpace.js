@@ -179,8 +179,8 @@ const workSpace = {
         path: "members.userId",
         select: "name email",
       })
-      .select("members -_id");
-    handleSuccess(res, "查詢成功", findWorkSpace.members);
+      .select("title viewSet members -_id");
+    handleSuccess(res, "查詢成功", findWorkSpace);
   },
 
   //B02-7	單一工作區產生邀請連結
@@ -207,7 +207,7 @@ const workSpace = {
       inviteHashData = findWorkSpace.inviteHashData;
     }
     // 產生邀請連結
-    const invitationLink = `${process.env.FONT_END}/work-space/${workSpaceID}/member/${inviteHashData}`;
+    const invitationLink = `${process.env.FONT_END}/workspace/${workSpaceID}/member/${inviteHashData}`;
 
     handleSuccess(res, "產生邀請連結成功", { invitationLink: invitationLink });
   },
@@ -264,6 +264,44 @@ const workSpace = {
   },
 
   //B02-10 單一工作區設定單一成員權限
+  async updateWorkSpaceMembers(req, res, next) {
+    const workSpaceID = req.params.wID;
+    const { role, userId } = req.body;
+    const findWorkSpace = await WorkSpaceModel.findById(workSpaceID).populate({
+      path: "members.userId",
+      select: "name email",
+    });
+
+    if (!role || !userId) {
+      return appError(400, "參數錯誤，請重新輸入", next);
+    }
+
+    if (!["admin", "editor"].includes(role)) {
+      return appError(400, "不正確的角色設定！", next);
+    }
+
+    //找到members是否有包含此id
+    const index = findWorkSpace.members.findIndex(
+      (element) => element.userId._id.toString() == userId
+    );
+
+    // console.log(index);
+    if (index !== -1) {
+      //console.log(findWorkSpace.members[index]);
+      findWorkSpace.members[index].role = role;
+    } else {
+      return appError(400, "查無此成員，設定成員權限失敗", next);
+    }
+
+    await findWorkSpace
+      .save()
+      .then(() => {
+        handleSuccess(res, "成員權限設定成功", findWorkSpace.members);
+      })
+      .catch((err) => {
+        return appError(400, err, next);
+      });
+  },
 
   //B02-11 單一工作區刪除單一成員----------------------------------------------------------------------------------
   async deleteWorkSpaceMembers(req, res, next) {

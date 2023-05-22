@@ -19,7 +19,7 @@ const ListSchema = new mongoose.Schema(
     },
     position: Number,
     cards: [{ type: mongoose.Schema.Types.ObjectId, ref: "card", default: [] }],
-    board: { type: mongoose.Schema.Types.ObjectId, ref: "board" },
+    boardId: { type: mongoose.Schema.Types.ObjectId, ref: "board" },
     createUser: {
       type: mongoose.Schema.ObjectId,
       ref: "user",
@@ -29,13 +29,21 @@ const ListSchema = new mongoose.Schema(
   { versionKey: "version" }
 );
 
-//定義虛擬 cardsInfo
-ListSchema.virtual("cardsInfo", {
-  ref: "card",
-  localField: "cards",
+//定義虛擬 boardInfo
+ListSchema.virtual("boardInfo", {
+  ref: "board",
+  localField: "boardId",
   foreignField: "_id",
-  justOne: false,
+  justOne: true,
 });
+
+// //定義虛擬 cardsInfo
+// ListSchema.virtual("cardsInfo", {
+//   ref: "card",
+//   localField: "cards",
+//   foreignField: "_id",
+//   justOne: false,
+// });
 
 // List
 const List = mongoose.model("list", ListSchema);
