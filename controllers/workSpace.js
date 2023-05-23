@@ -191,6 +191,7 @@ const workSpace = {
 
     if (findWorkSpace.inviteHashData == "") {
       //inviteHashData = await bcrypt.hash(workSpaceID, 12);
+      //bcrypt.hash()的方法有特殊字元會出錯，所以改用亂數
       inviteHashData = Math.floor(Math.random() * 1000000000000);
 
       const updateWorkSpace = await WorkSpaceModel.findOneAndUpdate(
@@ -346,6 +347,7 @@ const workSpace = {
     const adminIndex = findWorkSpace.members.findIndex(
       (element) => element.role.toString() == "admin"
     );
+    //console.log("adminIndex", adminIndex);
 
     if (adminIndex == -1) {
       return appError(400, "成員移除失敗，工作區至少要一個管理員", next);
