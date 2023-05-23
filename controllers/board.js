@@ -165,10 +165,10 @@ const board = {
     const boardId = req.params.bID;
     const errorArray = [];
     const userID = req.user.id;
-    const { title, position } = req.body;
+    const { title } = req.body;
 
     //檢查欄位
-    if (!title || !position) {
+    if (!title) {
       return appError(400, "欄位輸入錯誤，請重新輸入", next);
     }
     if (!validator.isLength(title, { max: 30 })) {
@@ -178,6 +178,13 @@ const board = {
     if (errorArray.length > 0) {
       return appError(400, errorArray, next);
     }
+
+    const findBoard = await BoardModel.findById(boardId);
+    if (!findBoard || findBoard.length == 0) {
+      return appError(400, "查無此看板，請重新輸入看板編號", next);
+    }
+    let position = findBoard.lists.length;
+
     //列表建立
     const newlist = await new listModel({
       title,
@@ -185,11 +192,6 @@ const board = {
       boardId,
       createUser: userID,
     });
-
-    const findBoard = await BoardModel.findById(boardId);
-    if (!findBoard || findBoard.length == 0) {
-      return appError(400, "查無此看板，請重新輸入看板編號", next);
-    }
 
     await newlist
       .save()

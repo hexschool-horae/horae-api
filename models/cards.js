@@ -7,7 +7,7 @@ const CardSchema = new mongoose.Schema(
     },
     title: {
       type: String,
-      required: [true, "請輸入您的列表名稱"],
+      required: [true, "請輸入您的卡片名稱"],
       lowercase: true,
     },
     discribe: {
@@ -25,6 +25,14 @@ const CardSchema = new mongoose.Schema(
       enum: ["open", "close"],
       default: "open",
       lowercase: true,
+    },
+    startDate: {
+      type: Date,
+      default: null,
+    },
+    endDate: {
+      type: Date,
+      default: null,
     },
     members: [{ type: mongoose.Schema.ObjectId, ref: "user", default: [] }],
     comments: [{ type: mongoose.Schema.ObjectId, ref: "comment", default: [] }],

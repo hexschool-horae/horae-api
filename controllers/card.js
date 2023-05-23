@@ -12,7 +12,7 @@ const card = {
       .select("-viewSet -status -list -createUser");
 
     if (!findCard || findCard.length == 0) {
-      return appError(400, "查無此看板", next);
+      return appError(400, "查無此卡片", next);
     }
     handleSuccess(res, "查詢成功", findCard);
   },
