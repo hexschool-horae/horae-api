@@ -3,7 +3,7 @@ const resErrorProd = (err, res) => {
   if (err.isOperational) {
     res.status(err.statusCode).json({
       success: false,
-      message: "dd" + err.message,
+      message: err.message,
     });
   } else {
     // log 紀錄
