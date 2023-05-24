@@ -19,8 +19,6 @@ const resErrorProd = (err, res) => {
 
 //開發環境錯誤訊息
 const resErrorDev = (err, res) => {
-  console.log("err.isOperational", err.isOperational);
-
   res.status(err.statusCode).json({
     success: false,
     message: err.message,

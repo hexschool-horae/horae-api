@@ -21,7 +21,6 @@ const isAuth = handleErrorAsync(async (req, res, next) => {
   //驗證token的正確性
   const decoded = await new Promise((resolve, reject) => {
     jwt.verify(token, process.env.JWT_SECRET, (err, payload) => {
-      err.isOperational = "1";
       if (err) {
         reject(err);
       } else {
