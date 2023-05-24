@@ -3,6 +3,7 @@ const appError = require("../service/appError");
 const handleErrorAsync = require("../service/handleErrorAsync");
 const User = require("../models/users");
 const WorkSpaceModel = require("../models/workSpaces");
+const boardModel = require("../models/boards");
 
 //檢查是否有權限的middleware
 const isAuth = handleErrorAsync(async (req, res, next) => {
@@ -74,7 +75,7 @@ const isAuthWorkspace = handleErrorAsync(async (req, res, next) => {
   }
   const findWorkSpace = await WorkSpaceModel.findById(workSpaceID);
   if (!findWorkSpace || findWorkSpace.length == 0) {
-    return appError(400, "查無此工作區", next);
+    return appError(404, "查無此工作區", next);
   }
 
   let isMember = false;
@@ -92,4 +93,34 @@ const isAuthWorkspace = handleErrorAsync(async (req, res, next) => {
   next();
 });
 
-module.exports = { isAuth, generateSendJWT, isAuthWorkspace };
+//檢查userID是否有看板使用權限的middleware
+const isAuthBoard = handleErrorAsync(async (req, res, next) => {
+  const boardID = req.params.bID;
+  const userID = req.user.id;
+
+  if (boardID.length < 24) {
+    return appError(400, "您的請求參數有誤", next);
+  }
+  const findBoard = await boardModel.findById(boardID);
+  if (!findBoard || findBoard.length == 0) {
+    return appError(404, "查無此看板", next);
+  }
+
+  let isMember = false;
+  let boardRole = "";
+  const memberIndex = findBoard.members.findIndex(
+    (element) => element.userId._id.toString() == userID.toString()
+  );
+
+  if (memberIndex !== -1) {
+    isMember = true;
+    boardRole = findBoard.members[memberIndex].role;
+  }
+  if (isMember === false) {
+    return appError(403, "您沒有此看板權限", next);
+  }
+  req.boardRole = boardRole;
+  next();
+});
+
+module.exports = { isAuth, generateSendJWT, isAuthWorkspace, isAuthBoard };

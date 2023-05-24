@@ -2,11 +2,41 @@ var express = require("express");
 var router = express.Router();
 const boardController = require("../controllers/board");
 const handleErrorAsync = require("../service/handleErrorAsync");
-const { isAuth } = require("../service/auth");
+const { isAuth, isAuthBoard } = require("../service/auth");
 
 router.post("/", isAuth, handleErrorAsync(boardController.addBoard));
 router.get("/:bID", handleErrorAsync(boardController.getOneBoard));
-router.get("/", isAuth, handleErrorAsync(boardController.getAllBoards));
-router.post("/:bID/list", isAuth, handleErrorAsync(boardController.addlist));
+router.post(
+  "/:bID/list",
+  isAuth,
+  isAuthBoard,
+  handleErrorAsync(boardController.addlist)
+);
+
+//標籤相關-----------------------------------------------------------------------------
+router.get(
+  "/:bID/tags",
+  isAuth,
+  isAuthBoard,
+  handleErrorAsync(boardController.getTags)
+);
+router.post(
+  "/:bID/tags",
+  isAuth,
+  isAuthBoard,
+  handleErrorAsync(boardController.addTag)
+);
+router.patch(
+  "/:bID/tags",
+  isAuth,
+  isAuthBoard,
+  handleErrorAsync(boardController.updateTag)
+);
+router.delete(
+  "/:bID/tags",
+  isAuth,
+  isAuthBoard,
+  handleErrorAsync(boardController.deleteTag)
+);
 
 module.exports = router;

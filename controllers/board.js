@@ -3,6 +3,7 @@ const ObjectId = require("mongoose").Types.ObjectId;
 const jwt = require("jsonwebtoken");
 const BoardModel = require("../models/boards");
 const WorkSpaceModel = require("../models/workSpaces");
+const boardTagsModel = require("../models/boardTags");
 const listModel = require("../models/lists");
 const validator = require("validator");
 const appError = require("../service/appError");
@@ -163,7 +164,6 @@ const board = {
   //B04-1	新增看板中列表----------------------------------------------------------------------------------
   async addlist(req, res, next) {
     const boardId = req.params.bID;
-    const errorArray = [];
     const userID = req.user.id;
     const { title } = req.body;
 
@@ -172,17 +172,9 @@ const board = {
       return appError(400, "欄位輸入錯誤，請重新輸入", next);
     }
     if (!validator.isLength(title, { max: 30 })) {
-      errorArray.push("列表名稱不可超過長度30！");
+      return appError(400, "列表名稱不可超過長度30！", next);
     }
 
-    if (errorArray.length > 0) {
-      return appError(400, errorArray, next);
-    }
-
-    const findBoard = await BoardModel.findById(boardId);
-    if (!findBoard || findBoard.length == 0) {
-      return appError(400, "查無此看板，請重新輸入看板編號", next);
-    }
     let position = findBoard.lists.length;
 
     //列表建立
@@ -211,6 +203,29 @@ const board = {
         return appError(400, `新增列表ID到所屬看板失敗${error}`, next);
       });
   },
+
+  //標籤相關
+  //B03-13	取得單一看板的所有標籤-------------------------------------------------------------------------------
+  async getTags(req, res, next) {
+    const boardId = req.params.bID;
+    const userID = req.user.id;
+    const findTags = await boardTagsModel.find({
+      boardId: new ObjectId(boardId),
+    });
+
+    if (!findTags || findTags.length == 0) {
+      return appError(404, "此看板尚未建立標籤", next);
+    }
+    handleSuccess(res, "成功", findTags);
+  },
+
+  //B03-14	單一看板新增標籤-------------------------------------------------------------------------------------
+  async addTag(req, res, next) {},
+  //B03-15	單一看板設定單一標籤---------------------------------------------------------------------------------
+  async updateTag(req, res, next) {},
+
+  //B03-16	單一看板刪除標籤-------------------------------------------------------------------------------------
+  async deleteTag(req, res, next) {},
 };
 
 module.exports = board;
