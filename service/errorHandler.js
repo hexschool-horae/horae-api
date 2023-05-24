@@ -3,7 +3,7 @@ const resErrorProd = (err, res) => {
   if (err.isOperational) {
     res.status(err.statusCode).json({
       success: false,
-      message: err.message,
+      message: "dd" + err.message,
     });
   } else {
     // log 紀錄
@@ -19,6 +19,8 @@ const resErrorProd = (err, res) => {
 
 //開發環境錯誤訊息
 const resErrorDev = (err, res) => {
+  console.log("err.isOperational", err.isOperational);
+
   res.status(err.statusCode).json({
     success: false,
     message: err.message,
@@ -47,7 +49,12 @@ const errorHandle = (err, req, res, next) => {
       err.statusCode = 400;
       err.isOperational = true;
       err.message = "資料格式錯誤";
+    } else if (err.name === "TokenExpiredError") {
+      err.statusCode = 401;
+      err.isOperational = true;
+      err.message = "您的驗證已過期，請重新登入";
     }
+
     resErrorProd(err, res);
   }
 };

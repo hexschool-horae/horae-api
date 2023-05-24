@@ -15,12 +15,13 @@ const isAuth = handleErrorAsync(async (req, res, next) => {
     token = req.headers.authorization.split(" ")[1];
   }
   if (!token) {
-    return next(appError(400, "您尚未登入", next));
+    return next(appError(401, "您尚未登入", next));
   }
 
   //驗證token的正確性
   const decoded = await new Promise((resolve, reject) => {
     jwt.verify(token, process.env.JWT_SECRET, (err, payload) => {
+      err.isOperational = "1";
       if (err) {
         reject(err);
       } else {
@@ -28,14 +29,14 @@ const isAuth = handleErrorAsync(async (req, res, next) => {
       }
     });
   });
-
+  console.log("decoded", decoded);
   //decoded.id回傳resolve(payload)
   const currentUser = await User.findById(decoded.id);
   if (!currentUser) {
-    return next(appError(400, "查無此使用者，請重新登入", next));
+    return next(appError(401, "查無此使用者，請重新登入", next));
   }
   if (currentUser.token == "") {
-    return next(appError(400, "您目前為登出狀態請先登入", next));
+    return next(appError(401, "您目前為登出狀態請先登入", next));
   }
   req.user = currentUser;
 
@@ -86,7 +87,7 @@ const isAuthWorkspace = handleErrorAsync(async (req, res, next) => {
     }
   });
   if (isMember === false) {
-    return appError(400, "您沒有此工作區權限", next);
+    return appError(403, "您沒有此工作區權限", next);
   }
   req.workSpaceRole = workSpaceRole;
   next();

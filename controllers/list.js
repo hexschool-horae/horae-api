@@ -11,10 +11,10 @@ const list = {
     const listId = req.params.lID;
     const errorArray = [];
     const userID = req.user.id;
-    const { title, position } = req.body;
+    const { title } = req.body;
 
     //檢查欄位
-    if (!title || !position) {
+    if (!title) {
       return appError(400, "欄位輸入錯誤，請重新輸入", next);
     }
     if (!validator.isLength(title, { max: 200 })) {
@@ -24,6 +24,15 @@ const list = {
     if (errorArray.length > 0) {
       return appError(400, errorArray, next);
     }
+
+    const findList = await listModel.findById(listId);
+    if (!findList || findList.length == 0) {
+      return appError(400, "查無此列表，請重新輸入列表編號", next);
+    }
+
+    let position = findList.cards.length;
+    console.log("findList.cards", findList.cards);
+
     //卡片建立
     const newCard = await new cardModel({
       title,
@@ -31,11 +40,6 @@ const list = {
       list: listId,
       createUser: userID,
     });
-
-    const findList = await listModel.findById(listId);
-    if (!findList || findList.length == 0) {
-      return appError(400, "查無此列表，請重新輸入列表編號", next);
-    }
 
     await newCard
       .save()
