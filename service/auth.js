@@ -29,7 +29,7 @@ const isAuth = handleErrorAsync(async (req, res, next) => {
       }
     });
   });
-  console.log("decoded", decoded);
+  //console.log("decoded", decoded);
   //decoded.id回傳resolve(payload)
   const currentUser = await User.findById(decoded.id);
   if (!currentUser) {

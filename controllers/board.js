@@ -257,7 +257,7 @@ const board = {
     await newTags
       .save()
       .then(() => {
-        handleSuccess(res, "新增標籤成功");
+        handleSuccess(res, "新增標籤成功", newTags._id);
       })
       .catch((error) => {
         if (err.name === "VersionError") {
