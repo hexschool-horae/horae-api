@@ -26,7 +26,7 @@ router.post(
   isAuthBoard,
   handleErrorAsync(boardController.addTag)
 );
-router.patch(
+router.put(
   "/:bID/tags",
   isAuth,
   isAuthBoard,

@@ -37,13 +37,21 @@ ListSchema.virtual("boardInfo", {
   justOne: true,
 });
 
-// //定義虛擬 cardsInfo
-// ListSchema.virtual("cardsInfo", {
-//   ref: "card",
-//   localField: "cards",
-//   foreignField: "_id",
-//   justOne: false,
-// });
+//定義虛擬 cardsInfo
+ListSchema.virtual("cardsInfo", {
+  ref: "card",
+  localField: "cards",
+  foreignField: "_id",
+  justOne: false,
+});
+
+ListSchema.virtual("tagInfo", {
+  ref: "boardtags",
+  localField: "cards.tags",
+  foreignField: "_id",
+  justOne: false,
+  options: { select: "title color" },
+});
 
 // List
 const List = mongoose.model("list", ListSchema);
