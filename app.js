@@ -6,9 +6,12 @@ const cors = require("cors");
 const errorHandler = require("./service/errorHandler");
 const dotenv = require("dotenv");
 dotenv.config({ path: "./config.env" });
+/** 生成 Swagger 套件 */
+const swaggerUI = require("swagger-ui-express");
+const swaggerFile = require("./swagger-output.json");
 
 //router區塊
-var indexRouter = require("./routes/index");
+// var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var workSpaceRouter = require("./routes/workSpace");
 var boardRouter = require("./routes/board");
@@ -28,12 +31,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", indexRouter);
+// app.use("/", indexRouter);
 app.use("/user", usersRouter);
 app.use("/work-space", workSpaceRouter);
 app.use("/board", boardRouter);
 app.use("/list", listRouter);
 app.use("/card", cardRouter);
+app.use("/api-doc", swaggerUI.serve, swaggerUI.setup(swaggerFile));
 
 app.use(errorHandler); //環境變數指令切換Dev或Prod、客製錯誤訊息(要放在router下面)
 
