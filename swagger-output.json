@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "title": "Horae 女神力 API",
-    "description": "Horae 是一個致敬Trello的專案管理工具",
+    "description": "Horae是希臘神話中掌管時間和秩序的女神，把掌握時間這個精神作為主題的看板生產力工具。提供團隊協作功能，並結合計時、番茄鐘等專注工具。致力為團隊累積進度，穩健邁向專案目標。",
     "version": "1.0.0"
   },
   "basePath": "/",
@@ -13,8 +13,8 @@
     }
   ],
   "schemes": [
-    "http",
-    "https"
+    "https",
+    "http"
   ],
   "securityDefinitions": {
     "Bearer": {
