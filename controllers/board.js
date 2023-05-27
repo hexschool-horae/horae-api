@@ -183,6 +183,11 @@ const board = {
     if (!validator.isLength(title, { max: 30 })) {
       return appError(400, "列表名稱不可超過長度30！", next);
     }
+    const findBoard = await BoardModel.findById(boardId);
+
+    if (!findBoard || findBoard.length == 0) {
+      return appError(400, "查無此看板，請重新輸入看板編號", next);
+    }
 
     let position = findBoard.lists.length;
 
@@ -246,7 +251,7 @@ const board = {
     if (!color.startsWith("#") || color.length != 7) {
       return appError(400, "色票碼格式錯誤！", next);
     }
-    //列表建立
+    //
     const newTags = await new boardTagsModel({
       title,
       color,
