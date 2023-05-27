@@ -8,15 +8,18 @@ const doc = {
       "Horae是希臘神話中掌管時間和秩序的女神，把掌握時間這個精神作為主題的看板生產力工具。提供團隊協作功能，並結合計時、番茄鐘等專注工具。致力為團隊累積進度，穩健邁向專案目標。",
   },
   host: process.env.BACK_END,
-  schemes: ["https", "http"],
-  tags: [{ name: "User", description: "使用者相關" }],
+  schemes: ["http", "https"],
+  tags: [
+    { name: "User", description: "使用者相關" },
+    { name: "WorkSpace", description: "工作區相關" },
+  ],
   definitions,
   securityDefinitions: {
     // Token
     Bearer: {
       type: "apiKey",
-      in: "header", // can be "header", "query" or "cookie"
-      name: "Authorization", // name of the header, query parameter or cookie
+      in: "headers", // can be "header", "query" or "cookie"
+      name: "authorization", // name of the header, query parameter or cookie
       description: "請加上 API Token",
     },
   },
