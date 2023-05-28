@@ -362,6 +362,24 @@ const workSpace = {
         return appError(400, err, next);
       });
   },
+
+  //B02-12 取得工作區邀請資料----------------------------------------------------------------------------------
+  async invitationData(req, res, next) {
+    const workSpaceID = req.params.wID;
+
+    const findWorkSpace = await WorkSpaceModel.findById(workSpaceID).select(
+      "title"
+    );
+
+    if (!findWorkSpace || findWorkSpace.length == 0) {
+      return appError(400, "工作區不存在", next);
+    }
+
+    handleSuccess(res, "成功", {
+      title: findWorkSpace.title,
+      inviter: "",
+    });
+  },
 };
 
 module.exports = workSpace;

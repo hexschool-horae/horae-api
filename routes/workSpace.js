@@ -58,4 +58,9 @@ router.delete(
   handleErrorAsync(workSpaceController.deleteWorkSpaceMembers)
 );
 
+router.get(
+  "/:wID/invitation-data",
+  handleErrorAsync(workSpaceController.invitationData)
+);
+
 module.exports = router;

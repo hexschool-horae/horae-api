@@ -968,6 +968,20 @@
         "responses": {}
       }
     },
+    "/work-space/{wID}/invitation-data": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "wID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
+    },
     "/board/": {
       "post": {
         "description": "",
