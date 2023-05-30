@@ -16,12 +16,12 @@ router.post(
      * #swagger.security=[{"Bearer": []}]
       #swagger.parameters['parameter_name'] = {
         in: 'body',
-        description: 'B03-1	新增看板。工作區觀看權限 viewSet:private/public。 工作區狀態 status:open/close',
+        description: 'B03-1	新增看板。工作區觀看權限 viewSet:private/public/workspace。 工作區狀態 status:open/close',
         schema: {
-   					  "title": "工作區標題",
-						  "discribe": "工作區描述",
-							"viewSet":"public",
-              "workSpaceId":"645f42dbb6b1d329a42d6065"
+          "title": "看板標題",
+          "discribe": "看板描述",
+          "viewSet": "public",
+          "workSpaceId": "6474a4d3377167fdb51a847e"
         }
       }
 
@@ -134,10 +134,10 @@ router.get(
       }
 
        #swagger.responses[400] = {
-          description: '使用者資料不存在',
+          description: '您的請求參數有誤',
           schema: {
           "success": false,
-          "message": "使用者資料不存在"
+          "message": "您的請求參數有誤"
           }
       }
 
@@ -270,10 +270,10 @@ router.get(
       }
 
       #swagger.responses[400] = {
-          description: '使用者資料不存在',
+          description: '您的請求參數有誤',
           schema: {
           "success": false,
-          "message": "使用者資料不存在"
+          "message": "您的請求參數有誤"
           }
       }
 
@@ -334,10 +334,10 @@ router.post(
       }
 
       #swagger.responses[400] = {
-          description: '使用者資料不存在',
+          description: '您的請求參數有誤',
           schema: {
           "success": false,
-          "message": "使用者資料不存在"
+          "message": "您的請求參數有誤"
           }
       }
 
@@ -357,6 +357,15 @@ router.post(
         "message": "您沒有此看板權限"
         }
       }
+
+     #swagger.responses[404] = {
+          description: '查無資料',
+          schema: {
+          "success": false,
+          "message": "查無資料"
+          }
+      }
+
 
       #swagger.responses[500] = {
         description: '系統錯誤',

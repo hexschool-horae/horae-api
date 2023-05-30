@@ -998,17 +998,17 @@
           {
             "name": "parameter_name",
             "in": "body",
-            "description": "B03-1 新增看板。工作區觀看權限 viewSet:private/public。 工作區狀態 status:open/close",
+            "description": "B03-1 新增看板。工作區觀看權限 viewSet:private/public/workspace。 工作區狀態 status:open/close",
             "schema": {
               "type": "object",
               "properties": {
                 "title": {
                   "type": "string",
-                  "example": "工作區標題"
+                  "example": "看板標題"
                 },
                 "discribe": {
                   "type": "string",
-                  "example": "工作區描述"
+                  "example": "看板描述"
                 },
                 "viewSet": {
                   "type": "string",
@@ -1016,7 +1016,7 @@
                 },
                 "workSpaceId": {
                   "type": "string",
-                  "example": "645f42dbb6b1d329a42d6065"
+                  "example": "6474a4d3377167fdb51a847e"
                 }
               }
             }
@@ -1264,7 +1264,7 @@
             }
           },
           "400": {
-            "description": "使用者資料不存在",
+            "description": "您的請求參數有誤",
             "schema": {
               "type": "object",
               "properties": {
@@ -1274,7 +1274,7 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "使用者資料不存在"
+                  "example": "您的請求參數有誤"
                 }
               },
               "xml": {
@@ -1539,7 +1539,7 @@
             }
           },
           "400": {
-            "description": "使用者資料不存在",
+            "description": "您的請求參數有誤",
             "schema": {
               "type": "object",
               "properties": {
@@ -1549,7 +1549,7 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "使用者資料不存在"
+                  "example": "您的請求參數有誤"
                 }
               },
               "xml": {
@@ -1679,7 +1679,7 @@
             }
           },
           "400": {
-            "description": "使用者資料不存在",
+            "description": "您的請求參數有誤",
             "schema": {
               "type": "object",
               "properties": {
@@ -1689,7 +1689,7 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "使用者資料不存在"
+                  "example": "您的請求參數有誤"
                 }
               },
               "xml": {
@@ -1728,6 +1728,25 @@
                 "message": {
                   "type": "string",
                   "example": "您沒有此看板權限"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "404": {
+            "description": "查無資料",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "查無資料"
                 }
               },
               "xml": {
