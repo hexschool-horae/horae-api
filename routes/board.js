@@ -62,6 +62,171 @@ router.post(
   }
 );
 
+//B03-2	修改單一看板權限---------------------------------------------------------------------------------
+router.patch(
+  "/:bID/viewSet",
+  isAuth,
+  isAuthBoard,
+  handleErrorAsync(boardController.updateBoardViewSet),
+  function (req, res, next) {
+    /**
+     * #swagger.tags = ['Board']
+     * #swagger.summary = 'B03-2	修改看板權限'
+     * #swagger.security=[{"Bearer": []}]
+		  #swagger.parameters['parameter_name'] = {
+		        in: 'body',
+		        description: 'B03-2	修改看板權限  private/public',
+		        schema: {
+						    "viewSet":"private", 
+						}
+		      }
+
+      #swagger.responses[200] = {
+      description: '成功',
+      schema: {
+            "success": "true",
+            "message": "修改成功"
+        }
+      }
+
+
+      #swagger.responses[400] = {
+          description: '欄位輸入錯誤，請重新輸入',
+          schema: {
+          "success": false,
+          "message": "欄位輸入錯誤，請重新輸入"
+          }
+      }
+
+      #swagger.responses[401] = {
+        description: '身分驗證不通過',
+        schema: {
+        "success": false,
+        "message": "錯誤訊息"
+        }
+      }
+
+      #swagger.responses[500] = {
+        description: '系統錯誤',
+        schema: {   
+          "success": false,
+          "message": "系統錯誤，請洽管理員"
+        }
+      }
+*/
+  }
+);
+
+//B03-3	單一看板封存設定 開啟/關閉---------------------------------------------------------------------------------
+router.patch(
+  "/:bID/status",
+  isAuth,
+  isAuthBoard,
+  handleErrorAsync(boardController.updateBoardStatus),
+  function (req, res, next) {
+    /**
+     * #swagger.tags = ['Board']
+     * #swagger.summary = 'B03-3	看板封存設定 開啟/關閉'
+     * #swagger.security=[{"Bearer": []}]
+		  #swagger.parameters['parameter_name'] = {
+		        in: 'body',
+		        description: 'B03-3	看板封存設定 開啟/關閉  open/close',
+		        schema: {
+						    "status":"open", 
+						}
+		      }
+
+      #swagger.responses[200] = {
+      description: '成功',
+      schema: {
+            "success": "true",
+            "message": "修改成功"
+        }
+      }
+
+
+      #swagger.responses[400] = {
+          description: '欄位輸入錯誤，請重新輸入',
+          schema: {
+          "success": false,
+          "message": "欄位輸入錯誤，請重新輸入"
+          }
+      }
+
+      #swagger.responses[401] = {
+        description: '身分驗證不通過',
+        schema: {
+        "success": false,
+        "message": "錯誤訊息"
+        }
+      }
+
+      #swagger.responses[500] = {
+        description: '系統錯誤',
+        schema: {   
+          "success": false,
+          "message": "系統錯誤，請洽管理員"
+        }
+      }
+*/
+  }
+);
+
+//B03-4	修改單一看板標題---------------------------------------------------------------------------------
+router.patch(
+  "/:bID/title",
+  isAuth,
+  isAuthBoard,
+  handleErrorAsync(boardController.updateBoardTitle),
+  function (req, res, next) {
+    /**
+     * #swagger.tags = ['Board']
+     * #swagger.summary = 'B03-4	修改看板標題'
+     * #swagger.security=[{"Bearer": []}]
+		  #swagger.parameters['parameter_name'] = {
+		        in: 'body',
+		        description: 'B03-4	修改看板標題',
+		        schema: {
+						    "title":"修改標題名稱", 
+						}
+		      }
+
+      #swagger.responses[200] = {
+      description: '成功',
+      schema: {
+            "success": "true",
+            "message": "修改成功"
+        }
+      }
+
+
+      #swagger.responses[400] = {
+          description: '欄位輸入錯誤，請重新輸入',
+          schema: {
+          "success": false,
+          "message": "欄位輸入錯誤，請重新輸入"
+          }
+      }
+
+      #swagger.responses[401] = {
+        description: '身分驗證不通過',
+        schema: {
+        "success": false,
+        "message": "錯誤訊息"
+        }
+      }
+
+      #swagger.responses[500] = {
+        description: '系統錯誤',
+        schema: {   
+          "success": false,
+          "message": "系統錯誤，請洽管理員"
+        }
+      }
+*/
+  }
+);
+
 // //B03-5 取得單一看板----------------------------------------------------------------------------------
 router.get(
   "/:bID",
@@ -233,8 +398,8 @@ router.get(
   handleErrorAsync(boardController.getTags),
   function (req, res, next) {
     /**
-     * #swagger.tags = ['Board']
-     * #swagger.summary = 'B03-13 取得單一看板的所有標籤'
+     * #swagger.tags = ['Board Tag']
+     * #swagger.summary = 'B03-13 取得看板的所有標籤'
      * #swagger.security=[{"Bearer": []}]
 			  
 
@@ -313,12 +478,12 @@ router.post(
   handleErrorAsync(boardController.addTag),
   function (req, res, next) {
     /**
-     * #swagger.tags = ['Board']
-     * #swagger.summary = 'B03-14 單一看板新增標籤'
+     * #swagger.tags = ['Board Tag']
+     * #swagger.summary = 'B03-14 看板新增標籤'
      * #swagger.security=[{"Bearer": []}]
 		  #swagger.parameters['parameter_name'] = {
 		        in: 'body',
-		        description: 'B03-14 單一看板新增標籤',
+		        description: 'B03-14 看板新增標籤',
 		        schema: {
 						  "title": "RR",
 						  "color":"#FFF132"
@@ -386,12 +551,12 @@ router.put(
   handleErrorAsync(boardController.updateTag),
   function (req, res, next) {
     /**
-     * #swagger.tags = ['Board']
-     * #swagger.summary = 'B03-15 單一看板修改標籤'
+     * #swagger.tags = ['Board Tag']
+     * #swagger.summary = 'B03-15 看板修改標籤'
      * #swagger.security=[{"Bearer": []}]
 		  #swagger.parameters['parameter_name'] = {
 		        in: 'body',
-		        description: 'B03-15 單一看板修改標籤',
+		        description: 'B03-15 看板修改標籤',
 		        schema: {
 						  "tagId": "6470c8a3677fcdeca580d535",
 						  "title": "React",
@@ -457,12 +622,12 @@ router.delete(
   handleErrorAsync(boardController.deleteTag),
   function (req, res, next) {
     /**
-     * #swagger.tags = ['Board']
-     * #swagger.summary = 'B03-16 單一看板刪除標籤'
+     * #swagger.tags = ['Board Tag']
+     * #swagger.summary = 'B03-16 看板刪除標籤'
      * #swagger.security=[{"Bearer": []}]
 		  #swagger.parameters['parameter_name'] = {
 		        in: 'body',
-		        description: 'B03-16 單一看板刪除標籤',
+		        description: 'B03-16 看板刪除標籤',
 		        schema: {
 						  "tagId": "6470c8a3677fcdeca580d535",
 						}

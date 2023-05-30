@@ -12,6 +12,8 @@ const doc = {
   tags: [
     { name: "User", description: "使用者相關" },
     { name: "WorkSpace", description: "工作區相關" },
+    { name: "Board", description: "看板相關" },
+    { name: "Board Tag", description: "看板標籤相關" },
   ],
   definitions,
   securityDefinitions: {

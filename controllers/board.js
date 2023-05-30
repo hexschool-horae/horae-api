@@ -37,7 +37,7 @@ const board = {
 
     const findBoard = await WorkSpaceModel.findById(workSpaceId);
     if (!findBoard || findBoard.length == 0) {
-      return appError(400, "查無此工作區", next);
+      return appError(400, "新增看板失敗! 查無此工作區", next);
     }
     //看板成員是建立者，並且是管理員
     const member = [{ userId: userID, role: "admin" }];
@@ -68,6 +68,86 @@ const board = {
       });
   },
 
+  //B03-2	修改單一看板權限 ----------------------------------------------------------------------------------
+  async updateBoardViewSet(req, res, next) {
+    const boardId = req.params.bID;
+    const userID = req.user.id;
+    const { viewSet } = req.body;
+    if (!viewSet) {
+      return appError(400, "欄位輸入錯誤，請重新輸入", next);
+    }
+
+    if (!["private", "workspace", "public"].includes(viewSet)) {
+      return appError(400, "不合法的看板權限設定！", next);
+    }
+
+    //修改
+    const updateBoard = await BoardModel.findOneAndUpdate(
+      {
+        _id: boardId,
+      },
+      { viewSet, createUser: userID }
+    );
+
+    if (!updateBoard) {
+      return appError(400, "看板權限修改失敗", next);
+    }
+    handleSuccess(res, "修改成功");
+  },
+  //B03-3	看板封存設定 開啟/關閉 ----------------------------------------------------------------------------------
+  async updateBoardStatus(req, res, next) {
+    const boardId = req.params.bID;
+    const userID = req.user.id;
+    const { status } = req.body;
+    if (!status) {
+      return appError(400, "欄位輸入錯誤，請重新輸入", next);
+    }
+
+    if (!["open", "close"].includes(status)) {
+      return appError(400, "不合法的看板封存設定參數！", next);
+    }
+
+    //修改
+    const updateBoard = await BoardModel.findOneAndUpdate(
+      {
+        _id: boardId,
+      },
+      { status, createUser: userID }
+    );
+
+    if (!updateBoard) {
+      return appError(400, "看板封存設定失敗", next);
+    }
+    handleSuccess(res, "修改成功");
+  },
+
+  //B03-4	修改單一看板標題 ----------------------------------------------------------------------------------
+  async updateBoardTitle(req, res, next) {
+    const boardId = req.params.bID;
+    const userID = req.user.id;
+    const { title } = req.body;
+    if (!title) {
+      return appError(400, "欄位輸入錯誤，請重新輸入", next);
+    }
+
+    if (!validator.isLength(title, { max: 10 })) {
+      return appError(400, "看板名稱不可超過長度10！", next);
+    }
+
+    //修改
+    const updateBoard = await BoardModel.findOneAndUpdate(
+      {
+        _id: boardId,
+      },
+      { title, createUser: userID }
+    );
+
+    if (!updateBoard) {
+      return appError(400, "看板標題修改失敗", next);
+    }
+    handleSuccess(res, "修改成功");
+  },
+
   // //B03-5 取得單一看板----------------------------------------------------------------------------------
   async getOneBoard(req, res, next) {
     const boardID = req.params.bID;
@@ -88,7 +168,7 @@ const board = {
         path: "members.userId",
         select: "name",
       })
-      .select("title discribe coverPath viewSet members");
+      .select("title discribe coverPath viewSet status members");
     if (!findBoard || findBoard.length == 0) {
       return appError(400, "查無此看板", next);
     }

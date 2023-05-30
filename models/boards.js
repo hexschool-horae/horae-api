@@ -7,7 +7,7 @@ const BoardSchema = new mongoose.Schema({
   title: {
     type: String,
     required: [true, "請輸入您的看板名稱"],
-    lowercase: true,
+    // lowercase: true,
   },
   discribe: {
     type: String,
