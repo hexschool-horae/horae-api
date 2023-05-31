@@ -8,9 +8,8 @@ const CardSchema = new mongoose.Schema(
     title: {
       type: String,
       required: [true, "請輸入您的卡片名稱"],
-      lowercase: true,
     },
-    discribe: {
+    describe: {
       type: String,
       default: "",
     },
@@ -27,11 +26,11 @@ const CardSchema = new mongoose.Schema(
       lowercase: true,
     },
     startDate: {
-      type: Date,
+      type: Number,
       default: null,
     },
     endDate: {
-      type: Date,
+      type: Number,
       default: null,
     },
     members: [{ type: mongoose.Schema.ObjectId, ref: "user", default: [] }],
@@ -46,6 +45,7 @@ const CardSchema = new mongoose.Schema(
     ],
     proiority: {
       type: String,
+      enum: ["1", "2", "3", "4"],
       default: "",
     },
     coverPath: {
@@ -55,6 +55,15 @@ const CardSchema = new mongoose.Schema(
     position: { type: Number, require: true },
     list: { type: mongoose.Schema.ObjectId, ref: "list" },
     createUser: {
+      type: mongoose.Schema.ObjectId,
+      ref: "user",
+      required: [true, "使用者id未填寫"],
+    },
+    updateAt: {
+      type: Date,
+      default: Date.now,
+    },
+    updateUser: {
       type: mongoose.Schema.ObjectId,
       ref: "user",
       required: [true, "使用者id未填寫"],

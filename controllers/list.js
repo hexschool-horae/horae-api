@@ -39,6 +39,7 @@ const list = {
       position,
       list: listId,
       createUser: userID,
+      updateUser: userID,
     });
 
     await newCard

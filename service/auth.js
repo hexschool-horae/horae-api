@@ -4,6 +4,7 @@ const handleErrorAsync = require("../service/handleErrorAsync");
 const User = require("../models/users");
 const WorkSpaceModel = require("../models/workSpaces");
 const boardModel = require("../models/boards");
+const cardModel = require("../models/cards");
 
 //檢查是否有權限的middleware
 const isAuth = handleErrorAsync(async (req, res, next) => {
@@ -123,4 +124,26 @@ const isAuthBoard = handleErrorAsync(async (req, res, next) => {
   next();
 });
 
-module.exports = { isAuth, generateSendJWT, isAuthWorkspace, isAuthBoard };
+//檢查卡片的middleware
+const isOkCard = handleErrorAsync(async (req, res, next) => {
+  const cardID = req.params.cardID;
+
+  if (cardID.length < 15) {
+    return appError(400, "您的請求參數有誤", next);
+  }
+  const findCard = await cardModel.findById(cardID);
+
+  if (!findCard || findCard.length == 0) {
+    return appError(400, "查無此卡片", next);
+  }
+
+  next();
+});
+
+module.exports = {
+  isAuth,
+  generateSendJWT,
+  isAuthWorkspace,
+  isAuthBoard,
+  isOkCard,
+};
