@@ -2466,6 +2466,10 @@
     },
     "/list/{lID}/card": {
       "post": {
+        "tags": [
+          "Card"
+        ],
+        "summary": "B05-1 新增列表中卡片",
         "description": "",
         "parameters": [
           {
@@ -2478,9 +2482,105 @@
             "name": "authorization",
             "in": "header",
             "type": "string"
+          },
+          {
+            "name": "parameter_name",
+            "in": "body",
+            "description": "B05-1 新增列表中卡片",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "example": "列表下的卡片"
+                }
+              }
+            }
           }
         ],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "string",
+                  "example": "true"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "修改成功"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "欄位輸入錯誤，請重新輸入",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "欄位輸入錯誤，請重新輸入"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "401": {
+            "description": "身分驗證不通過",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "錯誤訊息"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "系統錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "系統錯誤，請洽管理員"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     },
     "/card/": {
@@ -2807,36 +2907,6 @@
             "name": "authorization",
             "in": "header",
             "type": "string"
-          },
-          {
-            "name": "parameter_name",
-            "in": "body",
-            "description": "B05-2 修改單一卡片(基本資訊) <br />時間格式>>Timestamp <br />proiority >> 1：最高  2：高  3：中  4：低",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "title": {
-                  "type": "string",
-                  "example": "B看板66U"
-                },
-                "describe": {
-                  "type": "string",
-                  "example": "測試566OOO"
-                },
-                "startDate": {
-                  "type": "string",
-                  "example": "1685540000"
-                },
-                "endDate": {
-                  "type": "string",
-                  "example": "1685544000"
-                },
-                "proiority": {
-                  "type": "string",
-                  "example": "3"
-                }
-              }
-            }
           }
         ],
         "responses": {

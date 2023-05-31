@@ -45,7 +45,7 @@ const CardSchema = new mongoose.Schema(
     ],
     proiority: {
       type: String,
-      enum: ["1", "2", "3", "4"],
+      enum: ["1", "2", "3", "4", ""],
       default: "",
     },
     coverPath: {
