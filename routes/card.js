@@ -52,9 +52,9 @@ router.get(
                     ],
                     "tags": [
                         {
-                            id: "",
-                            title: "", 
-                            color: "", 
+                          "_id": "6478b1de7ef5d7ac56a2f7ed",
+                          "title": "QQQQ",
+                          "color": "#FFF111"
                         }
                     ],
                     "todolists": [
