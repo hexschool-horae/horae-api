@@ -31,13 +31,15 @@ const list = {
     }
 
     let position = findList.cards.length;
-    console.log("findList.cards", findList.cards);
+    const boardId = findList.boardId;
+    console.log("findList.boardID", boardId);
 
     //卡片建立
     const newCard = await new cardModel({
       title,
       position,
       list: listId,
+      boardId,
       createUser: userID,
       updateUser: userID,
     });

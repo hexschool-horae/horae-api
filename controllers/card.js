@@ -1,6 +1,8 @@
 const appError = require("../service/appError");
 const handleSuccess = require("../service/handleSuccess");
 const cardModel = require("../models/cards");
+const boardTagsModel = require("../models/boardTags");
+
 const validator = require("validator");
 
 const card = {
@@ -80,12 +82,104 @@ const card = {
     const cardID = req.params.cardID;
     const findCard = await cardModel
       .findById(cardID)
+      .populate({
+        path: "tags",
+        select: "_id title color",
+      })
       .select("-viewSet -status -list -createUser");
 
     if (!findCard || findCard.length == 0) {
       return appError(400, "查無此卡片", next);
     }
     handleSuccess(res, "查詢成功", findCard);
+  },
+
+  //B05-9 在卡片新增標籤----------------------------------------------------------------------------------
+  async addCardTag(req, res, next) {
+    const cardID = req.params.cardID;
+
+    const userID = req.user.id;
+    const boardId = req.boardId;
+
+    //console.log("addCardTag boardId", boardId);
+
+    const { tagId } = req.body;
+    if (!tagId) {
+      return appError(400, "欄位輸入錯誤，請重新輸入", next);
+    }
+
+    const findBoardTag = await boardTagsModel.findById(tagId);
+    if (!findBoardTag || findBoardTag.length == 0) {
+      return appError(400, "查無此標籤", next);
+    }
+
+    if (findBoardTag.boardId.toString() != boardId.toString()) {
+      return appError(400, "此標籤不屬於此看板", next);
+    }
+
+    const findCard = await cardModel.findById(cardID);
+    //找到卡片的tags是否有包含此id
+    const index = findCard.tags.findIndex(
+      (element) => element.toString() == tagId
+    );
+    if (index !== -1) {
+      return appError(400, "此標籤已經存在卡片，不可新增", next);
+    }
+
+    //新增標籤ID到所屬卡片
+    await findCard.tags.push(tagId);
+    await findCard
+      .save()
+      .then(() => {
+        handleSuccess(res, "新增成功");
+      })
+      .catch((error) => {
+        return appError(400, `在卡片新增標籤失敗${error}`, next);
+      });
+  },
+
+  //B05-10 在卡片移除標籤----------------------------------------------------------------------------------
+  async deleteCardTag(req, res, next) {
+    const cardID = req.params.cardID;
+
+    const userID = req.user.id;
+    const { tagId } = req.body;
+    if (!tagId) {
+      return appError(400, "欄位輸入錯誤，請重新輸入", next);
+    }
+
+    const findBoardTag = await boardTagsModel.findById(tagId);
+    if (!findBoardTag || findBoardTag.length == 0) {
+      return appError(400, "查無此標籤", next);
+    }
+
+    const boardId = req.boardId;
+    if (findBoardTag.boardId.toString() != boardId.toString()) {
+      return appError(400, "此標籤不屬於此看板", next);
+    }
+
+    const findCard = await cardModel.findById(cardID);
+
+    //找到tags是否有包含此id
+    const index = findCard.tags.findIndex(
+      (element) => element.toString() == tagId
+    );
+
+    if (index !== -1) {
+      findCard.tags.splice(index, 1); //.splice(要刪除的索引開始位置, 要刪除的元素數量)
+    } else {
+      return appError(400, "卡片上查無此標籤，移除失敗", next);
+    }
+
+    //移除標籤ID
+    await findCard
+      .save()
+      .then(() => {
+        handleSuccess(res, "移除成功");
+      })
+      .catch((error) => {
+        return appError(400, `在卡片移除標籤失敗${error}`, next);
+      });
   },
 };
 

@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const BoardModel = require("../models/boards");
 const WorkSpaceModel = require("../models/workSpaces");
 const boardTagsModel = require("../models/boardTags");
+const cardModel = require("../models/cards");
 const listModel = require("../models/lists");
 const validator = require("validator");
 const appError = require("../service/appError");
@@ -178,6 +179,10 @@ const board = {
       .populate({
         path: "cards",
         select: "title position startDate endDate tags proiority",
+        populate: {
+          path: "tags",
+          select: "title color",
+        },
       })
       .select("title status position cards");
 
@@ -427,8 +432,71 @@ const board = {
     if (deleteTag.deletedCount == 0) {
       return appError(400, "標籤刪除失敗", next);
     }
-    handleSuccess(res, "刪除成功");
+
+    const findCard = await cardModel.find({
+      tags: { $in: tagId },
+    });
+
+    let deleteTagInCard = true;
+    if (findCard || findCard.length > 0) {
+      //卡片裡有標籤，要移除
+      console.log("findCard", findCard);
+
+      let index = -1;
+      findCard.forEach((element) => {
+        console.log("element.tags", element.tags);
+
+        index = element.tags.findIndex(
+          (tag) => tag.toString() == tagId.toString()
+        );
+
+        if (index !== -1) {
+          element.tags.splice(index, 1); //.splice(要刪除的索引開始位置, 要刪除的元素數量)
+        }
+
+        //移除標籤ID
+        element
+          .save()
+          .then(() => {
+            deleteTagInCard = true;
+          })
+          .catch((error) => {
+            deleteTagInCard = false;
+            return appError(400, `在卡片移除標籤失敗${error}`, next);
+          });
+      });
+    }
+
+    if (deleteTagInCard == true) {
+      handleSuccess(res, "刪除成功");
+    }
   },
+  //   //B03-16	單一看板刪除標籤-------------------------------------------------------------------------------------
+  //   async deleteTag(req, res, next) {
+  //     const boardId = req.params.bID;
+  //     const { tagId } = req.body;
+
+  //     //檢查欄位
+  //     if (!tagId) {
+  //       return appError(400, "欄位輸入錯誤，請重新輸入", next);
+  //     }
+  //     const findTag = await boardTagsModel.findById(tagId);
+  //     if (!findTag || findTag.length == 0) {
+  //       return appError(404, "查無此標籤", next);
+  //     }
+
+  //     const deleteTag = await boardTagsModel.deleteOne({
+  //       _id: tagId,
+  //       boardId: new ObjectId(boardId),
+  //     });
+  //     if (deleteTag.acknowledged == false) {
+  //       return appError(400, "標籤刪除失敗", next);
+  //     }
+  //     if (deleteTag.deletedCount == 0) {
+  //       return appError(400, "標籤刪除失敗", next);
+  //     }
+  //     handleSuccess(res, "刪除成功");
+  //   },
 };
 
 module.exports = board;

@@ -99,7 +99,7 @@ router.get(
       description: '身分驗證不通過',
       schema: {
       "success": false,
-      "message": "錯誤訊息"
+      "message": "身分驗證不通過相關錯誤訊息"
       }
     }
 
@@ -162,7 +162,7 @@ router.patch(
         description: '身分驗證不通過',
         schema: {
         "success": false,
-        "message": "錯誤訊息"
+        "message": "身分驗證不通過相關錯誤訊息"
         }
       }
 
@@ -173,6 +173,114 @@ router.patch(
           "message": "系統錯誤，請洽管理員"
         }
       }
+*/
+  }
+);
+
+//B05-9 在卡片新增標籤----------------------------------------------------------------------------------
+router.post(
+  "/:cardID/tag",
+  isAuth,
+  isOkCard,
+  handleErrorAsync(cardController.addCardTag),
+  function (req, res, next) {
+    /**
+   * #swagger.tags = ['Card Tag Setting']
+   * #swagger.summary = 'B05-9 在卡片新增標籤'
+   * #swagger.security=[{"Bearer": []}]
+        #swagger.parameters['parameter_name'] = {
+              in: 'body',
+              description: 'B05-9 在卡片新增標籤',
+              schema: {
+                    "tagId": "6470bc3c8c7c20876074763a",
+                  }
+            }
+
+    #swagger.responses[200] = {
+    description: '成功',
+    schema: {
+          "success": "true",
+          "message": "新增成功"
+      }
+    }
+
+    #swagger.responses[400] = {
+        description: '欄位輸入錯誤，請重新輸入',
+        schema: {
+        "success": false,
+        "message": "欄位輸入錯誤，請重新輸入"
+        }
+    }
+
+    #swagger.responses[401] = {
+      description: '身分驗證不通過',
+      schema: {
+      "success": false,
+      "message": "身分驗證不通過相關錯誤訊息"
+      }
+    }
+
+    #swagger.responses[500] = {
+      description: '系統錯誤',
+      schema: {   
+        "success": false,
+        "message": "系統錯誤，請洽管理員"
+      }
+    }
+*/
+  }
+);
+
+//B05-10 在卡片移除標籤----------------------------------------------------------------------------------
+router.delete(
+  "/:cardID/tag",
+  isAuth,
+  isOkCard,
+  handleErrorAsync(cardController.deleteCardTag),
+  function (req, res, next) {
+    /**
+   * #swagger.tags = ['Card Tag Setting']
+   * #swagger.summary = 'B05-10 在卡片移除標籤'
+   * #swagger.security=[{"Bearer": []}]
+        #swagger.parameters['parameter_name'] = {
+              in: 'body',
+              description: 'B05-10 在卡片移除標籤',
+              schema: {
+                    "tagId": "6470bc3c8c7c20876074763a",
+                  }
+            }
+
+    #swagger.responses[200] = {
+    description: '成功',
+    schema: {
+          "success": "true",
+          "message": "移除成功"
+      }
+    }
+
+    #swagger.responses[400] = {
+        description: '欄位輸入錯誤，請重新輸入',
+        schema: {
+        "success": false,
+        "message": "欄位輸入錯誤，請重新輸入"
+        }
+    }
+
+    #swagger.responses[401] = {
+      description: '身分驗證不通過',
+      schema: {
+      "success": false,
+      "message": "身分驗證不通過相關錯誤訊息"
+      }
+    }
+
+    #swagger.responses[500] = {
+      description: '系統錯誤',
+      schema: {   
+        "success": false,
+        "message": "系統錯誤，請洽管理員"
+      }
+    }
 */
   }
 );

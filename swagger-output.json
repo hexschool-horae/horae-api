@@ -20,8 +20,20 @@
       "description": "看板相關"
     },
     {
+      "name": "List",
+      "description": "列表相關"
+    },
+    {
       "name": "Board Tag",
       "description": "看板標籤相關"
+    },
+    {
+      "name": "Card",
+      "description": "卡片相關"
+    },
+    {
+      "name": "Card Tag Setting",
+      "description": "卡片標籤設定相關"
     }
   ],
   "schemes": [
@@ -2198,7 +2210,7 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "新增標籤成功"
+                  "example": "標籤設定成功"
                 }
               },
               "xml": {
@@ -2856,7 +2868,7 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "錯誤訊息"
+                  "example": "身分驗證不通過相關錯誤訊息"
                 }
               },
               "xml": {
@@ -2989,7 +3001,243 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "錯誤訊息"
+                  "example": "身分驗證不通過相關錯誤訊息"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "系統錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "系統錯誤，請洽管理員"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/card/{cardID}/tag": {
+      "post": {
+        "tags": [
+          "Card Tag Setting"
+        ],
+        "summary": "B05-9 在卡片新增標籤",
+        "description": "",
+        "parameters": [
+          {
+            "name": "cardID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "parameter_name",
+            "in": "body",
+            "description": "B05-9 在卡片新增標籤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tagId": {
+                  "type": "string",
+                  "example": "6470bc3c8c7c20876074763a"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "string",
+                  "example": "true"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "新增成功"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "欄位輸入錯誤，請重新輸入",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "欄位輸入錯誤，請重新輸入"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "401": {
+            "description": "身分驗證不通過",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "身分驗證不通過相關錯誤訊息"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "系統錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "系統錯誤，請洽管理員"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Card Tag Setting"
+        ],
+        "summary": "B05-10 在卡片移除標籤",
+        "description": "",
+        "parameters": [
+          {
+            "name": "cardID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "parameter_name",
+            "in": "body",
+            "description": "B05-10 在卡片移除標籤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tagId": {
+                  "type": "string",
+                  "example": "6470bc3c8c7c20876074763a"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "string",
+                  "example": "true"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "移除成功"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "欄位輸入錯誤，請重新輸入",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "欄位輸入錯誤，請重新輸入"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "401": {
+            "description": "身分驗證不通過",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "身分驗證不通過相關錯誤訊息"
                 }
               },
               "xml": {

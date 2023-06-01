@@ -35,7 +35,7 @@ const CardSchema = new mongoose.Schema(
     },
     members: [{ type: mongoose.Schema.ObjectId, ref: "user", default: [] }],
     comments: [{ type: mongoose.Schema.ObjectId, ref: "comment", default: [] }],
-    tags: [{ type: mongoose.Schema.ObjectId, ref: "tag", default: [] }],
+    tags: [{ type: mongoose.Schema.ObjectId, ref: "boardtags", default: [] }],
     todolists: [
       { type: mongoose.Schema.ObjectId, ref: "todolist", default: [] },
     ],
@@ -54,6 +54,7 @@ const CardSchema = new mongoose.Schema(
     },
     position: { type: Number, require: true },
     list: { type: mongoose.Schema.ObjectId, ref: "list" },
+    boardId: { type: mongoose.Schema.ObjectId, ref: "board" },
     createUser: {
       type: mongoose.Schema.ObjectId,
       ref: "user",

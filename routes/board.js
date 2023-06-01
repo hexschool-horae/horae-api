@@ -568,7 +568,7 @@ router.put(
       description: '成功',
       schema: {
 				    "success": "true",
-				    "message": "新增標籤成功",
+				    "message": "標籤設定成功",
 				}
       }
 
