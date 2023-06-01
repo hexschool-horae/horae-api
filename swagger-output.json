@@ -2907,6 +2907,36 @@
             "name": "authorization",
             "in": "header",
             "type": "string"
+          },
+          {
+            "name": "parameter_name",
+            "in": "body",
+            "description": "B05-2 修改單一卡片(基本資訊) <br />時間格式>>Timestamp <br />proiority >> 1：最高   <br />2：高   <br />3：中   <br />4：低   <br />空:無",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "example": "B看板66U"
+                },
+                "describe": {
+                  "type": "string",
+                  "example": "測試566OOO"
+                },
+                "startDate": {
+                  "type": "string",
+                  "example": "1685540000"
+                },
+                "endDate": {
+                  "type": "string",
+                  "example": "1685544000"
+                },
+                "proiority": {
+                  "type": "string",
+                  "example": "3"
+                }
+              }
+            }
           }
         ],
         "responses": {

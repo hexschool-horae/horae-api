@@ -128,10 +128,10 @@ router.patch(
 		  #swagger.parameters['parameter_name'] = {
 		        in: 'body',
 		        description: 'B05-2	修改單一卡片(基本資訊) <br />時間格式>>Timestamp <br />proiority >> 1：最高
-2：高
-3：中
-4：低'
-'':無,
+ <br />2：高
+ <br />3：中
+ <br />4：低
+ <br />空:無',
 		        schema: {
                     "title": "B看板66U",
                     "describe": "測試566OOO",
