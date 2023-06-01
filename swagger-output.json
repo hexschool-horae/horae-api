@@ -2732,17 +2732,17 @@
                       "items": {
                         "type": "object",
                         "properties": {
-                          "id": {
+                          "_id": {
                             "type": "string",
-                            "example": ""
+                            "example": "6478b1de7ef5d7ac56a2f7ed"
                           },
                           "title": {
                             "type": "string",
-                            "example": ""
+                            "example": "QQQQ"
                           },
                           "color": {
                             "type": "string",
-                            "example": ""
+                            "example": "#FFF111"
                           }
                         }
                       }
