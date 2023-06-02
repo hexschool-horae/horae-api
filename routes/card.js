@@ -293,7 +293,7 @@ router.post(
   handleErrorAsync(cardController.addCardComment),
   function (req, res, next) {
     /**
-   * #swagger.tags = ['Card Comment']
+   * #swagger.tags = ['Card Comment Setting']
    * #swagger.summary = 'B05-11 卡片評論新增'
    * #swagger.security=[{"Bearer": []}]
         #swagger.parameters['parameter_name'] = {
@@ -348,7 +348,7 @@ router.put(
   handleErrorAsync(cardController.updateCardComment),
   function (req, res, next) {
     /**
-   * #swagger.tags = ['Card Comment']
+   * #swagger.tags = ['Card Comment Setting']
    * #swagger.summary = 'B05-12 卡片評論修改'
    * #swagger.security=[{"Bearer": []}]
         #swagger.parameters['parameter_name'] = {
@@ -403,7 +403,7 @@ router.delete(
   handleErrorAsync(cardController.deleteCardComment),
   function (req, res, next) {
     /**
-   * #swagger.tags = ['Card Comment']
+   * #swagger.tags = ['Card Comment Setting']
    * #swagger.summary = 'B05-13 卡片評論刪除'
    * #swagger.security=[{"Bearer": []}]
         #swagger.parameters['parameter_name'] = {

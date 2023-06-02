@@ -283,9 +283,27 @@ router.get(
 				                    {
 				                        "_id": "646df81a41cae2638c51f05e",
 				                        "title": "列表下的卡片",
-				                        "startDate": null,
-				                        "endDate": null,
-				                        "tags": [],
+                                "startDate": 1685540000,
+                                "endDate": 1685544000,
+                                "tags": [
+                                    {
+                                        "_id": "6478b1de7ef5d7ac56a2f7ed",
+                                        "title": "QQQQ",
+                                        "color": "#FFF111"
+                                    }
+                                ],
+                                "comments": [
+                                    {
+                                        "_id": "6479f9e8977d886d90bd9b5b",
+                                        "comment": "評論內容",
+                                        "user": {
+                                            "_id": "64743a4e5ac3abf5a47ae523",
+                                            "name": "louisa",
+                                            "createdAt": "2023-05-29T05:38:22.933Z"
+                                        },
+                                        "card": "647897f27396e0c9129bf051"
+                                    }
+                                ],
 				                        "proiority": "",
 				                        "position": 2
 				                    }

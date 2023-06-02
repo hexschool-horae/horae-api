@@ -34,6 +34,10 @@
     {
       "name": "Card Tag Setting",
       "description": "卡片標籤設定相關"
+    },
+    {
+      "name": "Card Comment Setting",
+      "description": "卡片評論相關"
     }
   ],
   "schemes": [
@@ -1603,12 +1607,70 @@
                                   "type": "string",
                                   "example": "列表下的卡片"
                                 },
-                                "startDate": {},
-                                "endDate": {},
+                                "startDate": {
+                                  "type": "number",
+                                  "example": 1685540000
+                                },
+                                "endDate": {
+                                  "type": "number",
+                                  "example": 1685544000
+                                },
                                 "tags": {
                                   "type": "array",
-                                  "example": [],
-                                  "items": {}
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "_id": {
+                                        "type": "string",
+                                        "example": "6478b1de7ef5d7ac56a2f7ed"
+                                      },
+                                      "title": {
+                                        "type": "string",
+                                        "example": "QQQQ"
+                                      },
+                                      "color": {
+                                        "type": "string",
+                                        "example": "#FFF111"
+                                      }
+                                    }
+                                  }
+                                },
+                                "comments": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "_id": {
+                                        "type": "string",
+                                        "example": "6479f9e8977d886d90bd9b5b"
+                                      },
+                                      "comment": {
+                                        "type": "string",
+                                        "example": "評論內容"
+                                      },
+                                      "user": {
+                                        "type": "object",
+                                        "properties": {
+                                          "_id": {
+                                            "type": "string",
+                                            "example": "64743a4e5ac3abf5a47ae523"
+                                          },
+                                          "name": {
+                                            "type": "string",
+                                            "example": "louisa"
+                                          },
+                                          "createdAt": {
+                                            "type": "string",
+                                            "example": "2023-05-29T05:38:22.933Z"
+                                          }
+                                        }
+                                      },
+                                      "card": {
+                                        "type": "string",
+                                        "example": "647897f27396e0c9129bf051"
+                                      }
+                                    }
+                                  }
                                 },
                                 "proiority": {
                                   "type": "string",
@@ -3513,7 +3575,7 @@
     "/card/{cardID}/comment": {
       "post": {
         "tags": [
-          "Card Comment"
+          "Card Comment Setting"
         ],
         "summary": "B05-11 卡片評論新增",
         "description": "",
@@ -3634,7 +3696,7 @@
       },
       "put": {
         "tags": [
-          "Card Comment"
+          "Card Comment Setting"
         ],
         "summary": "B05-12 卡片評論修改",
         "description": "",
@@ -3755,7 +3817,7 @@
       },
       "delete": {
         "tags": [
-          "Card Comment"
+          "Card Comment Setting"
         ],
         "summary": "B05-13 卡片評論刪除",
         "description": "",

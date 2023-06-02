@@ -17,6 +17,7 @@ const doc = {
     { name: "Board Tag", description: "看板標籤相關" },
     { name: "Card", description: "卡片相關" },
     { name: "Card Tag Setting", description: "卡片標籤設定相關" },
+    { name: "Card Comment Setting", description: "卡片評論相關" },
   ],
   definitions,
   securityDefinitions: {
