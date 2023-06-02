@@ -178,10 +178,10 @@ const board = {
       .find({ boardId: new ObjectId(boardID) })
       .populate({
         path: "cards",
-        select: "title position startDate endDate tags proiority",
+        select: "title position startDate endDate tags proiority comments",
         populate: {
-          path: "tags",
-          select: "title color",
+          path: "tags comments",
+          select: "title color comment",
         },
       })
       .select("title status position cards");

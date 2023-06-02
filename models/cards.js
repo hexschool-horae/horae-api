@@ -34,7 +34,7 @@ const CardSchema = new mongoose.Schema(
       default: null,
     },
     members: [{ type: mongoose.Schema.ObjectId, ref: "user", default: [] }],
-    comments: [{ type: mongoose.Schema.ObjectId, ref: "comment", default: [] }],
+    //comments: [{ type: mongoose.Schema.ObjectId, ref: "comment", default: [] }],
     tags: [{ type: mongoose.Schema.ObjectId, ref: "boardtags", default: [] }],
     todolists: [
       { type: mongoose.Schema.ObjectId, ref: "todolist", default: [] },
@@ -70,8 +70,18 @@ const CardSchema = new mongoose.Schema(
       required: [true, "使用者id未填寫"],
     },
   },
-  { versionKey: "version" }
+  {
+    versionKey: "version",
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
 );
+
+CardSchema.virtual("comments", {
+  ref: "Comment",
+  foreignField: "card",
+  localField: "_id",
+});
 
 // Card
 const Card = mongoose.model("card", CardSchema);

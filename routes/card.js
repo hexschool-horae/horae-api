@@ -285,4 +285,168 @@ router.delete(
   }
 );
 
+//B05-11 卡片評論新增----------------------------------------------------------------------------------
+router.post(
+  "/:cardID/comment",
+  isAuth,
+  isOkCard,
+  handleErrorAsync(cardController.addCardComment),
+  function (req, res, next) {
+    /**
+   * #swagger.tags = ['Card Comment']
+   * #swagger.summary = 'B05-11 卡片評論新增'
+   * #swagger.security=[{"Bearer": []}]
+        #swagger.parameters['parameter_name'] = {
+              in: 'body',
+              description: 'B05-11 卡片評論新增',
+              schema: {
+                    "comment": "評論內容",
+                  }
+            }
+
+    #swagger.responses[200] = {
+    description: '成功',
+    schema: {
+          "success": "true",
+          "message": "新增成功",
+		  "data": "6470bc3c8c7c20876074788a"
+      }
+    }
+
+    #swagger.responses[400] = {
+        description: '欄位輸入錯誤，請重新輸入',
+        schema: {
+        "success": false,
+        "message": "欄位輸入錯誤，請重新輸入"
+        }
+    }
+
+    #swagger.responses[401] = {
+      description: '身分驗證不通過',
+      schema: {
+      "success": false,
+      "message": "錯誤訊息"
+      }
+    }
+
+    #swagger.responses[500] = {
+      description: '系統錯誤',
+      schema: {   
+        "success": false,
+        "message": "系統錯誤，請洽管理員"
+      }
+    }
+*/
+  }
+);
+
+//B05-12 卡片評論修改----------------------------------------------------------------------------------
+router.put(
+  "/:cardID/comment",
+  isAuth,
+  isOkCard,
+  handleErrorAsync(cardController.updateCardComment),
+  function (req, res, next) {
+    /**
+   * #swagger.tags = ['Card Comment']
+   * #swagger.summary = 'B05-12 卡片評論修改'
+   * #swagger.security=[{"Bearer": []}]
+        #swagger.parameters['parameter_name'] = {
+              in: 'body',
+              description: 'B05-12 卡片評論修改',
+              schema: {
+					"commentId": "6470bc3c8c7c20876074788a",
+					"comment": "修改評論內容",
+                  }
+            }
+
+    #swagger.responses[200] = {
+    description: '成功',
+    schema: {
+          "success": "true",
+          "message": "修改成功"
+      }
+    }
+
+    #swagger.responses[400] = {
+        description: '欄位輸入錯誤，請重新輸入',
+        schema: {
+        "success": false,
+        "message": "欄位輸入錯誤，請重新輸入"
+        }
+    }
+
+    #swagger.responses[401] = {
+      description: '身分驗證不通過',
+      schema: {
+      "success": false,
+      "message": "錯誤訊息"
+      }
+    }
+
+    #swagger.responses[500] = {
+      description: '系統錯誤',
+      schema: {   
+        "success": false,
+        "message": "系統錯誤，請洽管理員"
+      }
+    }
+*/
+  }
+);
+
+//B05-13 卡片評論刪除----------------------------------------------------------------------------------
+router.delete(
+  "/:cardID/comment",
+  isAuth,
+  isOkCard,
+  handleErrorAsync(cardController.deleteCardComment),
+  function (req, res, next) {
+    /**
+   * #swagger.tags = ['Card Comment']
+   * #swagger.summary = 'B05-13 卡片評論刪除'
+   * #swagger.security=[{"Bearer": []}]
+        #swagger.parameters['parameter_name'] = {
+              in: 'body',
+              description: 'B05-13 卡片評論刪除',
+              schema: {
+					"commentId": "6470bc3c8c7c20876074788a",
+                  }
+            }
+
+    #swagger.responses[200] = {
+    description: '成功',
+    schema: {
+          "success": "true",
+          "message": "刪除成功"
+      }
+    }
+
+    #swagger.responses[400] = {
+        description: '欄位輸入錯誤，請重新輸入',
+        schema: {
+        "success": false,
+        "message": "欄位輸入錯誤，請重新輸入"
+        }
+    }
+
+    #swagger.responses[401] = {
+      description: '身分驗證不通過',
+      schema: {
+      "success": false,
+      "message": "錯誤訊息"
+      }
+    }
+
+    #swagger.responses[500] = {
+      description: '系統錯誤',
+      schema: {   
+        "success": false,
+        "message": "系統錯誤，請洽管理員"
+      }
+    }
+*/
+  }
+);
+
 module.exports = router;

@@ -2,6 +2,7 @@ const appError = require("../service/appError");
 const handleSuccess = require("../service/handleSuccess");
 const cardModel = require("../models/cards");
 const boardTagsModel = require("../models/boardTags");
+const commentModel = require("../models/cardComment");
 
 const validator = require("validator");
 
@@ -85,6 +86,10 @@ const card = {
       .populate({
         path: "tags",
         select: "_id title color",
+      })
+      .populate({
+        path: "comments",
+        select: "_id comment user -card",
       })
       .select("-viewSet -status -list -createUser");
 
@@ -180,6 +185,100 @@ const card = {
       .catch((error) => {
         return appError(400, `在卡片移除標籤失敗${error}`, next);
       });
+  },
+
+  //B05-11 卡片評論新增----------------------------------------------------------------------------------
+  async addCardComment(req, res, next) {
+    const cardId = req.params.cardID;
+    const userID = req.user.id;
+    const { comment } = req.body;
+    if (!comment) {
+      return appError(400, "欄位輸入錯誤，請重新輸入", next);
+    }
+
+    //列表建立
+    const newComment = await new commentModel({
+      comment,
+      card: cardId,
+      user: userID,
+    });
+
+    await newComment
+      .save()
+      .then(() => {
+        handleSuccess(res, "新增成功");
+      })
+      .catch((error) => {
+        return appError(400, `新增評論失敗${error}`, next);
+      });
+  },
+
+  //B05-12 卡片評論修改----------------------------------------------------------------------------------
+  //非本人的評論不可以修改
+  async updateCardComment(req, res, next) {
+    const userID = req.user.id;
+    const { commentId, comment } = req.body;
+
+    //檢查欄位
+    if (!commentId || !comment) {
+      return appError(400, "欄位輸入錯誤，請重新輸入", next);
+    }
+
+    const findComment = await commentModel.findById(commentId);
+    if (!findComment || findComment.length == 0) {
+      return appError(404, "查無此評論", next);
+    }
+
+    if (findComment.user._id.toString() != userID) {
+      return appError(400, "非本人的評論不可以修改", next);
+    }
+
+    findComment.comment = comment;
+    findComment.createdAt = Date.now();
+    findComment.user = userID;
+
+    await findComment
+      .save()
+      .then(() => {
+        handleSuccess(res, "評論修改成功");
+      })
+      .catch((err) => {
+        if (err.name === "VersionError") {
+          // 版本号不匹配
+          return appError(
+            400,
+            "更新評論失敗! 已被其他用戶修改，請重整後再試一次",
+            next
+          );
+        }
+
+        return appError(400, `更新評論失敗${error}`, next);
+      });
+  },
+
+  //B05-13 卡片評論刪除----------------------------------------------------------------------------------
+  async deleteCardComment(req, res, next) {
+    const { commentId } = req.body;
+
+    //檢查欄位
+    if (!commentId) {
+      return appError(400, "欄位輸入錯誤，請重新輸入", next);
+    }
+    const findComment = await commentModel.findById(commentId);
+    if (!findComment || findComment.length == 0) {
+      return appError(404, "查無此評論", next);
+    }
+
+    const deleteComment = await commentModel.deleteOne({
+      _id: commentId,
+    });
+    if (deleteComment.acknowledged == false) {
+      return appError(400, "評論刪除失敗", next);
+    }
+    if (deleteComment.deletedCount == 0) {
+      return appError(400, "評論刪除失敗", next);
+    }
+    handleSuccess(res, "刪除成功");
   },
 };
 
