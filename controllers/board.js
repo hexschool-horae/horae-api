@@ -179,12 +179,14 @@ const board = {
       .populate({
         path: "cards",
         select: "title position startDate endDate tags proiority comments",
+        options: { sort: { position: 1 } },
         populate: {
           path: "tags comments",
           select: "title color comment",
         },
       })
-      .select("title status position cards");
+      .select("title status position cards")
+      .sort({ position: 1 });
 
     //#region  檢查使用者權限  訪客/成員/管理員
     //確認token是否存在

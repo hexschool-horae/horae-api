@@ -90,6 +90,7 @@ const card = {
       .populate({
         path: "comments",
         select: "_id comment user -card",
+        options: { sort: { createdAt: -1 } },
       })
       .select("-viewSet -status -list -createUser");
 
