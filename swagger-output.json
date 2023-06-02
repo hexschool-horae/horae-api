@@ -2595,6 +2595,244 @@
         ]
       }
     },
+    "/list/{lID}/title": {
+      "patch": {
+        "tags": [
+          "List"
+        ],
+        "summary": "B04-2 修改列表標題",
+        "description": "",
+        "parameters": [
+          {
+            "name": "lID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "parameter_name",
+            "in": "body",
+            "description": "B04-2 修改列表標題",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "example": "修改標題名稱"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "string",
+                  "example": "true"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "修改成功"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "欄位輸入錯誤，請重新輸入",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "欄位輸入錯誤，請重新輸入"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "401": {
+            "description": "身分驗證不通過",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "錯誤訊息"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "系統錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "系統錯誤，請洽管理員"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/list/{lID}/status": {
+      "patch": {
+        "tags": [
+          "List"
+        ],
+        "summary": "B04-3 開啟/關閉單一列表",
+        "description": "",
+        "parameters": [
+          {
+            "name": "lID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "parameter_name",
+            "in": "body",
+            "description": "B04-3 開啟/關閉單一列表 open/close",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "open"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "string",
+                  "example": "true"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "修改成功"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "欄位輸入錯誤，請重新輸入",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "欄位輸入錯誤，請重新輸入"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "401": {
+            "description": "身分驗證不通過",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "錯誤訊息"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "系統錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "系統錯誤，請洽管理員"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
     "/card/": {
       "get": {
         "description": "",

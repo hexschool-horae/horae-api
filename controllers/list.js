@@ -61,6 +61,60 @@ const list = {
         return appError(400, `新增卡片ID到所屬列表失敗${error}`, next);
       });
   },
+
+  //B04-2	修改列表標題 ----------------------------------------------------------------------------------
+  async updateListTitle(req, res, next) {
+    const listId = req.params.lID;
+    const userID = req.user.id;
+    const { title } = req.body;
+    if (!title) {
+      return appError(400, "欄位輸入錯誤，請重新輸入", next);
+    }
+
+    if (!validator.isLength(title, { max: 30 })) {
+      return appError(400, "列表名稱不可超過長度30！", next);
+    }
+
+    //修改
+    const updateList = await listModel.findOneAndUpdate(
+      {
+        _id: listId,
+      },
+      { title, createUser: userID }
+    );
+
+    if (!updateList) {
+      return appError(400, "列表標題修改失敗", next);
+    }
+    handleSuccess(res, "修改成功");
+  },
+
+  //B04-3	開啟/關閉單一列表----------------------------------------------------------------------------------
+  async updateListStatus(req, res, next) {
+    const listId = req.params.lID;
+    const userID = req.user.id;
+    const { status } = req.body;
+    if (!status) {
+      return appError(400, "欄位輸入錯誤，請重新輸入", next);
+    }
+
+    if (!["open", "close"].includes(status)) {
+      return appError(400, "不正確的列表封存設定參數！", next);
+    }
+
+    //修改
+    const updateList = await listModel.findOneAndUpdate(
+      {
+        _id: listId,
+      },
+      { status, createUser: userID }
+    );
+
+    if (!updateList) {
+      return appError(400, "列表封存設定失敗", next);
+    }
+    handleSuccess(res, "修改成功");
+  },
 };
 
 module.exports = list;

@@ -4,6 +4,7 @@ const handleErrorAsync = require("../service/handleErrorAsync");
 const User = require("../models/users");
 const WorkSpaceModel = require("../models/workSpaces");
 const boardModel = require("../models/boards");
+const listModel = require("../models/lists");
 const cardModel = require("../models/cards");
 
 //檢查是否有權限的middleware
@@ -123,7 +124,6 @@ const isAuthBoard = handleErrorAsync(async (req, res, next) => {
   req.boardRole = boardRole;
   next();
 });
-
 //檢查卡片的middleware
 const isOkCard = handleErrorAsync(async (req, res, next) => {
   const cardID = req.params.cardID;
@@ -142,10 +142,29 @@ const isOkCard = handleErrorAsync(async (req, res, next) => {
   next();
 });
 
+//檢查卡片的middleware
+const isOkList = handleErrorAsync(async (req, res, next) => {
+  const listID = req.params.lID;
+
+  if (listID.length < 15) {
+    return appError(400, "您的請求參數有誤", next);
+  }
+  const findList = await listModel.findById(listID);
+
+  if (!findList || findList.length == 0) {
+    return appError(400, "查無此卡片", next);
+  }
+  req.boardId = findList.boardId;
+  console.log("req.boardId", findList.boardId);
+
+  next();
+});
+
 module.exports = {
   isAuth,
   generateSendJWT,
   isAuthWorkspace,
   isAuthBoard,
+  isOkList,
   isOkCard,
 };
