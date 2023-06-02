@@ -124,6 +124,7 @@ const isAuthBoard = handleErrorAsync(async (req, res, next) => {
   req.boardRole = boardRole;
   next();
 });
+
 //檢查卡片的middleware
 const isOkCard = handleErrorAsync(async (req, res, next) => {
   const cardID = req.params.cardID;
