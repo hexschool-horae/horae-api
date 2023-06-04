@@ -37,8 +37,16 @@ const CardSchema = new mongoose.Schema(
     //comments: [{ type: mongoose.Schema.ObjectId, ref: "comment", default: [] }],
     tags: [{ type: mongoose.Schema.ObjectId, ref: "boardtags", default: [] }],
     todolists: [
-      { type: mongoose.Schema.ObjectId, ref: "todolist", default: [] },
+      {
+        title: {
+          type: String,
+          required: [true, "內容不可空白"],
+        },
+      },
     ],
+    // todolists: [
+    //   { type: mongoose.Schema.ObjectId, ref: "todolist", default: [] },
+    // ],
     // dateSetting: [{ type: mongoose.Schema.ObjectId, ref: "dateSetting" }], 設定日期
     attachments: [
       { type: mongoose.Schema.ObjectId, ref: "attachment", default: [] },
@@ -81,6 +89,12 @@ CardSchema.virtual("comments", {
   ref: "Comment",
   foreignField: "card",
   localField: "_id",
+});
+
+CardSchema.virtual("todolists.contentList", {
+  ref: "Todolist",
+  foreignField: "title",
+  localField: "todolists._id",
 });
 
 // Card

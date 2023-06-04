@@ -133,7 +133,7 @@ router.patch(
  <br />4：低
  <br />空:無',
 		        schema: {
-                    "title": "B看板66U",
+                    "title": "修改卡片",
                     "describe": "測試566OOO",
                     "startDate":"1685540000",  
                     "endDate":"1685544000",
@@ -309,7 +309,7 @@ router.post(
     schema: {
           "success": "true",
           "message": "新增成功",
-		  "data": "6470bc3c8c7c20876074788a"
+		      "data": "6470bc3c8c7c20876074788a"
       }
     }
 
@@ -411,6 +411,335 @@ router.delete(
               description: 'B05-13 卡片評論刪除',
               schema: {
 					"commentId": "6470bc3c8c7c20876074788a",
+                  }
+            }
+
+    #swagger.responses[200] = {
+    description: '成功',
+    schema: {
+          "success": "true",
+          "message": "刪除成功"
+      }
+    }
+
+    #swagger.responses[400] = {
+        description: '欄位輸入錯誤，請重新輸入',
+        schema: {
+        "success": false,
+        "message": "欄位輸入錯誤，請重新輸入"
+        }
+    }
+
+    #swagger.responses[401] = {
+      description: '身分驗證不通過',
+      schema: {
+      "success": false,
+      "message": "錯誤訊息"
+      }
+    }
+
+    #swagger.responses[500] = {
+      description: '系統錯誤',
+      schema: {   
+        "success": false,
+        "message": "系統錯誤，請洽管理員"
+      }
+    }
+*/
+  }
+);
+
+//B05-14 卡片todolist新增標題----------------------------------------------------------------------------------
+router.post(
+  "/:cardID/todolist",
+  isAuth,
+  isOkCard,
+  handleErrorAsync(cardController.addCardTodolist),
+  function (req, res, next) {
+    /**
+   * #swagger.tags = ['Card Todolist Setting']
+   * #swagger.summary = 'B05-14 卡片todolist新增標題'
+   * #swagger.security=[{"Bearer": []}]
+        #swagger.parameters['parameter_name'] = {
+              in: 'body',
+              description: 'B05-14 卡片todolist新增標題',
+              schema: {
+                    "title": "todolist標題",
+                  }
+            }
+
+    #swagger.responses[200] = {
+    description: '成功',
+    schema: {
+          "success": "true",
+          "message": "新增成功",
+		  "data": "6470bc3c8c7c20876074788a"
+      }
+    }
+
+    #swagger.responses[400] = {
+        description: '欄位輸入錯誤，請重新輸入',
+        schema: {
+        "success": false,
+        "message": "欄位輸入錯誤，請重新輸入"
+        }
+    }
+
+    #swagger.responses[401] = {
+      description: '身分驗證不通過',
+      schema: {
+      "success": false,
+      "message": "錯誤訊息"
+      }
+    }
+
+    #swagger.responses[500] = {
+      description: '系統錯誤',
+      schema: {   
+        "success": false,
+        "message": "系統錯誤，請洽管理員"
+      }
+    }
+*/
+  }
+);
+
+//B05-15 卡片todolist修改標題----------------------------------------------------------------------------------
+router.put(
+  "/:cardID/todolist",
+  isAuth,
+  isOkCard,
+  handleErrorAsync(cardController.updateCardTodolist),
+  function (req, res, next) {
+    /**
+   * #swagger.tags = ['Card Todolist Setting']
+   * #swagger.summary = 'B05-15 卡片todolist修改標題'
+   * #swagger.security=[{"Bearer": []}]
+        #swagger.parameters['parameter_name'] = {
+              in: 'body',
+              description: 'B05-15 卡片todolist修改標題',
+              schema: {
+					"titleId": "6470bc3c8c7c20876074788a",
+					"title": "修改todolist標題",
+                  }
+            }
+
+    #swagger.responses[200] = {
+    description: '成功',
+    schema: {
+          "success": "true",
+          "message": "修改成功"
+      }
+    }
+
+    #swagger.responses[400] = {
+        description: '欄位輸入錯誤，請重新輸入',
+        schema: {
+        "success": false,
+        "message": "欄位輸入錯誤，請重新輸入"
+        }
+    }
+
+    #swagger.responses[401] = {
+      description: '身分驗證不通過',
+      schema: {
+      "success": false,
+      "message": "錯誤訊息"
+      }
+    }
+
+    #swagger.responses[500] = {
+      description: '系統錯誤',
+      schema: {   
+        "success": false,
+        "message": "系統錯誤，請洽管理員"
+      }
+    }
+*/
+  }
+);
+
+//B05-16 卡片todolist刪除一組(標題+細項)----------------------------------------------------------------------------------
+router.delete(
+  "/:cardID/todolist",
+  isAuth,
+  isOkCard,
+  handleErrorAsync(cardController.deleteCardTodolist),
+  function (req, res, next) {
+    /**
+   * #swagger.tags = ['Card Todolist Setting']
+   * #swagger.summary = 'B05-16 卡片todolist刪除一組(標題+細項)'
+   * #swagger.security=[{"Bearer": []}]
+        #swagger.parameters['parameter_name'] = {
+              in: 'body',
+              description: 'B05-16 卡片todolist刪除一組(標題+細項)',
+              schema: {
+					"titleId": "6470bc3c8c7c20876074788a",
+                  }
+            }
+
+    #swagger.responses[200] = {
+    description: '成功',
+    schema: {
+          "success": "true",
+          "message": "刪除成功"
+      }
+    }
+
+    #swagger.responses[400] = {
+        description: '欄位輸入錯誤，請重新輸入',
+        schema: {
+        "success": false,
+        "message": "欄位輸入錯誤，請重新輸入"
+        }
+    }
+
+    #swagger.responses[401] = {
+      description: '身分驗證不通過',
+      schema: {
+      "success": false,
+      "message": "錯誤訊息"
+      }
+    }
+
+    #swagger.responses[500] = {
+      description: '系統錯誤',
+      schema: {   
+        "success": false,
+        "message": "系統錯誤，請洽管理員"
+      }
+    }
+*/
+  }
+);
+
+//B05-17 卡片todolist新增細項---------------------------------------------------------------------------------
+router.post(
+  "/:cardID/todolist-content",
+  isAuth,
+  isOkCard,
+  handleErrorAsync(cardController.addCardTodolistContent),
+  function (req, res, next) {
+    /**
+   * #swagger.tags = ['Card Todolist Setting']
+   * #swagger.summary = 'B05-17 卡片todolist新增細項'
+   * #swagger.security=[{"Bearer": []}]
+        #swagger.parameters['parameter_name'] = {
+              in: 'body',
+              description: 'B05-17 卡片todolist新增細項',
+              schema: {
+                    "titleId": "6470bc3c8c7c20876074788a",
+                    "content": "todolist細項內容",
+                  }
+            }
+
+    #swagger.responses[200] = {
+    description: '成功',
+    schema: {
+          "success": "true",
+          "message": "新增成功",
+		  "data": "6470bc3c8c7c20876074788a"
+      }
+    }
+
+    #swagger.responses[400] = {
+        description: '欄位輸入錯誤，請重新輸入',
+        schema: {
+        "success": false,
+        "message": "欄位輸入錯誤，請重新輸入"
+        }
+    }
+
+    #swagger.responses[401] = {
+      description: '身分驗證不通過',
+      schema: {
+      "success": false,
+      "message": "錯誤訊息"
+      }
+    }
+
+    #swagger.responses[500] = {
+      description: '系統錯誤',
+      schema: {   
+        "success": false,
+        "message": "系統錯誤，請洽管理員"
+      }
+    }
+*/
+  }
+);
+
+//B05-18 卡片todolist修改細項----------------------------------------------------------------------------------
+router.put(
+  "/:cardID/todolist-content",
+  isAuth,
+  isOkCard,
+  handleErrorAsync(cardController.updateCardTodolistContent),
+  function (req, res, next) {
+    /**
+   * #swagger.tags = ['Card Todolist Setting']
+   * #swagger.summary = 'B05-18 卡片todolist修改細項'
+   * #swagger.security=[{"Bearer": []}]
+        #swagger.parameters['parameter_name'] = {
+              in: 'body',
+              description: 'B05-18 卡片todolist修改細項',
+              schema: {
+                    "contentId": "6470bc3c8c7c20876074788a",
+                    "content": "修改todolist細項內容",
+                  }
+            }
+
+    #swagger.responses[200] = {
+    description: '成功',
+    schema: {
+          "success": "true",
+          "message": "修改成功"
+      }
+    }
+
+    #swagger.responses[400] = {
+        description: '欄位輸入錯誤，請重新輸入',
+        schema: {
+        "success": false,
+        "message": "欄位輸入錯誤，請重新輸入"
+        }
+    }
+
+    #swagger.responses[401] = {
+      description: '身分驗證不通過',
+      schema: {
+      "success": false,
+      "message": "錯誤訊息"
+      }
+    }
+
+    #swagger.responses[500] = {
+      description: '系統錯誤',
+      schema: {   
+        "success": false,
+        "message": "系統錯誤，請洽管理員"
+      }
+    }
+*/
+  }
+);
+
+//B05-19 卡片todolist刪除一個細項----------------------------------------------------------------------------------
+router.delete(
+  "/:cardID/todolist-content",
+  isAuth,
+  isOkCard,
+  handleErrorAsync(cardController.deleteCardTodolistContent),
+  function (req, res, next) {
+    /**
+   * #swagger.tags = ['Card Todolist Setting']
+   * #swagger.summary = 'B05-19 卡片todolist刪除一個細項'
+   * #swagger.security=[{"Bearer": []}]
+        #swagger.parameters['parameter_name'] = {
+              in: 'body',
+              description: 'B05-19 卡片todolist刪除一個細項',
+              schema: {
+					            "contentId": "6470bc3c8c7c20876074788a",
                   }
             }
 
