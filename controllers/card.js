@@ -93,11 +93,11 @@ const card = {
         select: "_id createdAt comment user -card",
         options: { sort: { createdAt: -1 } },
       })
-      // .populate({
-      //   path: "contentList",
-      //   select: "_id content completed -title -card",
-      //   options: { sort: { createdAt: -1 } },
-      // })
+      .populate({
+        path: "todolists.contentList",
+        select: "_id content completed",
+        //options: { sort: { createdAt: -1 } },
+      })
       .select("-viewSet -status -list -createUser");
 
     if (!findCard || findCard.length == 0) {
@@ -301,11 +301,17 @@ const card = {
 
     const findCard = await cardModel.findById(cardId);
 
-    await findCard.todolists.push({ title });
+    let newTodolist = await findCard.todolists.push({ title });
+    console.log("newTodolist", findCard.todolists[newTodolist - 1]._id);
+
     await findCard
       .save()
       .then(() => {
-        handleSuccess(res, "成功加入todolist");
+        handleSuccess(
+          res,
+          "成功加入todolist標題",
+          findCard.todolists[newTodolist]
+        );
       })
       .catch((err) => {
         return appError(400, err, next);
@@ -421,11 +427,40 @@ const card = {
 
     await newContent
       .save()
-      .then(() => {
-        handleSuccess(res, "新增成功");
-      })
+      .then(() => {})
       .catch((error) => {
         return appError(400, `新增todolist細項失敗${error}`, next);
+      });
+
+    //卡片上todolist標題下也要新增對應細項
+    const findCard = await cardModel.findById(cardId);
+    //檢查是否已經存在該Todolist
+    const index = findCard.todolists.findIndex(
+      (element) => element._id.toString() == titleId
+    );
+
+    if (index !== -1) {
+      findCard.todolists[index].contentList.push(newContent._id);
+    } else {
+      return appError(400, "查無此Todolist標題，不可新增細項", next);
+    }
+
+    await findCard
+      .save()
+      .then(() => {
+        handleSuccess(res, "Todolist新增細項成功", newContent._id);
+      })
+      .catch((err) => {
+        if (err.name === "VersionError") {
+          // 版本号不匹配
+          return appError(
+            400,
+            "更新Todolist失敗! 已被其他用戶修改，請重整後再試一次",
+            next
+          );
+        }
+
+        return appError(400, `更新Todolist失敗${error}`, next);
       });
   },
 

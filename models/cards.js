@@ -42,6 +42,9 @@ const CardSchema = new mongoose.Schema(
           type: String,
           required: [true, "內容不可空白"],
         },
+        contentList: [
+          { type: mongoose.Schema.ObjectId, ref: "Todolist", default: [] },
+        ],
       },
     ],
     // todolists: [
@@ -91,11 +94,11 @@ CardSchema.virtual("comments", {
   localField: "_id",
 });
 
-CardSchema.virtual("todolists.contentList", {
-  ref: "Todolist",
-  foreignField: "title",
-  localField: "todolists._id",
-});
+// CardSchema.virtual("todolists.contentList", {
+//   ref: "Todolist",
+//   foreignField: "title",
+//   localField: "todolists.title._id",
+// });
 
 // Card
 const Card = mongoose.model("card", CardSchema);
