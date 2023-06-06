@@ -13,7 +13,9 @@ const card = {
     const userID = req.user.id;
 
     const cardID = req.params.cardID;
-    const { title, describe, startDate, endDate, proiority } = req.body;
+    const { title, describe, proiority } = req.body;
+    const startDate = req.body.startDate;
+    const endDate = req.body.endDate;
     if (!title || !describe || !startDate || !endDate || !proiority) {
       return appError(400, "欄位輸入錯誤，請重新輸入", next);
     }
@@ -27,7 +29,7 @@ const card = {
     }
 
     // 檢查時間是否為數字
-    if (!validator.isNumeric(startDate) || !validator.isNumeric(endDate)) {
+    if (typeof startDate != "number" || typeof endDate != "number") {
       return appError(400, "不正確的日期格式！", next);
     }
 
