@@ -3236,12 +3236,12 @@
                   "example": "測試566OOO"
                 },
                 "startDate": {
-                  "type": "string",
-                  "example": "1685540000"
+                  "type": "number",
+                  "example": 1685540000
                 },
                 "endDate": {
-                  "type": "string",
-                  "example": "1685544000"
+                  "type": "number",
+                  "example": 1685544000
                 },
                 "proiority": {
                   "type": "string",

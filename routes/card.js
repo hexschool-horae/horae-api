@@ -135,8 +135,8 @@ router.patch(
 		        schema: {
                     "title": "修改卡片",
                     "describe": "測試566OOO",
-                    "startDate":"1685540000",  
-                    "endDate":"1685544000",
+                    "startDate":1685540000,  
+                    "endDate":1685544000,
                     "proiority":"3"
                     }
 		      }
