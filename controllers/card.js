@@ -16,7 +16,7 @@ const card = {
     const { title, describe, proiority } = req.body;
     const startDate = req.body.startDate;
     const endDate = req.body.endDate;
-    if (!title || !describe || !startDate || !endDate || !proiority) {
+    if (!title || !describe || !proiority) {
       return appError(400, "欄位輸入錯誤，請重新輸入", next);
     }
 
@@ -28,36 +28,38 @@ const card = {
       return appError(400, "不正確的卡片優先權設定！", next);
     }
 
-    // 檢查時間是否為數字
-    if (typeof startDate != "number" || typeof endDate != "number") {
-      return appError(400, "不正確的日期格式！", next);
+    if (startDate == null && endDate == null) {
+    } else {
+      // 檢查時間是否為數字
+      if (typeof startDate != "number" || typeof endDate != "number") {
+        return appError(400, "不正確的日期格式！", next);
+      }
+
+      const stimestamp = parseInt(startDate, 10);
+      const etimestamp = parseInt(endDate, 10);
+
+      // 檢查時間戳記是否有效
+      if (
+        isNaN(stimestamp) ||
+        stimestamp < 0 ||
+        isNaN(etimestamp) ||
+        etimestamp < 0
+      ) {
+        return appError(400, "不正確的日期格式！", next);
+      }
+
+      const sdate = new Date(stimestamp);
+      const edate = new Date(etimestamp);
+
+      // 檢查日期是否有效
+      if (isNaN(sdate.getTime()) || isNaN(edate.getTime())) {
+        return appError(400, "不正確的日期格式！", next);
+      }
+
+      if (startDate > endDate) {
+        return appError(400, "開始時間不可大於結束時間！", next);
+      }
     }
-
-    const stimestamp = parseInt(startDate, 10);
-    const etimestamp = parseInt(endDate, 10);
-
-    // 檢查時間戳記是否有效
-    if (
-      isNaN(stimestamp) ||
-      stimestamp < 0 ||
-      isNaN(etimestamp) ||
-      etimestamp < 0
-    ) {
-      return appError(400, "不正確的日期格式！", next);
-    }
-
-    const sdate = new Date(stimestamp);
-    const edate = new Date(etimestamp);
-
-    // 檢查日期是否有效
-    if (isNaN(sdate.getTime()) || isNaN(edate.getTime())) {
-      return appError(400, "不正確的日期格式！", next);
-    }
-
-    if (startDate > endDate) {
-      return appError(400, "開始時間不可大於結束時間！", next);
-    }
-
     //修改
     const updateCard = await cardModel.findOneAndUpdate(
       {
