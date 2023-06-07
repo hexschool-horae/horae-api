@@ -38,6 +38,10 @@
     {
       "name": "Card Comment Setting",
       "description": "卡片評論相關"
+    },
+    {
+      "name": "Card Todolist Setting",
+      "description": "卡片代辦事項相關"
     }
   ],
   "schemes": [
@@ -3052,28 +3056,18 @@
                       "items": {
                         "type": "object",
                         "properties": {
-                          "id": {
-                            "type": "string",
-                            "example": ""
-                          },
                           "title": {
                             "type": "string",
-                            "example": ""
+                            "example": "todolist標題3"
                           },
                           "contentList": {
                             "type": "array",
-                            "items": {
-                              "type": "object",
-                              "properties": {
-                                "content": {
-                                  "type": "string",
-                                  "example": ""
-                                },
-                                "completed": {
-                                  "type": "function"
-                                }
-                              }
-                            }
+                            "example": [],
+                            "items": {}
+                          },
+                          "_id": {
+                            "type": "string",
+                            "example": "647e016fb7914a5e75e73e5e"
                           }
                         }
                       }
@@ -3979,7 +3973,7 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "新增成功"
+                  "example": "成功加入todolist標題"
                 },
                 "data": {
                   "type": "string",
@@ -4104,7 +4098,7 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "修改成功"
+                  "example": "Todolist修改成功"
                 }
               },
               "xml": {
@@ -4316,7 +4310,7 @@
           {
             "name": "parameter_name",
             "in": "body",
-            "description": "B05-17 卡片todolist新增細項",
+            "description": "B05-17 卡片todolist新增細項。只填細項內容，程式completed預設false",
             "schema": {
               "type": "object",
               "properties": {
@@ -4344,7 +4338,7 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "新增成功"
+                  "example": "Todolist新增細項成功"
                 },
                 "data": {
                   "type": "string",
@@ -4441,17 +4435,21 @@
           {
             "name": "parameter_name",
             "in": "body",
-            "description": "B05-18 卡片todolist修改細項",
+            "description": "B05-18 卡片todolist修改細項。completed >> true/false",
             "schema": {
               "type": "object",
               "properties": {
                 "contentId": {
                   "type": "string",
-                  "example": "6470bc3c8c7c20876074788a"
+                  "example": "648087d327da8d23aded69d1"
                 },
                 "content": {
                   "type": "string",
                   "example": "修改todolist細項內容"
+                },
+                "completed": {
+                  "type": "boolean",
+                  "example": true
                 }
               }
             }
@@ -4469,7 +4467,7 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "修改成功"
+                  "example": "todolist細項修改成功"
                 }
               },
               "xml": {

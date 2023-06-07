@@ -314,7 +314,7 @@ const card = {
         handleSuccess(
           res,
           "成功加入todolist標題",
-          findCard.todolists[newTodolist]
+          findCard.todolists[newTodolist - 1]._id
         );
       })
       .catch((err) => {
@@ -373,16 +373,20 @@ const card = {
       return appError(400, "欄位輸入錯誤，請重新輸入", next);
     }
 
-    const deleteContent = await todolistModel.deleteMany({
+    const findContent = await todolistModel.find({
       title: titleId,
     });
-    if (deleteContent.acknowledged == false) {
-      return appError(400, "Todolist刪除失敗", next);
+    if (findContent.length > 0) {
+      const deleteContent = await todolistModel.deleteMany({
+        title: titleId,
+      });
+      if (deleteContent.acknowledged == false) {
+        return appError(400, "Todolist刪除失敗", next);
+      }
+      if (deleteContent.deletedCount == 0) {
+        return appError(400, "Todolist刪除失敗", next);
+      }
     }
-    if (deleteContent.deletedCount == 0) {
-      return appError(400, "Todolist刪除失敗", next);
-    }
-
     const findCard = await cardModel.findById(cardId);
     //檢查是否已經存在該Todolist
     const index = findCard.todolists.findIndex(
@@ -469,15 +473,15 @@ const card = {
   },
 
   //B05-18 卡片todolist修改細項----------------------------------------------------------------------------------
-  async updateTodolistContent(req, res, next) {
+  async updateCardTodolistContent(req, res, next) {
     const userID = req.user.id;
     const { contentId, content, completed } = req.body;
 
     //檢查欄位
-    if (!contentId || !content || !completed) {
+    if (!contentId || !content) {
       return appError(400, "欄位輸入錯誤，請重新輸入", next);
     }
-    if (!["true", "false"].includes(role)) {
+    if (![true, false].includes(completed)) {
       return appError(400, "不正確的completed參數設定！", next);
     }
     const findContent = await todolistModel.findById(contentId);
@@ -485,9 +489,8 @@ const card = {
       return appError(404, "查無此todolist細項", next);
     }
 
-    findContent.comment = comment;
+    findContent.content = content;
     findContent.completed = completed;
-    findContent.createdAt = Date.now();
 
     await findContent
       .save()
@@ -509,7 +512,8 @@ const card = {
   },
 
   //B05-19 卡片todolist刪除一個細項----------------------------------------------------------------------------------
-  async deleteTodolistContent(req, res, next) {
+  async deleteCardTodolistContent(req, res, next) {
+    const cardId = req.params.cardID;
     const { contentId } = req.body;
 
     //檢查欄位
@@ -520,7 +524,7 @@ const card = {
     if (!findContent || findContent.length == 0) {
       return appError(404, "查無此評論", next);
     }
-
+    const titleId = findContent.title;
     const deleteContent = await todolistModel.deleteOne({
       _id: contentId,
     });
@@ -530,6 +534,40 @@ const card = {
     if (deleteContent.deletedCount == 0) {
       return appError(400, "評論刪除失敗", next);
     }
+
+    //卡片上todolist標題下也要刪除對應細項
+    const findCard = await cardModel.findById(cardId);
+    //檢查是否已經存在該Todolist
+    const index = findCard.todolists.findIndex(
+      (element) => element._id.toString() == titleId
+    );
+
+    if (index !== -1) {
+      let idx = findCard.todolists[index].contentList.indexOf(contentId);
+      console.log("idx", idx);
+
+      //findCard.todolists[index].contentList.push(newContent._id);
+    } else {
+      return appError(400, "查無此Todolist標題，不可新增細項", next);
+    }
+    await findCard
+      .save()
+      .then(() => {
+        handleSuccess(res, "刪除成功");
+      })
+      .catch((err) => {
+        if (err.name === "VersionError") {
+          // 版本号不匹配
+          return appError(
+            400,
+            "刪除Todolist失敗! 已被其他用戶修改，請重整後再試一次",
+            next
+          );
+        }
+
+        return appError(400, `刪除Todolist失敗${error}`, next);
+      });
+
     handleSuccess(res, "刪除成功");
   },
 };

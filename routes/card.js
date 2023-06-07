@@ -58,14 +58,22 @@ router.get(
                         }
                     ],
                     "todolists": [
-                        {
-                            id: "",
-                            title: "", 
-                            contentList:[{
-                                content: "",
-                                completed: Boolean,
-                            }]
-                        }
+                      {
+                        "title": "todolist標題3",
+                        "contentList": [
+                          {
+                            "_id": "64808969560b2eec198a0659",
+                            "content": "todolist細項內容1",
+                            "completed": false
+                          }
+                        ],
+                        "_id": "647e014e018481af24cf1c96"
+                      },
+                      {
+                        "title": "todolist標題3",
+                        "contentList": [],
+                        "_id": "647e016fb7914a5e75e73e5e"
+                      }
                     ],
                     "attachments": [
                         {
@@ -472,7 +480,7 @@ router.post(
     description: '成功',
     schema: {
           "success": "true",
-          "message": "新增成功",
+          "message": "成功加入todolist標題",
 		  "data": "6470bc3c8c7c20876074788a"
       }
     }
@@ -528,7 +536,7 @@ router.put(
     description: '成功',
     schema: {
           "success": "true",
-          "message": "修改成功"
+          "message": "Todolist修改成功"
       }
     }
 
@@ -574,7 +582,7 @@ router.delete(
               in: 'body',
               description: 'B05-16 卡片todolist刪除一組(標題+細項)',
               schema: {
-					"titleId": "6470bc3c8c7c20876074788a",
+					          "titleId": "6470bc3c8c7c20876074788a",
                   }
             }
 
@@ -626,7 +634,7 @@ router.post(
    * #swagger.security=[{"Bearer": []}]
         #swagger.parameters['parameter_name'] = {
               in: 'body',
-              description: 'B05-17 卡片todolist新增細項',
+              description: 'B05-17 卡片todolist新增細項。只填細項內容，程式completed預設false',
               schema: {
                     "titleId": "6470bc3c8c7c20876074788a",
                     "content": "todolist細項內容",
@@ -637,8 +645,8 @@ router.post(
     description: '成功',
     schema: {
           "success": "true",
-          "message": "新增成功",
-		  "data": "6470bc3c8c7c20876074788a"
+          "message": "Todolist新增細項成功",
+		      "data": "6470bc3c8c7c20876074788a"
       }
     }
 
@@ -682,10 +690,11 @@ router.put(
    * #swagger.security=[{"Bearer": []}]
         #swagger.parameters['parameter_name'] = {
               in: 'body',
-              description: 'B05-18 卡片todolist修改細項',
+              description: 'B05-18 卡片todolist修改細項。completed >> true/false',
               schema: {
-                    "contentId": "6470bc3c8c7c20876074788a",
+                    "contentId":"648087d327da8d23aded69d1",
                     "content": "修改todolist細項內容",
+                    "completed":true
                   }
             }
 
@@ -693,7 +702,7 @@ router.put(
     description: '成功',
     schema: {
           "success": "true",
-          "message": "修改成功"
+          "message": "todolist細項修改成功"
       }
     }
 

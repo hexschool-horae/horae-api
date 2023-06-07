@@ -138,7 +138,7 @@ const isOkCard = handleErrorAsync(async (req, res, next) => {
     return appError(400, "查無此卡片", next);
   }
   req.boardId = findCard.boardId;
-  console.log("req.boardId", findCard.boardId);
+  //console.log("req.boardId", findCard.boardId);
 
   next();
 });
