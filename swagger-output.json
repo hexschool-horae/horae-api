@@ -2717,6 +2717,24 @@
             "name": "authorization",
             "in": "header",
             "type": "string"
+          },
+          {
+            "name": "parameter_name",
+            "in": "body",
+            "description": "B03-9 看板刪除成員",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "role": {
+                  "type": "string",
+                  "example": "admin"
+                },
+                "userId": {
+                  "type": "string",
+                  "example": "644e09f67304950009bc264d"
+                }
+              }
+            }
           }
         ],
         "responses": {
@@ -2857,6 +2875,20 @@
             "name": "authorization",
             "in": "header",
             "type": "string"
+          },
+          {
+            "name": "parameter_name",
+            "in": "body",
+            "description": "B03-9 看板刪除成員",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "type": "string",
+                  "example": "645c605b54128783e9e56ae5"
+                }
+              }
+            }
           }
         ],
         "responses": {

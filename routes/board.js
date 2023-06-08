@@ -845,6 +845,14 @@ router.patch(
    * #swagger.tags = ['Board Member Setting']
    * #swagger.summary = 'B03-8	看板設定成員權限'
    * #swagger.security=[{"Bearer": []}]
+   * #swagger.parameters['parameter_name'] = {
+		        in: 'body',
+		        description: 'B03-9	看板刪除成員',
+		        schema: {
+            "role": "admin",
+                "userId": "644e09f67304950009bc264d"
+            }
+		      }		
 
 
     #swagger.responses[200] = {
@@ -916,7 +924,13 @@ router.delete(
    * #swagger.tags = ['Board Member Setting']
    * #swagger.summary = 'B03-9	看板刪除成員，回傳data內容為刪除後的所有成員資料'
    * #swagger.security=[{"Bearer": []}]
-
+		 #swagger.parameters['parameter_name'] = {
+		        in: 'body',
+		        description: 'B03-9	看板刪除成員',
+		        schema: {
+						  "userId": "645c605b54128783e9e56ae5",
+						}
+		      }		
 
     #swagger.responses[200] = {
     description: '成功',
