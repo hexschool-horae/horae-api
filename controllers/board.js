@@ -257,6 +257,237 @@ const board = {
     handleSuccess(res, message, finalRes);
   },
 
+  //B03-6	取得單一看板的所有成員---------------------------------------------------------------------------------
+  async getBoardMembers(req, res, next) {
+    const boardID = req.params.bID;
+    const findBoard = await BoardModel.findById(boardID)
+      .populate({
+        path: "members.userId",
+        select: "name email",
+      })
+      .select("title viewSet members -_id");
+    handleSuccess(res, "查詢成功", findBoard);
+  },
+
+  //B03-7	單一看板新增成員---------------------------------------------------------------------------------
+  async addBoardMembers(req, res, next) {
+    const userId = req.user.id;
+    const boardID = req.params.bID;
+    const reqhashData = req.params.hashData;
+    console.log("userId", userId);
+    console.log("boardID", boardID);
+    console.log("reqhashData", reqhashData);
+
+    if (boardID.length < 24) {
+      return appError(400, "您的請求參數有誤", next);
+    }
+
+    const findBoard = await BoardModel.findById(boardID)
+      .populate({
+        path: "members.userId",
+        select: "name email",
+      })
+      .select("inviteHashData members");
+    if (!findBoard || findBoard.length == 0) {
+      return appError(400, "查無此看板", next);
+    }
+
+    ////////////////////////////////////////////////
+    const indexHash = findBoard.members.findIndex(
+      (element) => element.inviteHashData.toString() == reqhashData
+    );
+
+    if (indexHash == -1) {
+      return appError(400, "此板邀請連結異常或是已失效", next);
+    }
+
+    /////////////////////////////////////////////
+    // if (reqhashData !== findBoard.inviteHashData) {
+    //   return appError(400, "您使用的邀請連結異常", next);
+    // }
+
+    //檢查是否已經存在該成員
+    const index = findBoard.members.findIndex(
+      (element) => element.userId._id.toString() == userId
+    );
+    if (index !== -1) {
+      return appError(400, "成員已經存在此看板，不可新增", next);
+    }
+
+    // 新增成員
+    const role = "editor";
+    await findBoard.members.push({ userId, role });
+    await findBoard
+      .save()
+      .then(() => {
+        handleSuccess(res, "成功加入看板");
+      })
+      .catch((err) => {
+        return appError(400, err, next);
+      });
+  },
+
+  //B03-8	單一看板設定成員權限---------------------------------------------------------------------------------
+  async updateBoardMembers(req, res, next) {
+    const boardID = req.params.bID;
+    const { role, userId } = req.body;
+    const findBoard = await BoardModel.findById(boardID).populate({
+      path: "members.userId",
+      select: "name email avatar",
+    });
+
+    if (!role || !userId) {
+      return appError(400, "參數錯誤，請重新輸入", next);
+    }
+
+    if (!["admin", "editor"].includes(role)) {
+      return appError(400, "不正確的角色設定！", next);
+    }
+
+    //找到members是否有包含此id
+    const index = findBoard.members.findIndex(
+      (element) => element.userId._id.toString() == userId
+    );
+
+    // console.log(index);
+    if (index !== -1) {
+      //console.log(findBoard.members[index]);
+      findBoard.members[index].role = role;
+    } else {
+      return appError(400, "查無此成員，設定成員權限失敗", next);
+    }
+
+    //檢查修改後的member角色有沒有admin
+    const adminIndex = findBoard.members.findIndex(
+      (element) => element.role.toString() == "admin"
+    );
+
+    if (adminIndex == -1) {
+      return appError(400, "設定成員權限失敗，看板至少要一個管理員", next);
+    }
+
+    await findBoard
+      .save()
+      .then(() => {
+        handleSuccess(res, "成員權限設定成功", findBoard.members);
+      })
+      .catch((err) => {
+        return appError(400, err, next);
+      });
+  },
+
+  //B03-9	單一看板刪除成員---------------------------------------------------------------------------------
+  async deleteBoardMembers(req, res, next) {
+    const boardID = req.params.bID;
+    const deleteUserID = req.body.userId;
+    const findBoard = await BoardModel.findById(boardID).populate({
+      path: "members.userId",
+      select: "name email avatar",
+    });
+
+    if (!deleteUserID) {
+      return appError(400, "參數錯誤，請重新輸入", next);
+    }
+    //找到members是否有包含此id
+    const index = findBoard.members.findIndex(
+      (element) => element.userId._id.toString() == deleteUserID
+    );
+
+    // console.log(index);
+    if (index !== -1) {
+      findBoard.members.splice(index, 1); //.splice(要刪除的索引開始位置, 要刪除的元素數量)
+    } else {
+      return appError(400, "查無此成員，移除失敗", next);
+    }
+
+    //檢查修改後的member角色有沒有admin
+    const adminIndex = findBoard.members.findIndex(
+      (element) => element.role.toString() == "admin"
+    );
+    //console.log("adminIndex", adminIndex);
+
+    if (adminIndex == -1) {
+      return appError(400, "成員移除失敗，看板至少要一個管理員", next);
+    }
+
+    await findBoard
+      .save()
+      .then(() => {
+        handleSuccess(res, "成員移除成功", findBoard.members);
+      })
+      .catch((err) => {
+        return appError(400, err, next);
+      });
+  },
+
+  //B03-10 產生看板邀請連結---------------------------------------------------------------------------------
+  async boardInvitationLink(req, res, next) {
+    const userID = req.user.id;
+    const boardID = req.params.bID;
+    const findBoard = await BoardModel.findById(boardID);
+    let inviteHash = "";
+
+    const index = findBoard.members.findIndex(
+      (element) => element.userId._id.toString() == userID
+    );
+
+    // console.log(index);
+    if (index == -1) {
+      return appError(400, "查無此成員，產生看板邀請連結失敗", next);
+    }
+
+    inviteHash = findBoard.members[index].inviteHashData;
+
+    if (inviteHash == "") {
+      inviteHash = Math.floor(Math.random() * 1000000000000);
+      findBoard.members[index].inviteHashData = inviteHash;
+    }
+    await findBoard
+      .save()
+      .then(() => {
+        // 產生邀請連結
+        const boardInvitationLink = `${process.env.FONT_END}/board/${boardID}/members/${inviteHash}`;
+
+        handleSuccess(res, "產生邀請連結成功", {
+          invitationLink: boardInvitationLink,
+        });
+      })
+      .catch((err) => {
+        return appError(400, "產生看板連結失敗，" + err, next);
+      });
+  },
+
+  //B03-11	寄看板邀請連結email給被邀請人---------------------------------------------------------------------------------
+
+  //B03-12 取得看板邀請資料---------------------------------------------------------------------------------
+  async getInvitationData(req, res, next) {
+    const boardID = req.params.bID;
+    const hashData = req.params.hashData;
+
+    const findBoard = await BoardModel.findById(boardID).populate({
+      path: "members.userId",
+      select: "name email avatar",
+    });
+
+    if (!findBoard || findBoard.length == 0) {
+      return appError(400, "看板不存在", next);
+    }
+    console.log("findBoard.members", findBoard.members);
+
+    const index = findBoard.members.findIndex(
+      (element) => element.inviteHashData == hashData
+    );
+
+    // console.log(index);
+    if (index == -1) {
+      return appError(400, "此板邀請連結異常或是已失效", next);
+    }
+
+    handleSuccess(res, "成功", {
+      title: findBoard.title,
+      inviter: findBoard.members[index].userId.name,
+    });
+  },
   //B04-1	新增看板中列表----------------------------------------------------------------------------------
   async addlist(req, res, next) {
     const boardId = req.params.bID;
@@ -473,32 +704,6 @@ const board = {
       handleSuccess(res, "刪除成功");
     }
   },
-  //   //B03-16	單一看板刪除標籤-------------------------------------------------------------------------------------
-  //   async deleteTag(req, res, next) {
-  //     const boardId = req.params.bID;
-  //     const { tagId } = req.body;
-
-  //     //檢查欄位
-  //     if (!tagId) {
-  //       return appError(400, "欄位輸入錯誤，請重新輸入", next);
-  //     }
-  //     const findTag = await boardTagsModel.findById(tagId);
-  //     if (!findTag || findTag.length == 0) {
-  //       return appError(404, "查無此標籤", next);
-  //     }
-
-  //     const deleteTag = await boardTagsModel.deleteOne({
-  //       _id: tagId,
-  //       boardId: new ObjectId(boardId),
-  //     });
-  //     if (deleteTag.acknowledged == false) {
-  //       return appError(400, "標籤刪除失敗", next);
-  //     }
-  //     if (deleteTag.deletedCount == 0) {
-  //       return appError(400, "標籤刪除失敗", next);
-  //     }
-  //     handleSuccess(res, "刪除成功");
-  //   },
 };
 
 module.exports = board;

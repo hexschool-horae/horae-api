@@ -20,12 +20,16 @@
       "description": "看板相關"
     },
     {
-      "name": "List",
-      "description": "列表相關"
-    },
-    {
       "name": "Board Tag",
       "description": "看板標籤相關"
+    },
+    {
+      "name": "Board Member Setting",
+      "description": "看板成員事項相關"
+    },
+    {
+      "name": "List",
+      "description": "列表相關"
     },
     {
       "name": "Card",
@@ -2508,6 +2512,789 @@
                 "message": {
                   "type": "string",
                   "example": "查無此看板"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "系統錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "系統錯誤，請洽管理員"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/board/{bID}/members": {
+      "get": {
+        "tags": [
+          "Board Member Setting"
+        ],
+        "summary": "B03-6 取得看板的所有成員 role：admin/editor",
+        "description": "",
+        "parameters": [
+          {
+            "name": "bID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "string",
+                  "example": "true"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "查詢成功"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "看板0608"
+                    },
+                    "viewSet": {
+                      "type": "string",
+                      "example": "public"
+                    },
+                    "members": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "userId": {
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "type": "string",
+                                "example": "64743a4e5ac3abf5a47ae523"
+                              },
+                              "name": {
+                                "type": "string",
+                                "example": "louisa"
+                              },
+                              "email": {
+                                "type": "string",
+                                "example": "louisa@gmail.com"
+                              }
+                            }
+                          },
+                          "role": {
+                            "type": "string",
+                            "example": "editor"
+                          },
+                          "inviteHashData": {
+                            "type": "string",
+                            "example": ""
+                          },
+                          "_id": {
+                            "type": "string",
+                            "example": "6481efd1d3bee680ebeb69b9"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "欄位輸入錯誤，請重新輸入",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "欄位輸入錯誤，請重新輸入"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "401": {
+            "description": "身分驗證不通過",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "身分驗證不通過相關錯誤訊息"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "系統錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "系統錯誤，請洽管理員"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "Board Member Setting"
+        ],
+        "summary": "B03-8 看板設定成員權限",
+        "description": "",
+        "parameters": [
+          {
+            "name": "bID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "string",
+                  "example": "true"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "成員權限設定成功"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "userId": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "example": "644e09f67304950009bc264d"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "修改過name8"
+                          },
+                          "email": {
+                            "type": "string",
+                            "example": "kk@gmail.com"
+                          }
+                        }
+                      },
+                      "role": {
+                        "type": "string",
+                        "example": "admin"
+                      },
+                      "inviteHashData": {
+                        "type": "string",
+                        "example": ""
+                      },
+                      "_id": {
+                        "type": "string",
+                        "example": "6481ec3ce6052ca9f4880b0b"
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "欄位輸入錯誤，請重新輸入",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "欄位輸入錯誤，請重新輸入"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "401": {
+            "description": "身分驗證不通過",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "身分驗證不通過相關錯誤訊息"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "系統錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "系統錯誤，請洽管理員"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Board Member Setting"
+        ],
+        "summary": "B03-9 看板刪除成員，回傳data內容為刪除後的所有成員資料",
+        "description": "",
+        "parameters": [
+          {
+            "name": "bID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "string",
+                  "example": "true"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "成員移除成功"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "userId": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "example": "64743a4e5ac3abf5a47ae523"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "louisa"
+                          },
+                          "email": {
+                            "type": "string",
+                            "example": "louisa@gmail.com"
+                          },
+                          "avatar": {
+                            "type": "string",
+                            "example": ""
+                          }
+                        }
+                      },
+                      "role": {
+                        "type": "string",
+                        "example": "editor"
+                      },
+                      "inviteHashData": {
+                        "type": "string",
+                        "example": ""
+                      },
+                      "_id": {
+                        "type": "string",
+                        "example": "6481efd1d3bee680ebeb69b9"
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "欄位輸入錯誤，請重新輸入",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "欄位輸入錯誤，請重新輸入"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "401": {
+            "description": "身分驗證不通過",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "身分驗證不通過相關錯誤訊息"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "系統錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "系統錯誤，請洽管理員"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/board/{bID}/members/{hashData}": {
+      "post": {
+        "tags": [
+          "Board Member Setting"
+        ],
+        "summary": "B03-7 看板新增成員",
+        "description": "",
+        "parameters": [
+          {
+            "name": "bID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "hashData",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "string",
+                  "example": "true"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "成功加入看板"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "此板邀請連結異常或是已失效",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "此板邀請連結異常或是已失效"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "401": {
+            "description": "身分驗證不通過",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "身分驗證不通過相關錯誤訊息"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "系統錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "系統錯誤，請洽管理員"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/board/{bID}/invitation-link": {
+      "post": {
+        "tags": [
+          "Board Member Setting"
+        ],
+        "summary": "B03-10 產生看板邀請連結",
+        "description": "",
+        "parameters": [
+          {
+            "name": "bID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "string",
+                  "example": "true"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "成功加入看板"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "invitationLink": {
+                      "type": "string",
+                      "example": "https://horae-ui-otzo.onrender.com/board/6481e84c5d914d25ab586c9a/members/60897399332"
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "欄位輸入錯誤，請重新輸入",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "欄位輸入錯誤，請重新輸入"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "401": {
+            "description": "身分驗證不通過",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "身分驗證不通過相關錯誤訊息"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "系統錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "系統錯誤，請洽管理員"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/board/{bID}/invitation-data/{hashData}": {
+      "get": {
+        "tags": [
+          "Board Member Setting"
+        ],
+        "summary": "B03-12 取得看板邀請資料",
+        "description": "",
+        "parameters": [
+          {
+            "name": "bID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "hashData",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "string",
+                  "example": "true"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "成功"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "看板名稱"
+                    },
+                    "inviter": {
+                      "type": "string",
+                      "example": "邀請人"
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "欄位輸入錯誤，請重新輸入",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "欄位輸入錯誤，請重新輸入"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "401": {
+            "description": "身分驗證不通過",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "身分驗證不通過相關錯誤訊息"
                 }
               },
               "xml": {

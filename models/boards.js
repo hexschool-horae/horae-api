@@ -39,12 +39,16 @@ const BoardSchema = new mongoose.Schema({
         type: String,
         enum: ["editor", "admin"],
       },
+      inviteHashData: {
+        type: String,
+        default: "",
+      },
     },
   ],
-  inviteHashData: {
-    type: String,
-    default: "",
-  },
+  // inviteHashData: {
+  //   type: String,
+  //   default: "",
+  // },
   lists: [{ type: mongoose.Schema.Types.ObjectId, ref: "list", default: [] }],
   // workspace: { type: mongoose.Schema.ObjectId, ref: "workSpace", default: "" },
   createUser: {

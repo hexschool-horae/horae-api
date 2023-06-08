@@ -703,4 +703,385 @@ router.delete(
   }
 );
 
+//B03-6	取得單一看板的所有成員---------------------------------------------------------------------------------
+router.get(
+  "/:bID/members",
+  isAuth,
+  isAuthBoard,
+  handleErrorAsync(boardController.getBoardMembers),
+  function (req, res, next) {
+    /**
+   * #swagger.tags = ['Board Member Setting']
+   * #swagger.summary = 'B03-6 取得看板的所有成員 role：admin/editor'
+   * #swagger.security=[{"Bearer": []}]
+
+
+    #swagger.responses[200] = {
+    description: '成功',
+    schema:{
+            "success": "true",
+            "message": "查詢成功",
+            "data": {
+                "title": "看板0608",
+                "viewSet": "public",
+                "members": [
+                    {
+                        "userId": {
+                            "_id": "644e09f67304950009bc264d",
+                            "name": "修改過name8",
+                            "email": "kk@gmail.com"
+                        },
+                        "role": "admin",
+                        "inviteHashData": "60897399332",
+                        "_id": "6481ec3ce6052ca9f4880b0b"
+                    },
+                    {
+                        "userId": {
+                            "_id": "64743a4e5ac3abf5a47ae523",
+                            "name": "louisa",
+                            "email": "louisa@gmail.com"
+                        },
+                        "role": "editor",
+                        "inviteHashData": "",
+                        "_id": "6481efd1d3bee680ebeb69b9"
+                    }
+                ]
+            }
+        }
+    }
+
+
+    #swagger.responses[400] = {
+        description: '欄位輸入錯誤，請重新輸入',
+        schema: {
+        "success": false,
+        "message": "欄位輸入錯誤，請重新輸入"
+        }
+    }
+
+    #swagger.responses[401] = {
+      description: '身分驗證不通過',
+      schema: {
+      "success": false,
+      "message": "身分驗證不通過相關錯誤訊息"
+      }
+    }
+
+    #swagger.responses[500] = {
+      description: '系統錯誤',
+      schema: {   
+        "success": false,
+        "message": "系統錯誤，請洽管理員"
+      }
+    }
+*/
+  }
+);
+
+//B03-7	單一看板新增成員---------------------------------------------------------------------------------
+router.post(
+  "/:bID/members/:hashData",
+  isAuth,
+  handleErrorAsync(boardController.addBoardMembers),
+  function (req, res, next) {
+    /**
+   * #swagger.tags = ['Board Member Setting']
+   * #swagger.summary = 'B03-7 看板新增成員'
+   * #swagger.security=[{"Bearer": []}]
+
+
+    #swagger.responses[200] = {
+    description: '成功',
+    schema:{
+            "success": "true",
+            "message": "成功加入看板",
+
+ 
+        }
+    }
+
+    #swagger.responses[400] = {
+        description: '欄位輸入錯誤，請重新輸入',
+        schema: {
+        "success": false,
+        "message": "欄位輸入錯誤，請重新輸入"
+        }
+    }
+    #swagger.responses[400] = {
+        description: '此板邀請連結異常或是已失效',
+        schema: {
+        "success": false,
+        "message": "此板邀請連結異常或是已失效"
+        }
+    }
+
+    #swagger.responses[401] = {
+      description: '身分驗證不通過',
+      schema: {
+      "success": false,
+      "message": "身分驗證不通過相關錯誤訊息"
+      }
+    }
+
+    #swagger.responses[500] = {
+      description: '系統錯誤',
+      schema: {   
+        "success": false,
+        "message": "系統錯誤，請洽管理員"
+      }
+    }
+*/
+  }
+);
+
+//B03-8	單一看板設定成員權限---------------------------------------------------------------------------------
+router.patch(
+  "/:bID/members",
+  isAuth,
+  isAuthBoard,
+  handleErrorAsync(boardController.updateBoardMembers),
+  function (req, res, next) {
+    /**
+   * #swagger.tags = ['Board Member Setting']
+   * #swagger.summary = 'B03-8	看板設定成員權限'
+   * #swagger.security=[{"Bearer": []}]
+
+
+    #swagger.responses[200] = {
+    description: '成功',
+    schema:{
+    "success": "true",
+    "message": "成員權限設定成功",
+    "data": [
+              {
+                  "userId": {
+                      "_id": "645c605b54128783e9e56ae5",
+                      "name": "testmm",
+                      "email": "testmm@gmail.com"
+                  },
+                  "role": "admin",
+                  "inviteHashData": "428764034415",
+                  "_id": "6481e84c5d914d25ab586c9b"
+              },
+              {
+                  "userId": {
+                      "_id": "644e09f67304950009bc264d",
+                      "name": "修改過name8",
+                      "email": "kk@gmail.com"
+                  },
+                  "role": "admin",
+                  "inviteHashData": "",
+                  "_id": "6481ec3ce6052ca9f4880b0b"
+              }
+          ]
+      }
+    }
+
+
+    #swagger.responses[400] = {
+        description: '欄位輸入錯誤，請重新輸入',
+        schema: {
+        "success": false,
+        "message": "欄位輸入錯誤，請重新輸入"
+        }
+    }
+
+    #swagger.responses[401] = {
+      description: '身分驗證不通過',
+      schema: {
+      "success": false,
+      "message": "身分驗證不通過相關錯誤訊息"
+      }
+    }
+
+    #swagger.responses[500] = {
+      description: '系統錯誤',
+      schema: {   
+        "success": false,
+        "message": "系統錯誤，請洽管理員"
+      }
+    }
+*/
+  }
+);
+
+//B03-9	單一看板刪除成員---------------------------------------------------------------------------------
+router.delete(
+  "/:bID/members",
+  isAuth,
+  isAuthBoard,
+  handleErrorAsync(boardController.deleteBoardMembers),
+  function (req, res, next) {
+    /**
+   * #swagger.tags = ['Board Member Setting']
+   * #swagger.summary = 'B03-9	看板刪除成員，回傳data內容為刪除後的所有成員資料'
+   * #swagger.security=[{"Bearer": []}]
+
+
+    #swagger.responses[200] = {
+    description: '成功',
+    schema:{
+            "success": "true",
+            "message": "成員移除成功",
+            "data": [
+                {
+                    "userId": {
+                        "_id": "644e09f67304950009bc264d",
+                        "name": "修改過name8",
+                        "email": "kk@gmail.com",
+                        "avatar": ""
+                    },
+                    "role": "admin",
+                    "inviteHashData": "60897399332",
+                    "_id": "6481ec3ce6052ca9f4880b0b"
+                },
+                {
+                    "userId": {
+                        "_id": "64743a4e5ac3abf5a47ae523",
+                        "name": "louisa",
+                        "email": "louisa@gmail.com",
+                        "avatar": ""
+                    },
+                    "role": "editor",
+                    "inviteHashData": "",
+                    "_id": "6481efd1d3bee680ebeb69b9"
+                }
+            ]
+        }
+    }
+
+
+    #swagger.responses[400] = {
+        description: '欄位輸入錯誤，請重新輸入',
+        schema: {
+        "success": false,
+        "message": "欄位輸入錯誤，請重新輸入"
+        }
+    }
+
+    #swagger.responses[401] = {
+      description: '身分驗證不通過',
+      schema: {
+      "success": false,
+      "message": "身分驗證不通過相關錯誤訊息"
+      }
+    }
+
+    #swagger.responses[500] = {
+      description: '系統錯誤',
+      schema: {   
+        "success": false,
+        "message": "系統錯誤，請洽管理員"
+      }
+    }
+*/
+  }
+);
+
+//B03-10 產生看板邀請連結---------------------------------------------------------------------------------
+router.post(
+  "/:bID/invitation-link",
+  isAuth,
+  isAuthBoard,
+  handleErrorAsync(boardController.boardInvitationLink),
+  function (req, res, next) {
+    /**
+   * #swagger.tags = ['Board Member Setting']
+   * #swagger.summary = 'B03-10 產生看板邀請連結'
+   * #swagger.security=[{"Bearer": []}]
+
+
+    #swagger.responses[200] = {
+    description: '成功',
+    schema:{
+            "success": "true",
+            "message": "成功加入看板",
+			 "data": {
+					"invitationLink": "https://horae-ui-otzo.onrender.com/board/6481e84c5d914d25ab586c9a/members/60897399332"
+			}
+        }
+    }
+
+
+    #swagger.responses[400] = {
+        description: '欄位輸入錯誤，請重新輸入',
+        schema: {
+        "success": false,
+        "message": "欄位輸入錯誤，請重新輸入"
+        }
+    }
+
+    #swagger.responses[401] = {
+      description: '身分驗證不通過',
+      schema: {
+      "success": false,
+      "message": "身分驗證不通過相關錯誤訊息"
+      }
+    }
+
+    #swagger.responses[500] = {
+      description: '系統錯誤',
+      schema: {   
+        "success": false,
+        "message": "系統錯誤，請洽管理員"
+      }
+    }
+*/
+  }
+);
+//B03-11	寄看板邀請連結email給被邀請人---------------------------------------------------------------------------------
+
+//B03-12 取得看板邀請資料---------------------------------------------------------------------------------
+router.get(
+  "/:bID/invitation-data/:hashData",
+  handleErrorAsync(boardController.getInvitationData),
+  function (req, res, next) {
+    /**
+   * #swagger.tags = ['Board Member Setting']
+   * #swagger.summary = 'B03-12 取得看板邀請資料'
+   * #swagger.security=[{"Bearer": []}]
+
+
+    #swagger.responses[200] = {
+    description: '成功',
+    schema:{
+            "success": "true",
+            "message": "成功",
+            "data": {
+              
+                "title": "看板名稱",
+                "inviter": "邀請人",
+                
+            }
+        }
+    }
+
+
+    #swagger.responses[400] = {
+        description: '欄位輸入錯誤，請重新輸入',
+        schema: {
+        "success": false,
+        "message": "欄位輸入錯誤，請重新輸入"
+        }
+    }
+
+    #swagger.responses[401] = {
+      description: '身分驗證不通過',
+      schema: {
+      "success": false,
+      "message": "身分驗證不通過相關錯誤訊息"
+      }
+    }
+
+    #swagger.responses[500] = {
+      description: '系統錯誤',
+      schema: {   
+        "success": false,
+        "message": "系統錯誤，請洽管理員"
+      }
+    }
+*/
+  }
+);
+
 module.exports = router;
