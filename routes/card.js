@@ -30,13 +30,11 @@ router.get(
                 "startDate": 1685540000,
                 "endDate": 1685540000,
                 "members": [
-                        {
-                            "userId": {
-                                "_id": "644e5d4a2be1aa32974e10d1",
-                                "name": "g"
-                            },
-                            "role": "admin",
-                            "_id": "645f819ca1afcf59db7fd99e"
+                       {
+                            "_id": "645c605b54128783e9e56ae5",
+                            "name": "testmm",
+                            "email": "testmm@gmail.com",
+                            "avatar": ""
                         }
                     ],
                     "comments": [
@@ -787,4 +785,111 @@ router.delete(
   }
 );
 
+//B05-20 卡片成員新增----------------------------------------------------------------------------------
+router.post(
+  "/:cardID/member",
+  isAuth,
+  isOkCard,
+  handleErrorAsync(cardController.addCardMember),
+  function (req, res, next) {
+    /**
+   * #swagger.members = ['Card Member Setting']
+   * #swagger.summary = 'B05-20 卡片成員新增'
+   * #swagger.security=[{"Bearer": []}]
+        #swagger.parameters['parameter_name'] = {
+              in: 'body',
+              description: 'B05-20 卡片成員新增',
+              schema: {
+                   "memberId":"64743a4e5ac3abf5a47ae523"
+                  }
+            }
+
+    #swagger.responses[200] = {
+    description: '成功',
+    schema: {
+          "success": "true",
+          "message": "新增成功"
+      }
+    }
+
+    #swagger.responses[400] = {
+        description: '欄位輸入錯誤，請重新輸入',
+        schema: {
+        "success": false,
+        "message": "欄位輸入錯誤，請重新輸入"
+        }
+    }
+
+    #swagger.responses[401] = {
+      description: '身分驗證不通過',
+      schema: {
+      "success": false,
+      "message": "身分驗證不通過相關錯誤訊息"
+      }
+    }
+
+    #swagger.responses[500] = {
+      description: '系統錯誤',
+      schema: {   
+        "success": false,
+        "message": "系統錯誤，請洽管理員"
+      }
+    }
+*/
+  }
+);
+
+//B05-21 卡片成員移除----------------------------------------------------------------------------------
+router.delete(
+  "/:cardID/member",
+  isAuth,
+  isOkCard,
+  handleErrorAsync(cardController.deleteCardMember),
+  function (req, res, next) {
+    /**
+   * #swagger.members = ['Card Member Setting']
+   * #swagger.summary = 'B05-21 卡片成員移除'
+   * #swagger.security=[{"Bearer": []}]
+        #swagger.parameters['parameter_name'] = {
+              in: 'body',
+              description: 'B05-21 卡片成員移除',
+              schema: {
+                    "memberId":"64743a4e5ac3abf5a47ae523"
+                  }
+            }
+
+    #swagger.responses[200] = {
+    description: '成功',
+    schema: {
+          "success": "true",
+          "message": "移除成功"
+      }
+    }
+
+    #swagger.responses[400] = {
+        description: '欄位輸入錯誤，請重新輸入',
+        schema: {
+        "success": false,
+        "message": "欄位輸入錯誤，請重新輸入"
+        }
+    }
+
+    #swagger.responses[401] = {
+      description: '身分驗證不通過',
+      schema: {
+      "success": false,
+      "message": "身分驗證不通過相關錯誤訊息"
+      }
+    }
+
+    #swagger.responses[500] = {
+      description: '系統錯誤',
+      schema: {   
+        "success": false,
+        "message": "系統錯誤，請洽管理員"
+      }
+    }
+*/
+  }
+);
 module.exports = router;

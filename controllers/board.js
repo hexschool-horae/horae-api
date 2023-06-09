@@ -181,8 +181,8 @@ const board = {
         select: "title position startDate endDate tags proiority comments",
         options: { sort: { position: 1 } },
         populate: {
-          path: "tags comments",
-          select: "title color comment",
+          path: "tags comments members",
+          select: "title color comment name email avatar",
         },
       })
       .select("title status position cards")
@@ -274,9 +274,9 @@ const board = {
     const userId = req.user.id;
     const boardID = req.params.bID;
     const reqhashData = req.params.hashData;
-    console.log("userId", userId);
-    console.log("boardID", boardID);
-    console.log("reqhashData", reqhashData);
+    // console.log("userId", userId);
+    // console.log("boardID", boardID);
+    // console.log("reqhashData", reqhashData);
 
     if (boardID.length < 24) {
       return appError(400, "您的請求參數有誤", next);
@@ -413,11 +413,47 @@ const board = {
     await findBoard
       .save()
       .then(() => {
-        handleSuccess(res, "成員移除成功", findBoard.members);
+        //handleSuccess(res, "成員移除成功", findBoard.members);
       })
       .catch((err) => {
         return appError(400, err, next);
       });
+
+    //////////////////////////////////
+    const findCard = await cardModel.find({
+      $and: [{ members: { $in: deleteUserID } }, { boardId: boardID }],
+    });
+
+    let deleteMemberInCard = true;
+    if (findCard || findCard.length > 0) {
+      let index = -1;
+      findCard.forEach((element) => {
+        //console.log("element.members", element.members);
+
+        index = element.members.findIndex(
+          (member) => member.toString() == deleteUserID.toString()
+        );
+
+        if (index !== -1) {
+          element.members.splice(index, 1); //.splice(要刪除的索引開始位置, 要刪除的元素數量)
+        }
+
+        //移除成員ID
+        element
+          .save()
+          .then(() => {
+            deleteMemberInCard = true;
+          })
+          .catch((error) => {
+            deleteMemberInCard = false;
+            return appError(400, `在卡片移除成員失敗${error}`, next);
+          });
+      });
+    }
+
+    if (deleteMemberInCard == true) {
+      handleSuccess(res, "刪除成功");
+    }
   },
 
   //B03-10 產生看板邀請連結---------------------------------------------------------------------------------
@@ -673,11 +709,11 @@ const board = {
     let deleteTagInCard = true;
     if (findCard || findCard.length > 0) {
       //卡片裡有標籤，要移除
-      console.log("findCard", findCard);
+      // console.log("findCard", findCard);
 
       let index = -1;
       findCard.forEach((element) => {
-        console.log("element.tags", element.tags);
+        // console.log("element.tags", element.tags);
 
         index = element.tags.findIndex(
           (tag) => tag.toString() == tagId.toString()

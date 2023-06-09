@@ -2721,7 +2721,7 @@
           {
             "name": "parameter_name",
             "in": "body",
-            "description": "B03-9 看板刪除成員",
+            "description": "B03-8 看板設定成員權限",
             "schema": {
               "type": "object",
               "properties": {
@@ -2862,7 +2862,7 @@
         "tags": [
           "Board Member Setting"
         ],
-        "summary": "B03-9 看板刪除成員，回傳data內容為刪除後的所有成員資料",
+        "summary": "B03-9 看板刪除成員，回傳data內容為刪除後的所有成員資料，卡片上如有此成員會一併移除",
         "description": "",
         "parameters": [
           {
@@ -3022,7 +3022,7 @@
         "tags": [
           "Board Member Setting"
         ],
-        "summary": "B03-7 看板新增成員",
+        "summary": "B03-7 看板新增成員，請傳入被邀請者token",
         "description": "",
         "parameters": [
           {
@@ -3793,26 +3793,21 @@
                       "items": {
                         "type": "object",
                         "properties": {
-                          "userId": {
-                            "type": "object",
-                            "properties": {
-                              "_id": {
-                                "type": "string",
-                                "example": "644e5d4a2be1aa32974e10d1"
-                              },
-                              "name": {
-                                "type": "string",
-                                "example": "g"
-                              }
-                            }
-                          },
-                          "role": {
-                            "type": "string",
-                            "example": "admin"
-                          },
                           "_id": {
                             "type": "string",
-                            "example": "645f819ca1afcf59db7fd99e"
+                            "example": "645c605b54128783e9e56ae5"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "testmm"
+                          },
+                          "email": {
+                            "type": "string",
+                            "example": "testmm@gmail.com"
+                          },
+                          "avatar": {
+                            "type": "string",
+                            "example": ""
                           }
                         }
                       }
@@ -5442,6 +5437,236 @@
                 "message": {
                   "type": "string",
                   "example": "錯誤訊息"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "系統錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "系統錯誤，請洽管理員"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/card/{cardID}/member": {
+      "post": {
+        "summary": "B05-20 卡片成員新增",
+        "description": "",
+        "parameters": [
+          {
+            "name": "cardID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "parameter_name",
+            "in": "body",
+            "description": "B05-20 卡片成員新增",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "memberId": {
+                  "type": "string",
+                  "example": "64743a4e5ac3abf5a47ae523"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "string",
+                  "example": "true"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "新增成功"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "欄位輸入錯誤，請重新輸入",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "欄位輸入錯誤，請重新輸入"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "401": {
+            "description": "身分驗證不通過",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "身分驗證不通過相關錯誤訊息"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "系統錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "系統錯誤，請洽管理員"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "B05-21 卡片成員移除",
+        "description": "",
+        "parameters": [
+          {
+            "name": "cardID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "parameter_name",
+            "in": "body",
+            "description": "B05-21 卡片成員移除",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "memberId": {
+                  "type": "string",
+                  "example": "64743a4e5ac3abf5a47ae523"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "string",
+                  "example": "true"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "移除成功"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "欄位輸入錯誤，請重新輸入",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "欄位輸入錯誤，請重新輸入"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "401": {
+            "description": "身分驗證不通過",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "身分驗證不通過相關錯誤訊息"
                 }
               },
               "xml": {

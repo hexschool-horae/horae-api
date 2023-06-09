@@ -2,9 +2,10 @@ const appError = require("../service/appError");
 const handleSuccess = require("../service/handleSuccess");
 const cardModel = require("../models/cards");
 const boardTagsModel = require("../models/boardTags");
+const boardModel = require("../models/boards");
 const commentModel = require("../models/cardComment");
 const todolistModel = require("../models/cardTodolist");
-
+const userModel = require("../models/users");
 const validator = require("validator");
 
 const card = {
@@ -88,6 +89,10 @@ const card = {
     const cardID = req.params.cardID;
     const findCard = await cardModel
       .findById(cardID)
+      .populate({
+        path: "members",
+        select: "name email avatar",
+      })
       .populate({
         path: "tags",
         select: "_id title color",
@@ -569,6 +574,104 @@ const card = {
       });
 
     handleSuccess(res, "刪除成功");
+  },
+
+  //B05-20 卡片成員新增----------------------------------------------------------------------------------
+  async addCardMember(req, res, next) {
+    const cardID = req.params.cardID;
+
+    //const userID = req.user.id;
+    const boardId = req.boardId;
+
+    //console.log("addCardMember boardId", boardId);
+
+    const { memberId } = req.body;
+    if (!memberId) {
+      return appError(400, "欄位輸入錯誤，請重新輸入", next);
+    }
+
+    const findUser = await userModel.findById(memberId);
+    if (!findUser || findUser.length == 0) {
+      return appError(400, "查無此使用者", next);
+    }
+
+    const findBoard = await boardModel.findById(boardId);
+    console.log("boardId", boardId);
+
+    if (!findBoard || findBoard.length == 0) {
+      return appError(400, "查無此看板", next);
+    }
+    const indexBoardMember = findBoard.members.findIndex(
+      (element) => element.userId.toString() == memberId
+    );
+
+    if (indexBoardMember == -1) {
+      return appError(400, "此使用者不屬於此看板", next);
+    }
+
+    const findCard = await cardModel.findById(cardID);
+    //找到卡片的members是否有包含此id
+    const index = findCard.members.findIndex(
+      (element) => element.toString() == memberId
+    );
+    if (index !== -1) {
+      return appError(400, "此成員已經存在卡片，不可新增", next);
+    }
+
+    //新增使用者ID到所屬卡片
+    await findCard.members.push(memberId);
+    await findCard
+      .save()
+      .then(() => {
+        handleSuccess(res, "新增成功");
+      })
+      .catch((error) => {
+        return appError(400, `在卡片新增成員失敗${error}`, next);
+      });
+  },
+
+  //B05-21 卡片成員移除----------------------------------------------------------------------------------
+  async deleteCardMember(req, res, next) {
+    const cardID = req.params.cardID;
+    const boardId = req.boardId;
+    const userID = req.user.id;
+    const { memberId } = req.body;
+    if (!memberId) {
+      return appError(400, "欄位輸入錯誤，請重新輸入", next);
+    }
+
+    const findUser = await userModel.findById(memberId);
+    if (!findUser || findUser.length == 0) {
+      return appError(400, "查無此使用者", next);
+    }
+
+    const findBoard = await boardModel.findById(boardId);
+    if (!findBoard || findBoard.length == 0) {
+      return appError(400, "查無此看板", next);
+    }
+
+    const findCard = await cardModel.findById(cardID);
+
+    //找到members是否有包含此id
+    const index = findCard.members.findIndex(
+      (element) => element.toString() == memberId
+    );
+
+    if (index !== -1) {
+      findCard.members.splice(index, 1); //.splice(要刪除的索引開始位置, 要刪除的元素數量)
+    } else {
+      return appError(400, "卡片上查無此成員，移除失敗", next);
+    }
+
+    //移除使用者ID
+    await findCard
+      .save()
+      .then(() => {
+        handleSuccess(res, "移除成功");
+      })
+      .catch((error) => {
+        return appError(400, `在卡片移除成員失敗${error}`, next);
+      });
   },
 };
 
