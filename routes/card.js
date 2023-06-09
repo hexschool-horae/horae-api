@@ -793,7 +793,7 @@ router.post(
   handleErrorAsync(cardController.addCardMember),
   function (req, res, next) {
     /**
-   * #swagger.members = ['Card Member Setting']
+   * #swagger.tags = ['Card Member Setting']
    * #swagger.summary = 'B05-20 卡片成員新增'
    * #swagger.security=[{"Bearer": []}]
         #swagger.parameters['parameter_name'] = {
@@ -847,7 +847,7 @@ router.delete(
   handleErrorAsync(cardController.deleteCardMember),
   function (req, res, next) {
     /**
-   * #swagger.members = ['Card Member Setting']
+   * #swagger.tags = ['Card Member Setting']
    * #swagger.summary = 'B05-21 卡片成員移除'
    * #swagger.security=[{"Bearer": []}]
         #swagger.parameters['parameter_name'] = {

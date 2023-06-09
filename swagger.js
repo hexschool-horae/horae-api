@@ -20,6 +20,7 @@ const doc = {
     { name: "Card Tag Setting", description: "卡片標籤設定相關" },
     { name: "Card Comment Setting", description: "卡片評論相關" },
     { name: "Card Todolist Setting", description: "卡片代辦事項相關" },
+    { name: "Card Member Setting", description: "卡片成員相關" },
   ],
   definitions,
   securityDefinitions: {

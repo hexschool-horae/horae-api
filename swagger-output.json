@@ -46,6 +46,10 @@
     {
       "name": "Card Todolist Setting",
       "description": "卡片代辦事項相關"
+    },
+    {
+      "name": "Card Member Setting",
+      "description": "卡片成員相關"
     }
   ],
   "schemes": [
@@ -5473,6 +5477,9 @@
     },
     "/card/{cardID}/member": {
       "post": {
+        "tags": [
+          "Card Member Setting"
+        ],
         "summary": "B05-20 卡片成員新增",
         "description": "",
         "parameters": [
@@ -5587,6 +5594,9 @@
         ]
       },
       "delete": {
+        "tags": [
+          "Card Member Setting"
+        ],
         "summary": "B05-21 卡片成員移除",
         "description": "",
         "parameters": [
