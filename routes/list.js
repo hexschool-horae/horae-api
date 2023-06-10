@@ -167,4 +167,58 @@ router.patch(
 */
   }
 );
+
+//B04-4 移動列表位置----------------------------------------------------------------------------------
+router.patch(
+  "/:lID/position",
+  isAuth,
+  isOkList,
+  handleErrorAsync(listController.moveList),
+  function (req, res, next) {
+    /**
+   * #swagger.tags = ['List']
+   * #swagger.summary = 'B04-4 移動列表位置'
+   * #swagger.security=[{"Bearer": []}]
+        #swagger.parameters['parameter_name'] = {
+              in: 'body',
+              description: 'finalPosition 列表最後的位置(位置起始值從0開始)',
+              schema: {
+                    "finalPosition": 0
+                  }
+            }
+
+    #swagger.responses[200] = {
+    description: '成功',
+    schema: {
+          "success": "true",
+          "message": "移動成功"
+      }
+    }
+
+    #swagger.responses[400] = {
+        description: '欄位輸入錯誤，請重新輸入',
+        schema: {
+        "success": false,
+        "message": "欄位輸入錯誤，請重新輸入"
+        }
+    }
+
+    #swagger.responses[401] = {
+      description: '身分驗證不通過',
+      schema: {
+      "success": false,
+      "message": "身分驗證不通過相關錯誤訊息"
+      }
+    }
+
+    #swagger.responses[500] = {
+      description: '系統錯誤',
+      schema: {   
+        "success": false,
+        "message": "系統錯誤，請洽管理員"
+      }
+    }
+*/
+  }
+);
 module.exports = router;

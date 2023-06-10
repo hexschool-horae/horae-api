@@ -143,7 +143,7 @@ const isOkCard = handleErrorAsync(async (req, res, next) => {
   next();
 });
 
-//檢查卡片的middleware
+//檢查列表的middleware
 const isOkList = handleErrorAsync(async (req, res, next) => {
   const listID = req.params.lID;
 
@@ -153,7 +153,7 @@ const isOkList = handleErrorAsync(async (req, res, next) => {
   const findList = await listModel.findById(listID);
 
   if (!findList || findList.length == 0) {
-    return appError(400, "查無此卡片", next);
+    return appError(400, "查無此列表", next);
   }
   req.boardId = findList.boardId;
   console.log("req.boardId", findList.boardId);

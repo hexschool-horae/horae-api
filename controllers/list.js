@@ -4,6 +4,7 @@ const listModel = require("../models/lists");
 const boardModel = require("../models/boards");
 const cardModel = require("../models/cards");
 const validator = require("validator");
+const ObjectId = require("mongoose").Types.ObjectId;
 
 const list = {
   //B05-1	新增列表中卡片----------------------------------------------------------------------------------
@@ -114,6 +115,81 @@ const list = {
       return appError(400, "列表封存設定失敗", next);
     }
     handleSuccess(res, "修改成功");
+  },
+
+  //B04-4 移動列表位置----------------------------------------------------------------------------------
+  async moveList(req, res, next) {
+    const listId = req.params.lID;
+    const boardId = req.boardId;
+    // const userID = req.user.id;
+    const finalPosition = req.body.finalPosition;
+    if (finalPosition == undefined) {
+      return appError(400, "欄位輸入錯誤，請重新輸入", next);
+    }
+
+    if (typeof finalPosition != "number") {
+      return appError(400, "不正確的position設定參數！", next);
+    }
+
+    if (finalPosition < 0) {
+      return appError(400, "position參數不可為負數！", next);
+    }
+
+    const findAllLists = await boardModel.findById(boardId);
+    if (finalPosition > findAllLists.lists.length - 1) {
+      return appError(400, "position參數不可超過列表數字！", next);
+    }
+
+    const findList = await listModel.findById(listId);
+    const originalPosition = findList.position;
+
+    if (originalPosition == finalPosition) {
+      return appError(400, "position參數和原本相同！", next);
+    }
+    //原本位置 > 最後位置 : 資料庫中大於最後位置的其他資料的位置要+1
+    //原本位置 < 最後位置 : 資料庫中小於最後位置的其他資料的位置要-1
+    const condition = {
+      $and: [
+        { boardId: new ObjectId(boardId) },
+        {
+          position: {
+            [originalPosition > finalPosition ? "$gte" : "$lte"]: finalPosition,
+            [originalPosition > finalPosition ? "$lte" : "$gte"]:
+              originalPosition,
+          },
+        },
+      ],
+    };
+
+    let operation = 1;
+    if (originalPosition < finalPosition) {
+      operation = -1;
+    }
+
+    // const test = await listModel.find(condition);
+    // console.log("test", test);
+    // handleSuccess(res, "位置移動成功", test);
+    await listModel
+      .updateMany(condition, {
+        $inc: { position: operation },
+      })
+      .then(() => {})
+      .catch((err) => {
+        return appError(400, `列表位置移動失敗${error}`, next);
+      });
+
+    let updateList = await listModel.findOneAndUpdate(
+      {
+        _id: new ObjectId(listId),
+      },
+      { position: finalPosition }
+    );
+
+    if (!updateList) {
+      return appError(500, "列表位置移動失敗", next);
+    }
+
+    handleSuccess(res, "位置移動成功");
   },
 };
 
