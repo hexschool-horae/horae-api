@@ -64,8 +64,8 @@ const CardSchema = new mongoose.Schema(
       default: "",
     },
     position: { type: Number, require: true },
-    list: { type: mongoose.Schema.ObjectId, ref: "list" },
-    boardId: { type: mongoose.Schema.ObjectId, ref: "board" },
+    listId: { type: mongoose.Schema.Types.ObjectId, ref: "list" },
+    boardId: { type: mongoose.Schema.Types.ObjectId, ref: "board" },
     createUser: {
       type: mongoose.Schema.ObjectId,
       ref: "user",

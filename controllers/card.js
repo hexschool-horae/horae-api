@@ -3,10 +3,12 @@ const handleSuccess = require("../service/handleSuccess");
 const cardModel = require("../models/cards");
 const boardTagsModel = require("../models/boardTags");
 const boardModel = require("../models/boards");
+const listModel = require("../models/lists");
 const commentModel = require("../models/cardComment");
 const todolistModel = require("../models/cardTodolist");
 const userModel = require("../models/users");
 const validator = require("validator");
+const ObjectId = require("mongoose").Types.ObjectId;
 
 const card = {
   //B05-2	修改單一卡片(基本資訊)----------------------------------------------------------------------------------
@@ -115,6 +117,89 @@ const card = {
     handleSuccess(res, "查詢成功", findCard);
   },
 
+  //B05-8 移動卡片位置----------------------------------------------------------------------------------
+  async moveCard(req, res, next) {
+    // console.log("moveList");
+    const cardID = req.params.cardID;
+    const originalListId = req.listId;
+    // const userID = req.user.id;
+    const { finalPosition, finalListId } = req.body;
+    if (finalPosition == undefined || !finalListId) {
+      return appError(400, "欄位輸入錯誤，請重新輸入", next);
+    }
+
+    if (typeof finalPosition != "number") {
+      return appError(400, "不正確的 finalPosition 設定參數！", next);
+    }
+
+    if (finalPosition < 0) {
+      return appError(400, "位置不可為負數！", next);
+    }
+
+    const findAllCards = await listModel.findById(finalListId);
+    if (!findAllCards || findAllCards.length == 0) {
+      return appError(400, "查無此列表id", next);
+    }
+
+    if (finalPosition > findAllCards.cards.length - 1) {
+      return appError(400, "位置不可超過卡片總數！", next);
+    }
+
+    const findCard = await cardModel.findById(cardID);
+    const originalPosition = findCard.position;
+
+    if (originalListId == finalListId && originalPosition == finalPosition) {
+      return appError(400, "卡片位置和原本相同！", next);
+    }
+
+    if (originalListId == finalListId) {
+      //原本位置 > 最後位置 : 資料庫中大於最後位置的其他資料的位置要+1
+      //原本位置 < 最後位置 : 資料庫中小於最後位置的其他資料的位置要-1
+      let condition = {
+        $and: [
+          { listId: new ObjectId(originalListId) },
+          {
+            position: {
+              [originalPosition > finalPosition ? "$gte" : "$lte"]:
+                finalPosition,
+              [originalPosition > finalPosition ? "$lte" : "$gte"]:
+                originalPosition,
+            },
+          },
+        ],
+      };
+
+      let operation = 1;
+      if (originalPosition < finalPosition) {
+        operation = -1;
+      }
+      //console.log("condition", condition);
+      // const test = await cardModel.find(condition);
+      // handleSuccess(res, "位置移動成功", test);
+      await cardModel
+        .updateMany(condition, {
+          $inc: { position: operation },
+        })
+        .then(() => {})
+        .catch((err) => {
+          return appError(400, `卡片位置移動失敗${error}`, next);
+        });
+
+      let updateCard = await cardModel.findOneAndUpdate(
+        {
+          _id: new ObjectId(cardID),
+        },
+        { position: finalPosition }
+      );
+
+      if (!updateCard) {
+        return appError(500, "卡片位置移動失敗", next);
+      }
+    } else {
+    }
+    handleSuccess(res, "位置移動成功");
+  },
+
   //B05-9 在卡片新增標籤----------------------------------------------------------------------------------
   async addCardTag(req, res, next) {
     const cardID = req.params.cardID;
@@ -212,7 +297,7 @@ const card = {
       return appError(400, "欄位輸入錯誤，請重新輸入", next);
     }
 
-    //列表建立
+    //卡片評論建立
     const newComment = await new commentModel({
       comment,
       card: cardId,
@@ -430,7 +515,6 @@ const card = {
       return appError(400, "欄位輸入錯誤，請重新輸入", next);
     }
 
-    //列表建立
     const newContent = await new todolistModel({
       content,
       completed: false,

@@ -39,7 +39,7 @@ const list = {
     const newCard = await new cardModel({
       title,
       position,
-      list: listId,
+      listId,
       boardId,
       createUser: userID,
       updateUser: userID,

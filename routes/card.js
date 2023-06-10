@@ -6,6 +6,69 @@ const { isAuth, isOkCard } = require("../service/auth");
 
 router.get("/", isAuth, handleErrorAsync(cardController.filterCard)); //卡片篩選
 
+//B05-2	修改單一卡片(基本資訊)----------------------------------------------------------------------------------
+router.patch(
+  "/:cardID",
+  isAuth,
+  isOkCard,
+  handleErrorAsync(cardController.updateCardData),
+  function (req, res, next) {
+    /**
+     * #swagger.tags = ['Card']
+     * #swagger.summary = 'B05-2	修改單一卡片(基本資訊)'
+     * #swagger.security=[{"Bearer": []}]
+		  #swagger.parameters['parameter_name'] = {
+		        in: 'body',
+		        description: 'B05-2	修改單一卡片(基本資訊) <br />時間格式>>Timestamp，無開始和結束日請皆填null，不可單一值填null <br />proiority >> 1：最高
+ <br />2：高
+ <br />3：中
+ <br />4：低
+ <br />空:無',
+		        schema: {
+                    "title": "修改卡片",
+                    "describe": "測試566OOO",
+                    "startDate":1685540000,  
+                    "endDate":1685544000,
+                    "proiority":"3"
+                    }
+		      }
+
+      #swagger.responses[200] = {
+      description: '成功',
+      schema: {
+            "success": "true",
+            "message": "修改成功"
+        }
+      }
+
+
+      #swagger.responses[400] = {
+          description: '欄位輸入錯誤，請重新輸入',
+          schema: {
+          "success": false,
+          "message": "欄位輸入錯誤，請重新輸入"
+          }
+      }
+
+      #swagger.responses[401] = {
+        description: '身分驗證不通過',
+        schema: {
+        "success": false,
+        "message": "身分驗證不通過相關錯誤訊息"
+        }
+      }
+
+      #swagger.responses[500] = {
+        description: '系統錯誤',
+        schema: {   
+          "success": false,
+          "message": "系統錯誤，請洽管理員"
+        }
+      }
+*/
+  }
+);
+
 //B05-4 取得單一卡片----------------------------------------------------------------------------------
 router.get(
   "/:cardID",
@@ -120,69 +183,60 @@ router.get(
   }
 );
 
-//B05-2	修改單一卡片(基本資訊)----------------------------------------------------------------------------------
+//B05-8 移動卡片位置----------------------------------------------------------------------------------
 router.patch(
-  "/:cardID",
+  "/:cardID/position",
   isAuth,
   isOkCard,
-  handleErrorAsync(cardController.updateCardData),
+  handleErrorAsync(cardController.moveCard),
   function (req, res, next) {
     /**
-     * #swagger.tags = ['Card']
-     * #swagger.summary = 'B05-2	修改單一卡片(基本資訊)'
-     * #swagger.security=[{"Bearer": []}]
-		  #swagger.parameters['parameter_name'] = {
-		        in: 'body',
-		        description: 'B05-2	修改單一卡片(基本資訊) <br />時間格式>>Timestamp，無開始和結束日請皆填null，不可單一值填null <br />proiority >> 1：最高
- <br />2：高
- <br />3：中
- <br />4：低
- <br />空:無',
-		        schema: {
-                    "title": "修改卡片",
-                    "describe": "測試566OOO",
-                    "startDate":1685540000,  
-                    "endDate":1685544000,
-                    "proiority":"3"
-                    }
-		      }
+   * #swagger.tags = ['Card']
+   * #swagger.summary = 'B05-8 移動卡片位置'
+   * #swagger.security=[{"Bearer": []}]
+        #swagger.parameters['parameter_name'] = {
+              in: 'body',
+              description: 'finalPosition 卡片最後的位置(位置起始值從0開始)',
+              schema: {
+		                "listId": "6470bc3c8c7c208760747899"
+                    "finalPosition": 0
+                  }
+            }
 
-      #swagger.responses[200] = {
-      description: '成功',
-      schema: {
-            "success": "true",
-            "message": "修改成功"
-        }
+    #swagger.responses[200] = {
+    description: '成功',
+    schema: {
+          "success": "true",
+          "message": "移動成功"
       }
+    }
 
-
-      #swagger.responses[400] = {
-          description: '欄位輸入錯誤，請重新輸入',
-          schema: {
-          "success": false,
-          "message": "欄位輸入錯誤，請重新輸入"
-          }
-      }
-
-      #swagger.responses[401] = {
-        description: '身分驗證不通過',
+    #swagger.responses[400] = {
+        description: '欄位輸入錯誤，請重新輸入',
         schema: {
         "success": false,
-        "message": "身分驗證不通過相關錯誤訊息"
+        "message": "欄位輸入錯誤，請重新輸入"
         }
-      }
+    }
 
-      #swagger.responses[500] = {
-        description: '系統錯誤',
-        schema: {   
-          "success": false,
-          "message": "系統錯誤，請洽管理員"
-        }
+    #swagger.responses[401] = {
+      description: '身分驗證不通過',
+      schema: {
+      "success": false,
+      "message": "身分驗證不通過相關錯誤訊息"
       }
+    }
+
+    #swagger.responses[500] = {
+      description: '系統錯誤',
+      schema: {   
+        "success": false,
+        "message": "系統錯誤，請洽管理員"
+      }
+    }
 */
   }
 );
-
 //B05-9 在卡片新增標籤----------------------------------------------------------------------------------
 router.post(
   "/:cardID/tag",
