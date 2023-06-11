@@ -108,8 +108,8 @@ const card = {
         path: "todolists.contentList",
         select: "_id content completed",
         //options: { sort: { createdAt: -1 } },
-      })
-      .select("-viewSet -status -list -createUser");
+      });
+    //.select("-viewSet -status -list -createUser");
 
     if (!findCard || findCard.length == 0) {
       return appError(400, "查無此卡片", next);
