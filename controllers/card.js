@@ -27,7 +27,7 @@ const card = {
       return appError(400, "卡片名稱不可超過長度200！", next);
     }
 
-    if (!["1", "2", "3", "4"].includes(proiority)) {
+    if (!["", "1", "2", "3", "4"].includes(proiority)) {
       return appError(400, "不正確的卡片優先權設定！", next);
     }
 
