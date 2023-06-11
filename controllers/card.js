@@ -19,7 +19,7 @@ const card = {
     const { title, describe, proiority } = req.body;
     const startDate = req.body.startDate;
     const endDate = req.body.endDate;
-    if (!title || !describe || !proiority) {
+    if (!title) {
       return appError(400, "欄位輸入錯誤，請重新輸入", next);
     }
 
