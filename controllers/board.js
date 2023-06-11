@@ -583,9 +583,10 @@ const board = {
       })
       .select("-createUser -createdAt");
 
-    if (!findTags || findTags.length == 0) {
-      return appError(404, "此看板尚未建立標籤", next);
+    if (!findTags) {
+      return appError(404, "此看板標籤異常", next);
     }
+
     handleSuccess(res, "成功", findTags);
   },
 
