@@ -136,23 +136,38 @@ const card = {
       return appError(400, "位置不可為負數！", next);
     }
 
-    const findAllCards = await listModel.findById(finalListId);
-    if (!findAllCards || findAllCards.length == 0) {
+    const finalList = await listModel.findById(finalListId);
+    if (!finalList || finalList.length == 0) {
       return appError(400, "查無此列表id", next);
-    }
-
-    if (finalPosition > findAllCards.cards.length - 1) {
-      return appError(400, "位置不可超過卡片總數！", next);
     }
 
     const findCard = await cardModel.findById(cardID);
     const originalPosition = findCard.position;
+
+    const originalList = await listModel.findById(originalListId);
+    const index = originalList.cards.findIndex(
+      (element) => element.toString() == cardID
+    );
+    console.log("cardID:", cardID);
+    console.log("originalList.cards[index]:", originalList.cards[index]);
+
+    // await originalList.cards.splice(index, 1); //.splice(要刪除的索引開始位置, 要刪除的元素數量)
+
+    // //finalList的 Cards array新增cardId
+    // await finalList.cards.push(cardID);
+
+    //////////////////////////////////////
 
     if (originalListId == finalListId && originalPosition == finalPosition) {
       return appError(400, "卡片位置和原本相同！", next);
     }
 
     if (originalListId == finalListId) {
+      if (finalPosition > finalList.cards.length - 1) {
+        return appError(400, "位置不可超過卡片總數！", next);
+      }
+
+      //移動到相同的listId
       //原本位置 > 最後位置 : 資料庫中大於最後位置的其他資料的位置要+1
       //原本位置 < 最後位置 : 資料庫中小於最後位置的其他資料的位置要-1
       let condition = {
@@ -182,7 +197,7 @@ const card = {
         })
         .then(() => {})
         .catch((err) => {
-          return appError(400, `卡片位置移動失敗${error}`, next);
+          return appError(400, `卡片位置移動失敗${err}`, next);
         });
 
       let updateCard = await cardModel.findOneAndUpdate(
@@ -196,6 +211,81 @@ const card = {
         return appError(500, "卡片位置移動失敗", next);
       }
     } else {
+      if (finalPosition > finalList.cards.length) {
+        return appError(400, "移動到的位置不正確！", next);
+      }
+      //移動到不同的listId
+      //原本的listId : 資料庫中大於最後位置的其他資料的位置要-1
+      //移動後的listId : 資料庫中大於最後位置的其他資料的位置要+1
+      //originalList的 Cards array移除cardId
+      //finalList的 Cards array新增cardId
+      let arr = [originalListId, finalListId];
+      for (let i = 0; i < 2; i++) {
+        let condition = {
+          $and: [
+            { listId: new ObjectId(arr[i]) },
+            {
+              position: {
+                $gte: i == 0 ? originalPosition : finalPosition,
+              },
+            },
+          ],
+        };
+
+        let operation = 1;
+        if (i == 0) {
+          operation = -1;
+        }
+
+        // console.log("condition", condition);
+        // console.log("operation", operation);
+
+        // let test = await cardModel.find(condition);
+        // console.log("test" + i, test);
+
+        await cardModel
+          .updateMany(condition, {
+            $inc: { position: operation },
+          })
+          .then(() => {})
+          .catch((err) => {
+            return appError(400, `卡片位置移動失敗${err}`, next);
+          });
+      }
+      //originalList的 Cards array移除cardId
+
+      const originalList = await listModel.findById(originalListId);
+      const index = originalList.cards.findIndex(
+        (element) => element.toString() == cardID
+      );
+
+      await originalList.cards.splice(index, 1); //.splice(要刪除的索引開始位置, 要刪除的元素數量)
+      await originalList
+        .save()
+        .then(() => {})
+        .catch((error) => {
+          return appError(400, `在原列表移除卡片失敗${error}`, next);
+        });
+
+      //finalList的 Cards array新增cardId
+      await finalList.cards.push(cardID);
+      await finalList
+        .save()
+        .then(() => {})
+        .catch((error) => {
+          return appError(400, `在新列表新增卡片失敗${error}`, next);
+        });
+    }
+
+    let updateCard = await cardModel.findOneAndUpdate(
+      {
+        _id: new ObjectId(cardID),
+      },
+      { listId: new ObjectId(finalListId), position: finalPosition }
+    );
+
+    if (!updateCard) {
+      return appError(500, "卡片位置移動失敗", next);
     }
     handleSuccess(res, "位置移動成功");
   },

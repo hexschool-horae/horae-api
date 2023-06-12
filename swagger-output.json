@@ -3855,6 +3855,139 @@
       }
     },
     "/card/{cardID}": {
+      "patch": {
+        "tags": [
+          "Card"
+        ],
+        "summary": "B05-2 修改單一卡片(基本資訊)",
+        "description": "",
+        "parameters": [
+          {
+            "name": "cardID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "parameter_name",
+            "in": "body",
+            "description": "B05-2 修改單一卡片(基本資訊) <br />時間格式>>Timestamp，無開始和結束日請皆填null，不可單一值填null <br />proiority >> 1：最高   <br />2：高   <br />3：中   <br />4：低   <br />空:無",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "example": "修改卡片"
+                },
+                "describe": {
+                  "type": "string",
+                  "example": "測試566OOO"
+                },
+                "startDate": {
+                  "type": "number",
+                  "example": 1685540000
+                },
+                "endDate": {
+                  "type": "number",
+                  "example": 1685544000
+                },
+                "proiority": {
+                  "type": "string",
+                  "example": "3"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "string",
+                  "example": "true"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "修改成功"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "欄位輸入錯誤，請重新輸入",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "欄位輸入錯誤，請重新輸入"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "401": {
+            "description": "身分驗證不通過",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "身分驗證不通過相關錯誤訊息"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "系統錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "系統錯誤，請洽管理員"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
       "get": {
         "tags": [
           "Card"
@@ -4045,6 +4178,14 @@
                       "type": "number",
                       "example": 8
                     },
+                    "listId": {
+                      "type": "string",
+                      "example": "64871c60ab18a3b2728a563d"
+                    },
+                    "boardId": {
+                      "type": "string",
+                      "example": "64871b1fab18a3b2728a5506"
+                    },
                     "updateUser": {
                       "type": "string",
                       "example": "64743a4e5ac3abf5a47ae523"
@@ -4132,12 +4273,14 @@
             "Bearer": []
           }
         ]
-      },
+      }
+    },
+    "/card/{cardID}/position": {
       "patch": {
         "tags": [
           "Card"
         ],
-        "summary": "B05-2 修改單一卡片(基本資訊)",
+        "summary": "B05-8 移動卡片位置",
         "description": "",
         "parameters": [
           {
@@ -4154,29 +4297,17 @@
           {
             "name": "parameter_name",
             "in": "body",
-            "description": "B05-2 修改單一卡片(基本資訊) <br />時間格式>>Timestamp，無開始和結束日請皆填null，不可單一值填null <br />proiority >> 1：最高   <br />2：高   <br />3：中   <br />4：低   <br />空:無",
+            "description": "finalListId卡片最後的列表ID。finalPosition 卡片最後的位置(位置起始值從0開始)",
             "schema": {
               "type": "object",
               "properties": {
-                "title": {
+                "finalListId": {
                   "type": "string",
-                  "example": "修改卡片"
+                  "example": "64871b37ab18a3b2728a550f"
                 },
-                "describe": {
-                  "type": "string",
-                  "example": "測試566OOO"
-                },
-                "startDate": {
+                "finalPosition": {
                   "type": "number",
-                  "example": 1685540000
-                },
-                "endDate": {
-                  "type": "number",
-                  "example": 1685544000
-                },
-                "proiority": {
-                  "type": "string",
-                  "example": "3"
+                  "example": 0
                 }
               }
             }
@@ -4194,7 +4325,7 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "修改成功"
+                  "example": "移動成功"
                 }
               },
               "xml": {

@@ -147,6 +147,8 @@ router.get(
                 "proiority": "3",
                 "coverPath": "",
                 "position": 8,
+                  "listId": "64871c60ab18a3b2728a563d",
+                "boardId": "64871b1fab18a3b2728a5506",
                 "updateUser": "64743a4e5ac3abf5a47ae523",
                 "createdAt": "2023-05-31T15:26:11.928Z",
                 "updateAt": "2023-05-31T15:51:52.484Z",
@@ -196,10 +198,10 @@ router.patch(
    * #swagger.security=[{"Bearer": []}]
         #swagger.parameters['parameter_name'] = {
               in: 'body',
-              description: 'finalPosition 卡片最後的位置(位置起始值從0開始)',
+              description: 'finalListId卡片最後的列表ID。finalPosition 卡片最後的位置(位置起始值從0開始)',
               schema: {
-		                "listId": "6470bc3c8c7c208760747899"
-                    "finalPosition": 0
+		                  "finalListId":"64871b37ab18a3b2728a550f",
+                      "finalPosition": 0
                   }
             }
 
