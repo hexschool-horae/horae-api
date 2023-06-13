@@ -177,7 +177,7 @@ const workSpace = {
     const findWorkSpace = await WorkSpaceModel.findById(workSpaceID)
       .populate({
         path: "members.userId",
-        select: "name email",
+        select: "name email avatar",
       })
       .select("title viewSet members -_id");
     handleSuccess(res, "查詢成功", findWorkSpace);
@@ -234,7 +234,7 @@ const workSpace = {
     const findWorkSpace = await WorkSpaceModel.findById(workSpaceID)
       .populate({
         path: "members.userId",
-        select: "name email",
+        select: "name email avatar",
       })
       .select("inviteHashData members");
     if (!findWorkSpace || findWorkSpace.length == 0) {
@@ -276,7 +276,7 @@ const workSpace = {
     const { role, userId } = req.body;
     const findWorkSpace = await WorkSpaceModel.findById(workSpaceID).populate({
       path: "members.userId",
-      select: "name email",
+      select: "name email avatar",
     });
 
     if (!role || !userId) {
@@ -325,7 +325,7 @@ const workSpace = {
     const deleteUserID = req.body.userId;
     const findWorkSpace = await WorkSpaceModel.findById(workSpaceID).populate({
       path: "members.userId",
-      select: "name email",
+      select: "name email avatar",
     });
 
     if (!deleteUserID) {

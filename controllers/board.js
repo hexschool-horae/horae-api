@@ -167,7 +167,7 @@ const board = {
       // })
       .populate({
         path: "members.userId",
-        select: "name",
+        select: "name email avatar",
       })
       .select("title discribe coverPath viewSet status members");
     if (!findBoard || findBoard.length == 0) {
@@ -263,7 +263,7 @@ const board = {
     const findBoard = await BoardModel.findById(boardID)
       .populate({
         path: "members.userId",
-        select: "name email",
+        select: "name email avatar",
       })
       .select("title viewSet members -_id");
     handleSuccess(res, "查詢成功", findBoard);
@@ -285,7 +285,7 @@ const board = {
     const findBoard = await BoardModel.findById(boardID)
       .populate({
         path: "members.userId",
-        select: "name email",
+        select: "name email avatar",
       })
       .select("inviteHashData members");
     if (!findBoard || findBoard.length == 0) {

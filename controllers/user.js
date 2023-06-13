@@ -93,7 +93,7 @@ const user = {
     //console.log(req.user);
 
     const findUser = await User.findOne({ _id: req.user }).select(
-      "name +email"
+      "name email avatar"
     );
     if (!findUser) {
       return appError(400, "使用者資料不存在", next);
