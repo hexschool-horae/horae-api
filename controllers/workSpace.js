@@ -6,6 +6,7 @@ const { isAuth } = require("../service/auth");
 const appError = require("../service/appError");
 const handleSuccess = require("../service/handleSuccess");
 const WorkSpace = require("../models/workSpaces");
+const BoardModel = require("../models/boards");
 
 const workSpace = {
   //B02-1	新增工作區 ----------------------------------------------------------------------------------
@@ -352,6 +353,13 @@ const workSpace = {
     if (adminIndex == -1) {
       return appError(400, "成員移除失敗，工作區至少要一個管理員", next);
     }
+
+    ///看板成員移除=====================================================
+    const deleteBoardMember = await BoardModel.deleteMany({
+      "members.userId": deleteUserID,
+    })
+      .then(() => {})
+      .catch((err) => {});
 
     await findWorkSpace
       .save()

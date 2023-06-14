@@ -19,7 +19,7 @@ const board = {
     const { title, discribe, viewSet, workSpaceId } = req.body;
 
     //檢查欄位
-    if (!title || !discribe || !viewSet || !workSpaceId) {
+    if (!title || !viewSet || !workSpaceId) {
       return appError(400, "欄位輸入錯誤，請重新輸入", next);
     }
     if (!validator.isLength(title, { max: 10 })) {
@@ -169,7 +169,7 @@ const board = {
         path: "members.userId",
         select: "name email avatar",
       })
-      .select("title discribe coverPath viewSet status members");
+      .select("title discribe coverPath viewSet covercolor status members");
     if (!findBoard || findBoard.length == 0) {
       return appError(400, "查無此看板", next);
     }
@@ -302,11 +302,27 @@ const board = {
     }
 
     /////////////////////////////////////////////
-    // if (reqhashData !== findBoard.inviteHashData) {
-    //   return appError(400, "您使用的邀請連結異常", next);
-    // }
+    const role = "editor";
+    const findWorkSpace = await WorkSpaceModel.find({
+      boards: { $in: new ObjectId(boardID) },
+    });
+    // console.log("findWorkSpace.members", findWorkSpace[0].members);
 
-    //檢查是否已經存在該成員
+    const indexWorkSpace = findWorkSpace[0].members.findIndex(
+      (element) => element.userId._id.toString() == userId
+    );
+    // console.log("indexWorkSpace", indexWorkSpace);
+
+    //檢查工作區是否已經存在該成員
+    if (indexWorkSpace == -1) {
+      await findWorkSpace[0].members.push({ userId, role });
+      await findWorkSpace[0]
+        .save()
+        .then(() => {})
+        .catch((err) => {});
+    }
+
+    //檢查看板是否已經存在該成員
     const index = findBoard.members.findIndex(
       (element) => element.userId._id.toString() == userId
     );
@@ -315,7 +331,6 @@ const board = {
     }
 
     // 新增成員
-    const role = "editor";
     await findBoard.members.push({ userId, role });
     await findBoard
       .save()
@@ -419,7 +434,7 @@ const board = {
         return appError(400, err, next);
       });
 
-    //////////////////////////////////
+    ///卡片成員移除=====================================================
     const findCard = await cardModel.find({
       $and: [{ members: { $in: deleteUserID } }, { boardId: boardID }],
     });
@@ -450,6 +465,27 @@ const board = {
           });
       });
     }
+
+    // ///工作區成員移除=====================================================
+    // const findWorkSpace = await WorkSpaceModel.find({
+    //   boards: { $in: new ObjectId(boardID) },
+    // });
+    // // console.log("findWorkSpace.members", findWorkSpace[0].members);
+
+    // const indexWorkSpace = findWorkSpace[0].members.findIndex(
+    //   (element) => element.userId._id.toString() == deleteUserID
+    // );
+    // // console.log("indexWorkSpace", indexWorkSpace);
+
+    // //檢查工作區是否已經存在該成員
+    // if (indexWorkSpace !== -1) {
+    //   // await findWorkSpace[0].members.push({ userId, role });
+    //   await findWorkSpace[0].members.splice(indexWorkSpace, 1);
+    //   await findWorkSpace[0]
+    //     .save()
+    //     .then(() => {})
+    //     .catch((err) => {});
+    // }
 
     if (deleteMemberInCard == true) {
       handleSuccess(res, "刪除成功");
@@ -508,7 +544,7 @@ const board = {
     if (!findBoard || findBoard.length == 0) {
       return appError(400, "看板不存在", next);
     }
-    console.log("findBoard.members", findBoard.members);
+    // console.log("findBoard.members", findBoard.members);
 
     const index = findBoard.members.findIndex(
       (element) => element.inviteHashData == hashData

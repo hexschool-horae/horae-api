@@ -23,6 +23,11 @@ const BoardSchema = new mongoose.Schema({
     default: "public",
     lowercase: true,
   },
+  covercolor: {
+    type: String,
+    enum: ["theme1", "theme2", "theme3"],
+    default: "theme1",
+  },
   status: {
     type: String,
     enum: ["open", "close"],
