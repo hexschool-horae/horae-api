@@ -234,7 +234,7 @@ router.get(
   function (req, res, next) {
     /**    
      * #swagger.tags = ['Board']
-     * #swagger.summary = '除了看板資訊外，會回傳 yourRole角色: visitor/admin/editor,yourPermission 權限: viewOnly/edit。'
+     * #swagger.summary = 'B03-5 取得單一看板：除了看板資訊外，會回傳 yourRole角色: visitor/admin/editor,yourPermission 權限: viewOnly/edit。'
      * #swagger.security=[{"Bearer": []}]
      
     #swagger.responses[200] = {
