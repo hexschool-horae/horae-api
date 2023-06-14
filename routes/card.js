@@ -3,6 +3,7 @@ var router = express.Router();
 const cardController = require("../controllers/card");
 const handleErrorAsync = require("../service/handleErrorAsync");
 const { isAuth, isOkCard } = require("../service/auth");
+const imageCheck = require("../service/imageCheck");
 
 router.get("/", isAuth, handleErrorAsync(cardController.filterCard)); //卡片篩選
 
@@ -935,6 +936,120 @@ router.delete(
       schema: {
       "success": false,
       "message": "身分驗證不通過相關錯誤訊息"
+      }
+    }
+
+    #swagger.responses[500] = {
+      description: '系統錯誤',
+      schema: {   
+        "success": false,
+        "message": "系統錯誤，請洽管理員"
+      }
+    }
+*/
+  }
+);
+
+//B05-22 卡片中附件上傳----------------------------------------------------------------------------------
+router.post(
+  "/:cardID/attachment",
+  isAuth,
+  isOkCard,
+  imageCheck,
+  handleErrorAsync(cardController.addCardAttachment),
+  function (req, res, next) {
+    /**
+
+     * #swagger.tags = ['Card Attachment']
+     * #swagger.summary = 'B05-22 卡片中附件上傳'
+     * #swagger.security=[{"Bearer": []}],  
+     #swagger.parameters['file'] = {
+        in: 'formData',
+        required: true,
+      type: 'file',
+      description: '附件檔案'
+      }
+	  
+
+
+    #swagger.responses[200] = {
+    description: '成功',
+    schema: {
+          "success": "true",
+          "message": "新增成功",
+		  "data": "6470bc3c8c7c20876074788a"
+      }
+    }
+	
+
+
+    #swagger.responses[400] = {
+        description: '無檔案或格式不正確、上傳圖片失敗',
+        schema: {
+        "success": false,
+        "message": "欄位輸入錯誤，請重新輸入"
+        }
+    }
+
+    #swagger.responses[401] = {
+      description: '身分驗證不通過',
+      schema: {
+      "success": false,
+      "message": "錯誤訊息"
+      }
+    }
+
+    #swagger.responses[500] = {
+      description: '系統錯誤',
+      schema: {   
+        "success": false,
+        "message": "系統錯誤，請洽管理員"
+      }
+    }
+*/
+  }
+);
+
+//B05-23	卡片中附件刪除----------------------------------------------------------------------------------
+router.delete(
+  "/:cardID/attachment",
+  isAuth,
+  isOkCard,
+  handleErrorAsync(cardController.deleteCardAttachment),
+  function (req, res, next) {
+    /**
+   * #swagger.tags = ['Card Attachment']
+   * #swagger.summary = 'B05-23	卡片中附件刪除'
+   * #swagger.security=[{"Bearer": []}]
+        #swagger.parameters['parameter_name'] = {
+              in: 'body',
+              description: 'B05-23	卡片中附件刪除',
+              schema: {
+					"commentId": "6470bc3c8c7c20876074788a",
+                  }
+            }
+
+    #swagger.responses[200] = {
+    description: '成功',
+    schema: {
+          "success": "true",
+          "message": "刪除成功"
+      }
+    }
+
+    #swagger.responses[400] = {
+        description: '欄位輸入錯誤，請重新輸入',
+        schema: {
+        "success": false,
+        "message": "欄位輸入錯誤，請重新輸入"
+        }
+    }
+
+    #swagger.responses[401] = {
+      description: '身分驗證不通過',
+      schema: {
+      "success": false,
+      "message": "錯誤訊息"
       }
     }
 

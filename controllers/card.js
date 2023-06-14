@@ -847,6 +847,59 @@ const card = {
         return appError(400, `在卡片移除成員失敗${error}`, next);
       });
   },
+
+  //B05-22 卡片中附件上傳----------------------------------------------------------------------------------
+  async addCardAttachment(req, res, next) {
+    const cardId = req.params.cardID;
+    const userID = req.user.id;
+    const { comment } = req.body;
+    if (!comment) {
+      return appError(400, "欄位輸入錯誤，請重新輸入", next);
+    }
+
+    handleSuccess(res, "新增成功");
+
+    // //卡片附件建立
+    // const newComment = await new commentModel({
+    //   comment,
+    //   card: cardId,
+    //   user: userID,
+    // });
+
+    // await newComment
+    //   .save()
+    //   .then(() => {
+    //     handleSuccess(res, "新增成功", newComment._id);
+    //   })
+    //   .catch((error) => {
+    //     return appError(400, `新增附件失敗${error}`, next);
+    //   });
+  },
+
+  //B05-23	卡片中附件刪除----------------------------------------------------------------------------------
+  async deleteCardAttachment(req, res, next) {
+    const { commentId } = req.body;
+
+    //檢查欄位
+    if (!commentId) {
+      return appError(400, "欄位輸入錯誤，請重新輸入", next);
+    }
+    const findComment = await commentModel.findById(commentId);
+    if (!findComment || findComment.length == 0) {
+      return appError(404, "查無此附件", next);
+    }
+
+    const deleteComment = await commentModel.deleteOne({
+      _id: commentId,
+    });
+    if (deleteComment.acknowledged == false) {
+      return appError(400, "附件刪除失敗", next);
+    }
+    if (deleteComment.deletedCount == 0) {
+      return appError(400, "附件刪除失敗", next);
+    }
+    handleSuccess(res, "刪除成功");
+  },
 };
 
 module.exports = card;

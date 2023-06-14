@@ -48,6 +48,7 @@ const board = {
       viewSet,
       createUser: userID,
       members: member,
+      workSpaceId,
     });
 
     await newBoard

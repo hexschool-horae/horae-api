@@ -55,7 +55,7 @@ const BoardSchema = new mongoose.Schema({
   //   default: "",
   // },
   lists: [{ type: mongoose.Schema.Types.ObjectId, ref: "list", default: [] }],
-  // workspace: { type: mongoose.Schema.ObjectId, ref: "workSpace", default: "" },
+  workSpaceId: { type: mongoose.Schema.Types.ObjectId, ref: "workSpace" },
   createUser: {
     type: mongoose.Schema.ObjectId,
     ref: "user",

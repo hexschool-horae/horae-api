@@ -17,6 +17,7 @@ var workSpaceRouter = require("./routes/workSpace");
 var boardRouter = require("./routes/board");
 var listRouter = require("./routes/list");
 var cardRouter = require("./routes/card");
+const uploadRouter = require("./routes/upload");
 
 //express
 var app = express();
@@ -38,7 +39,7 @@ app.use("/board", boardRouter);
 app.use("/list", listRouter);
 app.use("/card", cardRouter);
 app.use("/api-doc", swaggerUI.serve, swaggerUI.setup(swaggerFile));
-
+app.use("/upload", uploadRouter);
 app.use(errorHandler); //環境變數指令切換Dev或Prod、客製錯誤訊息(要放在router下面)
 
 process.on("uncaughtException", (err) => {

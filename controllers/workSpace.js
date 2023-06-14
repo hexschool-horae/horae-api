@@ -7,6 +7,7 @@ const appError = require("../service/appError");
 const handleSuccess = require("../service/handleSuccess");
 const WorkSpace = require("../models/workSpaces");
 const BoardModel = require("../models/boards");
+const ObjectId = require("mongoose").Types.ObjectId;
 
 const workSpace = {
   //B02-1	新增工作區 ----------------------------------------------------------------------------------
@@ -354,12 +355,37 @@ const workSpace = {
       return appError(400, "成員移除失敗，工作區至少要一個管理員", next);
     }
 
-    ///看板成員移除=====================================================
-    const deleteBoardMember = await BoardModel.deleteMany({
-      "members.userId": deleteUserID,
-    })
-      .then(() => {})
-      .catch((err) => {});
+    // ///看板成員移除=====================================================
+    // const findBoardMember = await BoardModel.find({
+    //   workSpaceID: new ObjectId(workSpaceID),
+    // });
+    // console.log("workSpaceID", workSpaceID);
+    // console.log("findBoardMember", findBoardMember);
+
+    // if (findBoardMember || findBoardMember.length > 0) {
+    //   let index = -1;
+    //   // console.log("findBoardMember.length", findBoardMember.length);
+
+    //   findBoardMember.forEach((element) => {
+    //     console.log("element.members", element);
+
+    //     index = element.members.findIndex(
+    //       (member) => member.userId.toString() == deleteUserID.toString()
+    //     );
+
+    //     if (index !== -1) {
+    //       element.members.splice(index, 1); //.splice(要刪除的索引開始位置, 要刪除的元素數量)
+    //     }
+    //     console.log("index", index);
+    //     //移除成員ID
+    //     element
+    //       .save()
+    //       .then(() => {})
+    //       .catch((error) => {});
+    //   });
+    // }
+
+    // handleSuccess(res, "成員移除成功");
 
     await findWorkSpace
       .save()
