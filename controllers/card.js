@@ -6,9 +6,15 @@ const boardModel = require("../models/boards");
 const listModel = require("../models/lists");
 const commentModel = require("../models/cardComment");
 const todolistModel = require("../models/cardTodolist");
+const attachmentModel = require("../models/cardAttachment");
+
 const userModel = require("../models/users");
 const validator = require("validator");
 const ObjectId = require("mongoose").Types.ObjectId;
+const { v4: uuidv4 } = require("uuid");
+//require("../service/firebase"); 不要放到全域
+const firebaseAdmin = require("../service/firebase");
+const bucket = firebaseAdmin.storage().bucket();
 
 const card = {
   //B05-2	修改單一卡片(基本資訊)----------------------------------------------------------------------------------
@@ -107,6 +113,11 @@ const card = {
       .populate({
         path: "todolists.contentList",
         select: "_id content completed",
+        //options: { sort: { createdAt: -1 } },
+      })
+      .populate({
+        path: "attachments",
+        select: "_id fileUrl fileName createdAt -card",
         //options: { sort: { createdAt: -1 } },
       });
     //.select("-viewSet -status -list -createUser");
@@ -852,51 +863,95 @@ const card = {
   async addCardAttachment(req, res, next) {
     const cardId = req.params.cardID;
     const userID = req.user.id;
-    const { comment } = req.body;
-    if (!comment) {
-      return appError(400, "欄位輸入錯誤，請重新輸入", next);
+
+    if (!req.files.length) {
+      return next(appError(400, "尚未上傳檔案", next));
     }
+    // 取得上傳的檔案資訊列表裡面的第一個檔案
+    const file = req.files[0];
+    // console.log("file.originalname", file.originalname);
 
-    handleSuccess(res, "新增成功");
+    // const fileName = `${uuidv4()}.${file.originalname.split(".").pop()}`;
+    const fileName = file.originalname;
+    const filePath = "attachments/" + fileName;
 
-    // //卡片附件建立
-    // const newComment = await new commentModel({
-    //   comment,
-    //   card: cardId,
-    //   user: userID,
-    // });
+    //基於檔案的原始名稱建立一個 blob 物件
+    //目錄就是在filebase上建資料夾 ex：url/attachments/檔名
+    const blob = bucket.file(filePath);
 
-    // await newComment
-    //   .save()
-    //   .then(() => {
-    //     handleSuccess(res, "新增成功", newComment._id);
-    //   })
-    //   .catch((error) => {
-    //     return appError(400, `新增附件失敗${error}`, next);
-    //   });
+    // 建立一個可以寫入 blob 的物件，建立串流通道還未寫入
+    const blobStream = blob.createWriteStream();
+
+    // 監聽上傳狀態，當上傳完成時，會觸發 finish 事件
+    blobStream.on("finish", () => {
+      // 設定檔案的存取權限
+      const config = {
+        action: "read", // 權限
+        expires: "12-31-2500", // 網址的有效期限
+      };
+
+      //回傳已儲存網址
+      blob.getSignedUrl(config, async (err, fileUrl) => {
+        //卡片附件建立
+        const newAttachment = await new attachmentModel({
+          fileUrl,
+          fileName,
+          filePath,
+          card: cardId,
+          user: userID,
+        });
+
+        await newAttachment
+          .save()
+          .then(() => {
+            handleSuccess(res, "新增成功", newAttachment._id);
+          })
+          .catch((error) => {
+            return appError(400, `新增附件失敗${error}`, next);
+          });
+      });
+    });
+
+    // 如果上傳過程中發生錯誤，會觸發 error 事件
+    blobStream.on("error", (err) => {
+      res.status(500).send("上傳失敗");
+    });
+
+    // 將檔案的 buffer 寫入 blobStream
+    blobStream.end(file.buffer);
   },
 
   //B05-23	卡片中附件刪除----------------------------------------------------------------------------------
   async deleteCardAttachment(req, res, next) {
-    const { commentId } = req.body;
+    const { fileId } = req.body;
+    console.log("fileId", fileId);
 
     //檢查欄位
-    if (!commentId) {
+    if (!fileId) {
       return appError(400, "欄位輸入錯誤，請重新輸入", next);
     }
-    const findComment = await commentModel.findById(commentId);
-    if (!findComment || findComment.length == 0) {
+
+    const findAttachment = await attachmentModel.findById(fileId);
+    if (!findAttachment || findAttachment.length == 0) {
       return appError(404, "查無此附件", next);
     }
 
-    const deleteComment = await commentModel.deleteOne({
-      _id: commentId,
+    await bucket
+      .file(findAttachment.filePath)
+      .delete()
+      .then(function () {})
+      .catch(function (error) {
+        return appError(500, "附件刪除失敗" + error, next);
+      });
+
+    const deleteAttachment = await attachmentModel.deleteOne({
+      _id: fileId,
     });
-    if (deleteComment.acknowledged == false) {
-      return appError(400, "附件刪除失敗", next);
+    if (deleteAttachment.acknowledged == false) {
+      return appError(500, "附件資料庫資料刪除失敗", next);
     }
-    if (deleteComment.deletedCount == 0) {
-      return appError(400, "附件刪除失敗", next);
+    if (deleteAttachment.deletedCount == 0) {
+      return appError(500, "附件刪除失敗", next);
     }
     handleSuccess(res, "刪除成功");
   },

@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const appError = require("../service/appError");
 const handleErrorAsync = require("../service/handleErrorAsync");
-const imageCheck = require("../service/imageCheck");
+const { isOkFile } = require("../service/uploadCheck");
 const { v4: uuidv4 } = require("uuid");
 //require("../service/firebase"); 不要放到全域
 const firebaseAdmin = require("../service/firebase");
@@ -13,7 +13,7 @@ const { isAuth, generateSendJWT } = require("../service/auth");
 router.post(
   "/file",
   isAuth,
-  imageCheck,
+  isOkFile,
   handleErrorAsync(async (req, res, next) => {
     if (!req.files.length) {
       return next(appError(400, "尚未上傳檔案", next));

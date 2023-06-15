@@ -3,7 +3,7 @@ var router = express.Router();
 const cardController = require("../controllers/card");
 const handleErrorAsync = require("../service/handleErrorAsync");
 const { isAuth, isOkCard } = require("../service/auth");
-const imageCheck = require("../service/imageCheck");
+const { isOkFile } = require("../service/uploadCheck");
 
 router.get("/", isAuth, handleErrorAsync(cardController.filterCard)); //卡片篩選
 
@@ -955,7 +955,7 @@ router.post(
   "/:cardID/attachment",
   isAuth,
   isOkCard,
-  imageCheck,
+  isOkFile,
   handleErrorAsync(cardController.addCardAttachment),
   function (req, res, next) {
     /**

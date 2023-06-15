@@ -51,9 +51,9 @@ const CardSchema = new mongoose.Schema(
     //   { type: mongoose.Schema.ObjectId, ref: "todolist", default: [] },
     // ],
     // dateSetting: [{ type: mongoose.Schema.ObjectId, ref: "dateSetting" }], 設定日期
-    attachments: [
-      { type: mongoose.Schema.ObjectId, ref: "attachment", default: [] },
-    ],
+    // attachments: [
+    //   { type: mongoose.Schema.ObjectId, ref: "Attachment", default: [] },
+    // ],
     proiority: {
       type: String,
       enum: ["1", "2", "3", "4", ""],
@@ -94,6 +94,11 @@ CardSchema.virtual("comments", {
   localField: "_id",
 });
 
+CardSchema.virtual("attachments", {
+  ref: "Attachment",
+  foreignField: "card",
+  localField: "_id",
+});
 // CardSchema.virtual("todolists.contentList", {
 //   ref: "Todolist",
 //   foreignField: "title",
