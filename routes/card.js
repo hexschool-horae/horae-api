@@ -960,7 +960,7 @@ router.post(
   function (req, res, next) {
     /**
 
-     * #swagger.tags = ['Card Attachment']
+     * #swagger.tags = ['Card Attachment Setting']
      * #swagger.summary = 'B05-22 卡片中附件上傳'
      * #swagger.security=[{"Bearer": []}],  
      #swagger.parameters['file'] = {
@@ -984,7 +984,7 @@ router.post(
 
 
     #swagger.responses[400] = {
-        description: '無檔案或格式不正確、上傳圖片失敗',
+        description: '無檔案或格式不正確、上傳失敗',
         schema: {
         "success": false,
         "message": "欄位輸入錯誤，請重新輸入"
@@ -1018,14 +1018,14 @@ router.delete(
   handleErrorAsync(cardController.deleteCardAttachment),
   function (req, res, next) {
     /**
-   * #swagger.tags = ['Card Attachment']
+   * #swagger.tags = ['Card Attachment Setting']
    * #swagger.summary = 'B05-23	卡片中附件刪除'
    * #swagger.security=[{"Bearer": []}]
         #swagger.parameters['parameter_name'] = {
               in: 'body',
               description: 'B05-23	卡片中附件刪除',
               schema: {
-					"commentId": "6470bc3c8c7c20876074788a",
+					      "fileId": "6470bc3c8c7c20876074788a",
                   }
             }
 

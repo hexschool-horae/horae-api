@@ -21,6 +21,7 @@ const doc = {
     { name: "Card Comment Setting", description: "卡片評論相關" },
     { name: "Card Todolist Setting", description: "卡片代辦事項相關" },
     { name: "Card Member Setting", description: "卡片成員相關" },
+    { name: "Card Attachment Setting", description: "卡片附件相關" },
   ],
   definitions,
   securityDefinitions: {

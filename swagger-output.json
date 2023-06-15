@@ -50,6 +50,10 @@
     {
       "name": "Card Member Setting",
       "description": "卡片成員相關"
+    },
+    {
+      "name": "Card Attachment Setting",
+      "description": "卡片附件相關"
     }
   ],
   "schemes": [
@@ -5968,7 +5972,7 @@
     "/card/{cardID}/attachment": {
       "post": {
         "tags": [
-          "Card Attachment"
+          "Card Attachment Setting"
         ],
         "summary": "B05-22 卡片中附件上傳",
         "description": "",
@@ -6017,7 +6021,7 @@
             }
           },
           "400": {
-            "description": "無檔案或格式不正確、上傳圖片失敗",
+            "description": "無檔案或格式不正確、上傳失敗",
             "schema": {
               "type": "object",
               "properties": {
@@ -6082,7 +6086,7 @@
       },
       "delete": {
         "tags": [
-          "Card Attachment"
+          "Card Attachment Setting"
         ],
         "summary": "B05-23 卡片中附件刪除",
         "description": "",
@@ -6105,7 +6109,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "commentId": {
+                "fileId": {
                   "type": "string",
                   "example": "6470bc3c8c7c20876074788a"
                 }
@@ -6196,26 +6200,6 @@
             "Bearer": []
           }
         ]
-      }
-    },
-    "/upload/file": {
-      "post": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
       }
     }
   }
