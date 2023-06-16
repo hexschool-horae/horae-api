@@ -978,9 +978,9 @@ router.post(
           "success": "true",
           "message": "新增成功",
 		  "data": {
-        "fileUrl": "https://storage.googleapis.com/class8-606ac.appspot.com/attachments/web-setting.jpg?GoogleAccessId=firebase-adminsdk-llqs7%40class8-606ac.iam.gserviceaccount.com&Expires=16756646400&Signature=behqUOmOFS7N%2BXUliLriGs20I1W0M3RHLF22UCtOdxqdpEHH3ITrRLjDINwiEbkvomsHsM3kgoQmwDQAPHqC4CE2yrJHGnkaW2Cl%2Fk03WtEt3%2BDaj3KSeusks%2BOK2YaureLpLL%2F%2FDPc%2FA6b1xV5cd8wAQRm2s2PZgZC6swqjeOWy05XWxER8nUVlh8NKmLHDi5o3gkBU%2BtZSRaX9UfyAfEzw2NZBumvLyldq6By%2FpFGH18mWbUkYauNzjePv9ptgLUtCxsE3rlnGpTkSAYAb%2BODgI3XbyaH7MX%2FozcFBTk5tlbW9YM9CPCYEJq24BgAukLi0s0cCGUfFDH8q%2B3WPbw%3D%3D",
+        "fileUrl": "圖檔雲端路徑",
         "fileName": "web-setting.jpg",
-        "filePath": "attachments/web-setting.jpg",
+        "filePath": "attachments/卡片Id/web-setting.jpg",
         "user": "64743a4e5ac3abf5a47ae523",
         "card": "648b25c86c678f90a1a14049",
         "_id": "648c44286097a3c767e2a556",

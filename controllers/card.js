@@ -873,8 +873,12 @@ const card = {
 
     // const fileName = `${uuidv4()}.${file.originalname.split(".").pop()}`;
     const fileName = file.originalname;
-    const filePath = "attachments/" + fileName;
+    const filePath = "attachments/" + cardId + "/" + fileName;
 
+    const findAttachment = await attachmentModel.find({ filePath });
+    if (findAttachment.length > 0) {
+      return next(appError(400, "已存在同檔名檔案，請勿重複上傳", next));
+    }
     //基於檔案的原始名稱建立一個 blob 物件
     //目錄就是在filebase上建資料夾 ex：url/attachments/檔名
     const blob = bucket.file(filePath);
