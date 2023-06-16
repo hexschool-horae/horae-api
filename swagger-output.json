@@ -211,18 +211,30 @@
                   "type": "string",
                   "example": "true"
                 },
-                "user": {
-                  "type": "object",
-                  "properties": {
-                    "token": {
-                      "type": "string",
-                      "example": "eyJhbGciOizI1NiMY4jg1NzV7TlXbbewxs4PjwAAwZM"
-                    }
-                  }
-                },
                 "message": {
                   "type": "string",
                   "example": "成功"
+                },
+                "user": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "example": "Louisa"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "louisa@gmail.com"
+                    },
+                    "avatar": {
+                      "type": "string",
+                      "example": "#BAAC9A"
+                    },
+                    "token": {
+                      "type": "string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NzQzYTRlNWFjM2FiZjVhNDdhZTUyMyIsImlhdCI6MTY4NjkxNDI5MywiZXhwIjoxNjg3NTE5MDkzfQ.wNgmT1OKJjTasUF_k3F_mhKDUdzDo_9Q05ntOt2N_rQ"
+                    }
+                  }
                 }
               },
               "xml": {
@@ -6011,8 +6023,41 @@
                   "example": "新增成功"
                 },
                 "data": {
-                  "type": "string",
-                  "example": "6470bc3c8c7c20876074788a"
+                  "type": "object",
+                  "properties": {
+                    "fileUrl": {
+                      "type": "string",
+                      "example": "https://storage.googleapis.com/class8-606ac.appspot.com/attachments/web-setting.jpg?GoogleAccessId=firebase-adminsdk-llqs7%40class8-606ac.iam.gserviceaccount.com&Expires=16756646400&Signature=behqUOmOFS7N%2BXUliLriGs20I1W0M3RHLF22UCtOdxqdpEHH3ITrRLjDINwiEbkvomsHsM3kgoQmwDQAPHqC4CE2yrJHGnkaW2Cl%2Fk03WtEt3%2BDaj3KSeusks%2BOK2YaureLpLL%2F%2FDPc%2FA6b1xV5cd8wAQRm2s2PZgZC6swqjeOWy05XWxER8nUVlh8NKmLHDi5o3gkBU%2BtZSRaX9UfyAfEzw2NZBumvLyldq6By%2FpFGH18mWbUkYauNzjePv9ptgLUtCxsE3rlnGpTkSAYAb%2BODgI3XbyaH7MX%2FozcFBTk5tlbW9YM9CPCYEJq24BgAukLi0s0cCGUfFDH8q%2B3WPbw%3D%3D"
+                    },
+                    "fileName": {
+                      "type": "string",
+                      "example": "web-setting.jpg"
+                    },
+                    "filePath": {
+                      "type": "string",
+                      "example": "attachments/web-setting.jpg"
+                    },
+                    "user": {
+                      "type": "string",
+                      "example": "64743a4e5ac3abf5a47ae523"
+                    },
+                    "card": {
+                      "type": "string",
+                      "example": "648b25c86c678f90a1a14049"
+                    },
+                    "_id": {
+                      "type": "string",
+                      "example": "648c44286097a3c767e2a556"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "2023-06-16T11:14:48.066Z"
+                    },
+                    "__v": {
+                      "type": "number",
+                      "example": 0
+                    }
+                  }
                 }
               },
               "xml": {

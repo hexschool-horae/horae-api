@@ -62,8 +62,13 @@ const generateSendJWT = async (user, statusCode, res) => {
   user.password = undefined;
   res.status(statusCode).json({
     success: "true",
-    user: { token: token },
     message: "成功",
+    user: {
+      name: user.name,
+      email: user.email,
+      avatar: user.avatar,
+      token: token,
+    },
   });
 };
 

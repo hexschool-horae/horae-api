@@ -904,7 +904,7 @@ const card = {
         await newAttachment
           .save()
           .then(() => {
-            handleSuccess(res, "新增成功", newAttachment._id);
+            handleSuccess(res, "新增成功", newAttachment);
           })
           .catch((error) => {
             return appError(400, `新增附件失敗${error}`, next);

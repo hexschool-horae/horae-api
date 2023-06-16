@@ -73,12 +73,14 @@ router.post(
       #swagger.responses[200] = {
         description: '登入成功',
         schema: {
-        success: "true",
-        user: {
-        token:
-          "eyJhbGciOizI1NiMY4jg1NzV7TlXbbewxs4PjwAAwZM",
-          },
-          message: "成功",
+          "success": "true",
+          "message": "成功",
+          "user": {
+              "name": "Louisa",
+              "email": "louisa@gmail.com",
+              "avatar": "#BAAC9A",
+              "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NzQzYTRlNWFjM2FiZjVhNDdhZTUyMyIsImlhdCI6MTY4NjkxNDI5MywiZXhwIjoxNjg3NTE5MDkzfQ.wNgmT1OKJjTasUF_k3F_mhKDUdzDo_9Q05ntOt2N_rQ"
+          }
         }
       }
 
