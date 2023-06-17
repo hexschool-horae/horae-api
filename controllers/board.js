@@ -12,6 +12,54 @@ const handleSuccess = require("../service/handleSuccess");
 const User = require("../models/users");
 
 const board = {
+  //B04-1	新增看板中列表----------------------------------------------------------------------------------
+  async addlist(req, res, next) {
+    const boardId = req.params.bID;
+    const userID = req.user.id;
+    const { title } = req.body;
+
+    //檢查欄位
+    if (!title) {
+      return appError(400, "欄位輸入錯誤，請重新輸入", next);
+    }
+    if (!validator.isLength(title, { max: 30 })) {
+      return appError(400, "列表名稱不可超過長度30！", next);
+    }
+    const findBoard = await BoardModel.findById(boardId);
+
+    if (!findBoard || findBoard.length == 0) {
+      return appError(400, "查無此看板，請重新輸入看板編號", next);
+    }
+
+    let position = findBoard.lists.length;
+
+    //列表建立
+    const newlist = await new listModel({
+      title,
+      position,
+      boardId,
+      createUser: userID,
+    });
+
+    await newlist
+      .save()
+      .then(() => {})
+      .catch((error) => {
+        return appError(400, `新增列表失敗${error}`, next);
+      });
+
+    //新增列表ID到所屬看板
+    await findBoard.lists.push(newlist._id);
+    await findBoard
+      .save()
+      .then(() => {
+        handleSuccess(res, "新增列表成功", newlist._id);
+      })
+      .catch((error) => {
+        return appError(400, `新增列表ID到所屬看板失敗${error}`, next);
+      });
+  },
+
   //B03-1	新增看板 ----------------------------------------------------------------------------------
   async addBoard(req, res, next) {
     const errorArray = [];
@@ -561,53 +609,6 @@ const board = {
       inviter: findBoard.members[index].userId.name,
     });
   },
-  //B04-1	新增看板中列表----------------------------------------------------------------------------------
-  async addlist(req, res, next) {
-    const boardId = req.params.bID;
-    const userID = req.user.id;
-    const { title } = req.body;
-
-    //檢查欄位
-    if (!title) {
-      return appError(400, "欄位輸入錯誤，請重新輸入", next);
-    }
-    if (!validator.isLength(title, { max: 30 })) {
-      return appError(400, "列表名稱不可超過長度30！", next);
-    }
-    const findBoard = await BoardModel.findById(boardId);
-
-    if (!findBoard || findBoard.length == 0) {
-      return appError(400, "查無此看板，請重新輸入看板編號", next);
-    }
-
-    let position = findBoard.lists.length;
-
-    //列表建立
-    const newlist = await new listModel({
-      title,
-      position,
-      boardId,
-      createUser: userID,
-    });
-
-    await newlist
-      .save()
-      .then(() => {})
-      .catch((error) => {
-        return appError(400, `新增列表失敗${error}`, next);
-      });
-
-    //新增列表ID到所屬看板
-    await findBoard.lists.push(newlist._id);
-    await findBoard
-      .save()
-      .then(() => {
-        handleSuccess(res, "新增列表成功", newlist._id);
-      })
-      .catch((error) => {
-        return appError(400, `新增列表ID到所屬看板失敗${error}`, next);
-      });
-  },
 
   //標籤相關
   //B03-13	取得單一看板的所有標籤-------------------------------------------------------------------------------
@@ -777,6 +778,48 @@ const board = {
     if (deleteTagInCard == true) {
       handleSuccess(res, "刪除成功");
     }
+  },
+
+  //B03-19	更新看板封面- ----------------------------------------------------------------------------------
+  async updateBoardCover(req, res, next) {
+    const boardId = req.params.bID;
+    const userID = req.user.id;
+    const { fileURL } = req.body;
+    if (!fileURL) {
+      return appError(400, "欄位輸入錯誤，請重新輸入", next);
+    }
+
+    //修改
+    const updateBoard = await BoardModel.findOneAndUpdate(
+      {
+        _id: boardId,
+      },
+      { coverPath: fileURL }
+    );
+
+    if (!updateBoard) {
+      return appError(400, "看板封面設定失敗", next);
+    }
+    handleSuccess(res, "修改成功");
+  },
+
+  //B03-20	刪除看板封面-----------------------------------------------------------------------------------
+  async deleteBoardCover(req, res, next) {
+    const boardId = req.params.bID;
+    const userID = req.user.id;
+
+    //修改
+    const updateBoard = await BoardModel.findOneAndUpdate(
+      {
+        _id: boardId,
+      },
+      { coverPath: "" }
+    );
+
+    if (!updateBoard) {
+      return appError(400, "看板封面刪除失敗", next);
+    }
+    handleSuccess(res, "刪除成功");
   },
 };
 

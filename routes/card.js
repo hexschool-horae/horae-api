@@ -139,10 +139,16 @@ router.get(
                     ],
                     "attachments": [
                         {
-                            id: "",
-                            createdAt: "",
-                            title: "",
-                            url: "",
+                             "_id": "648c440a13408b472e1cafe5",
+                            "fileUrl": "圖檔雲端路徑",
+                            "fileName": "web-setting.jpg",
+                            "user": {
+                              "_id": "64743a4e5ac3abf5a47ae523",
+                              "name": "Louisa",
+                              "email": "louisa@gmail.com",
+                              "avatar": "#BAAC9A",
+                              "createdAt": "2023-05-29T05:38:22.933Z"
+                            },
                         }
                     ],
                 "proiority": "3",
