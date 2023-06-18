@@ -73,7 +73,6 @@ router.patch(
 //B05-4 取得單一卡片----------------------------------------------------------------------------------
 router.get(
   "/:cardID",
-  isAuth,
   handleErrorAsync(cardController.getOneCard),
   function (req, res, next) {
     /**
