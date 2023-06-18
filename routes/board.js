@@ -1203,4 +1203,59 @@ router.delete(
   }
 );
 
+//B03-21	修改看板主題---------------------------------------------------------------------------------
+router.patch(
+  "/:bID/theme",
+  isAuth,
+  isAuthBoard,
+  handleErrorAsync(boardController.updateBoardTheme),
+  function (req, res, next) {
+    /**
+     * #swagger.tags = ['Board']
+     * #swagger.summary = 'B03-21	修改看板主題'
+     * #swagger.security=[{"Bearer": []}]
+     * 		  #swagger.parameters['parameter_name'] = {
+		        in: 'body',
+		        description: '看板主題代碼 theme1,theme2,theme3',
+		        schema: {
+						        "covercolor":"看板主題代碼", 
+						}
+		      }
+ 
+
+      #swagger.responses[200] = {
+      description: '成功',
+      schema: {
+            "success": "true",
+            "message": "修改成功"
+        }
+      }
+
+
+      #swagger.responses[400] = {
+          description: '欄位輸入錯誤，請重新輸入',
+          schema: {
+          "success": false,
+          "message": "欄位輸入錯誤，請重新輸入"
+          }
+      }
+
+      #swagger.responses[401] = {
+        description: '身分驗證不通過',
+        schema: {
+        "success": false,
+        "message": "錯誤訊息"
+        }
+      }
+
+      #swagger.responses[500] = {
+        description: '系統錯誤',
+        schema: {   
+          "success": false,
+          "message": "系統錯誤，請洽管理員"
+        }
+      }
+*/
+  }
+);
 module.exports = router;

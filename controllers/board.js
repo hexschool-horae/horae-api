@@ -821,6 +821,31 @@ const board = {
     }
     handleSuccess(res, "刪除成功");
   },
+
+  //B03-21	修改看板主題----------------------------------------------------------------------------------
+  async updateBoardTheme(req, res, next) {
+    const boardId = req.params.bID;
+    const userID = req.user.id;
+    const { covercolor } = req.body;
+    if (!covercolor) {
+      return appError(400, "欄位輸入錯誤，請重新輸入", next);
+    }
+    if (!["theme1", "theme2", "theme3"].includes(covercolor)) {
+      return appError(400, "不正確的看板主題設定！", next);
+    }
+    //修改
+    const updateBoard = await BoardModel.findOneAndUpdate(
+      {
+        _id: boardId,
+      },
+      { covercolor: covercolor }
+    );
+
+    if (!updateBoard) {
+      return appError(400, "看板主題設定失敗", next);
+    }
+    handleSuccess(res, "修改成功");
+  },
 };
 
 module.exports = board;
