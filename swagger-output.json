@@ -1325,7 +1325,7 @@
         "tags": [
           "WorkSpace"
         ],
-        "summary": "B03-5 取得單一看板：除了工作區資訊外，會回傳 yourRole角色: visitor/admin/editor,yourPermission 瀏覽權限: viewOnly/edit。",
+        "summary": "B02-5 取得單一工作區：除了工作區資訊外，會回傳 yourRole角色: visitor/admin/editor,yourPermission 瀏覽權限: viewOnly/edit。",
         "description": "",
         "parameters": [
           {
@@ -1720,7 +1720,7 @@
           {
             "name": "parameter_name",
             "in": "body",
-            "description": "B02-3 修改單一工作區資料(含權限)",
+            "description": "B02-10 單一工作區設定單一成員權限",
             "schema": {
               "type": "object",
               "properties": {
@@ -1748,54 +1748,41 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "查詢成功"
+                  "example": "成員權限設定成功"
                 },
                 "data": {
-                  "type": "object",
-                  "properties": {
-                    "title": {
-                      "type": "string",
-                      "example": "露易莎工作區"
-                    },
-                    "viewSet": {
-                      "type": "string",
-                      "example": "public"
-                    },
-                    "members": {
-                      "type": "array",
-                      "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "userId": {
                         "type": "object",
                         "properties": {
-                          "userId": {
-                            "type": "object",
-                            "properties": {
-                              "_id": {
-                                "type": "string",
-                                "example": "647344a57b31b0e84736f169"
-                              },
-                              "name": {
-                                "type": "string",
-                                "example": "testmm2"
-                              },
-                              "email": {
-                                "type": "string",
-                                "example": "testmm2@gmail.com"
-                              },
-                              "avatar": {
-                                "type": "string",
-                                "example": "#EDD8AB"
-                              }
-                            }
-                          },
-                          "role": {
-                            "type": "string",
-                            "example": "editor"
-                          },
                           "_id": {
                             "type": "string",
-                            "example": "6489def7f7798604825aa0b2"
+                            "example": "647344a57b31b0e84736f169"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "testmm2"
+                          },
+                          "email": {
+                            "type": "string",
+                            "example": "testmm2@gmail.com"
+                          },
+                          "avatar": {
+                            "type": "string",
+                            "example": "#EDD8AB"
                           }
                         }
+                      },
+                      "role": {
+                        "type": "string",
+                        "example": "admin"
+                      },
+                      "_id": {
+                        "type": "string",
+                        "example": "6489def7f7798604825aa0b2"
                       }
                     }
                   }
@@ -1891,7 +1878,7 @@
           {
             "name": "parameter_name",
             "in": "body",
-            "description": "B02-3 修改單一工作區資料(含權限)",
+            "description": "B02-11 單一工作區刪除單一成員",
             "schema": {
               "type": "object",
               "properties": {
@@ -1988,8 +1975,8 @@
         ]
       }
     },
-    "/work-space/{wID}/invitation-data": {
-      "get": {
+    "/work-space/{wID}/invitation-link": {
+      "post": {
         "tags": [
           "WorkSpace Member Setting"
         ],
@@ -2000,6 +1987,11 @@
             "name": "wID",
             "in": "path",
             "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
             "type": "string"
           }
         ],
@@ -2015,55 +2007,14 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "查詢成功"
+                  "example": "產生邀請連結成功"
                 },
                 "data": {
                   "type": "object",
                   "properties": {
-                    "title": {
+                    "invitationLink": {
                       "type": "string",
-                      "example": "露易莎工作區"
-                    },
-                    "viewSet": {
-                      "type": "string",
-                      "example": "public"
-                    },
-                    "members": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "userId": {
-                            "type": "object",
-                            "properties": {
-                              "_id": {
-                                "type": "string",
-                                "example": "647344a57b31b0e84736f169"
-                              },
-                              "name": {
-                                "type": "string",
-                                "example": "testmm2"
-                              },
-                              "email": {
-                                "type": "string",
-                                "example": "testmm2@gmail.com"
-                              },
-                              "avatar": {
-                                "type": "string",
-                                "example": "#EDD8AB"
-                              }
-                            }
-                          },
-                          "role": {
-                            "type": "string",
-                            "example": "editor"
-                          },
-                          "_id": {
-                            "type": "string",
-                            "example": "6489def7f7798604825aa0b2"
-                          }
-                        }
-                      }
+                      "example": "https://horae-ui-otzo.onrender.com/workspace/6489c2b26ae0a5420e741762/members/883038357333"
                     }
                   }
                 }
@@ -2299,23 +2250,18 @@
         ]
       }
     },
-    "/work-space/{wID}/invitation-link": {
-      "post": {
+    "/work-space/{wID}/invitation-data": {
+      "get": {
         "tags": [
           "WorkSpace Member Setting"
         ],
-        "summary": "B02-12 取得工作區邀請資料-",
+        "summary": "B02-12 取得工作區邀請資料",
         "description": "",
         "parameters": [
           {
             "name": "wID",
             "in": "path",
             "required": true,
-            "type": "string"
-          },
-          {
-            "name": "authorization",
-            "in": "header",
             "type": "string"
           }
         ],
@@ -2331,7 +2277,20 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "刪除成功"
+                  "example": "成功"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "露易莎工作區"
+                    },
+                    "inviter": {
+                      "type": "string",
+                      "example": ""
+                    }
+                  }
                 }
               },
               "xml": {

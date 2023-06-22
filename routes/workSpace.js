@@ -230,7 +230,7 @@ router.get(
   function (req, res, next) {
     /**    
      * #swagger.tags = ['WorkSpace']
-     * #swagger.summary = 'B03-5 取得單一看板：除了工作區資訊外，會回傳 yourRole角色: visitor/admin/editor,yourPermission 瀏覽權限: viewOnly/edit。'
+     * #swagger.summary = 'B02-5	取得單一工作區：除了工作區資訊外，會回傳 yourRole角色: visitor/admin/editor,yourPermission 瀏覽權限: viewOnly/edit。'
      * #swagger.security=[{"Bearer": []}]
      
     #swagger.responses[200] = {
@@ -403,48 +403,28 @@ router.get(
   }
 );
 
-//B02-7	單一工作區產生邀請連結
-router.get(
-  "/:wID/invitation-data",
-  handleErrorAsync(workSpaceController.invitationData),
+//B02-7	單一工作區產生邀請連結----------------------------------------------------------------------------------
+router.post(
+  "/:wID/invitation-link",
+  isAuth,
+  isAuthWorkspace,
+  handleErrorAsync(workSpaceController.invitationLink),
   function (req, res, next) {
     /**
    * #swagger.tags = ['WorkSpace Member Setting']
    * #swagger.summary = 'B02-7	單一工作區產生邀請連結'
    * #swagger.security=[{"Bearer": []}]
 
+
     #swagger.responses[200] = {
     description: '成功',
     schema: {
-              "success": "true",
-              "message": "查詢成功",
-              "data": {
-                  "title": "露易莎工作區",
-                  "viewSet": "public",
-                  "members": [
-                      {
-                          "userId": {
-                              "_id": "64743a4e5ac3abf5a47ae523",
-                              "name": "Louisa",
-                              "email": "louisa@gmail.com",
-                              "avatar": "#BAAC9A"
-                          },
-                          "role": "admin",
-                          "_id": "6489c2b26ae0a5420e741763"
-                      },
-                      {
-                          "userId": {
-                              "_id": "647344a57b31b0e84736f169",
-                              "name": "testmm2",
-                              "email": "testmm2@gmail.com",
-                              "avatar": "#EDD8AB"
-                          },
-                          "role": "editor",
-                          "_id": "6489def7f7798604825aa0b2"
-                      }
-                  ]
-              }
-          }
+        "success": "true",
+        "message": "產生邀請連結成功",
+        "data": {
+          "invitationLink": "https://horae-ui-otzo.onrender.com/workspace/6489c2b26ae0a5420e741762/members/883038357333"
+        }
+      }
     }
 
 
@@ -474,6 +454,7 @@ router.get(
 */
   }
 );
+
 //B02-8	單一工作區寄email給被邀請人
 //B02-9	單一工作區新增成員----------------------------------------------------------------------------------
 router.post(
@@ -561,7 +542,7 @@ router.patch(
    * #swagger.security=[{"Bearer": []}]
     #swagger.parameters['parameter_name'] = {
           in: 'body',
-          description: 'B02-3	修改單一工作區資料(含權限)',
+          description: 'B02-10 單一工作區設定單一成員權限',
           schema:{
             "role": "admin",
                 "userId": "6464dc2e33d57ab33b4f9105"
@@ -571,36 +552,34 @@ router.patch(
 
     #swagger.responses[200] = {
     description: '成功',
-    schema: {
-              "success": "true",
-              "message": "查詢成功",
-              "data": {
-                  "title": "露易莎工作區",
-                  "viewSet": "public",
-                  "members": [
-                      {
-                          "userId": {
-                              "_id": "64743a4e5ac3abf5a47ae523",
-                              "name": "Louisa",
-                              "email": "louisa@gmail.com",
-                              "avatar": "#BAAC9A"
-                          },
-                          "role": "admin",
-                          "_id": "6489c2b26ae0a5420e741763"
-                      },
-                      {
-                          "userId": {
-                              "_id": "647344a57b31b0e84736f169",
-                              "name": "testmm2",
-                              "email": "testmm2@gmail.com",
-                              "avatar": "#EDD8AB"
-                          },
-                          "role": "editor",
-                          "_id": "6489def7f7798604825aa0b2"
-                      }
-                  ]
+    schema: 
+          {
+            "success": "true",
+            "message": "成員權限設定成功",
+            "data": [
+              {
+                "userId": {
+                  "_id": "64743a4e5ac3abf5a47ae523",
+                  "name": "Louisa",
+                  "email": "louisa@gmail.com",
+                  "avatar": "#BAAC9A"
+                },
+                "role": "admin",
+                "_id": "6489c2b26ae0a5420e741763"
+              },
+              {
+                "userId": {
+                  "_id": "647344a57b31b0e84736f169",
+                  "name": "testmm2",
+                  "email": "testmm2@gmail.com",
+                  "avatar": "#EDD8AB"
+                },
+                "role": "admin",
+                "_id": "6489def7f7798604825aa0b2"
               }
+            ]
           }
+
     }
 
 
@@ -643,7 +622,7 @@ router.delete(
    * #swagger.security=[{"Bearer": []}]
     #swagger.parameters['parameter_name'] = {
           in: 'body',
-          description: 'B02-3	修改單一工作區資料(含權限)',
+          description: 'B02-11 單一工作區刪除單一成員',
           schema:{
             "userId":"647344a57b31b0e84736f169"
             }
@@ -685,24 +664,25 @@ router.delete(
   }
 );
 
-//B02-12 取得工作區邀請資料----------------------------------------------------------------------------------
-router.post(
-  "/:wID/invitation-link",
-  isAuth,
-  isAuthWorkspace,
-  handleErrorAsync(workSpaceController.invitationLink),
+//B02-12 取得工作區邀請資料
+router.get(
+  "/:wID/invitation-data",
+  handleErrorAsync(workSpaceController.invitationData),
   function (req, res, next) {
     /**
    * #swagger.tags = ['WorkSpace Member Setting']
-   * #swagger.summary = 'B02-12 取得工作區邀請資料-'
+   * #swagger.summary = 'B02-12 取得工作區邀請資料'
    * #swagger.security=[{"Bearer": []}]
-
 
     #swagger.responses[200] = {
     description: '成功',
     schema: {
-          "success": "true",
-          "message": "刪除成功"
+        "success": "true",
+        "message": "成功",
+        "data": {
+          "title": "露易莎工作區",
+          "inviter": ""
+        }
       }
     }
 
