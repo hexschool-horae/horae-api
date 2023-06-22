@@ -16,6 +16,10 @@
       "description": "工作區相關"
     },
     {
+      "name": "WorkSpace Member Setting",
+      "description": "工作區成員相關"
+    },
+    {
       "name": "Board",
       "description": "看板相關"
     },
@@ -25,7 +29,7 @@
     },
     {
       "name": "Board Member Setting",
-      "description": "看板成員事項相關"
+      "description": "看板成員相關"
     },
     {
       "name": "List",
@@ -848,17 +852,133 @@
     },
     "/work-space/": {
       "post": {
+        "tags": [
+          "WorkSpace"
+        ],
+        "summary": "B02-1 新增工作區",
         "description": "",
         "parameters": [
           {
             "name": "authorization",
             "in": "header",
             "type": "string"
+          },
+          {
+            "name": "parameter_name",
+            "in": "body",
+            "description": "B02-1 新增工作區",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "example": "工作區測試"
+                },
+                "discribe": {
+                  "type": "string",
+                  "example": "tttt"
+                },
+                "viewSet": {
+                  "type": "string",
+                  "example": "public"
+                }
+              }
+            }
           }
         ],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "string",
+                  "example": "true"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "新增工作區成功"
+                },
+                "data": {
+                  "type": "string",
+                  "example": "645f3f19fa5c06941e134dcc"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "欄位輸入錯誤，請重新輸入",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "欄位輸入錯誤，請重新輸入"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "401": {
+            "description": "身分驗證不通過",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "錯誤訊息"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "系統錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "系統錯誤，請洽管理員"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       },
       "get": {
+        "tags": [
+          "WorkSpace"
+        ],
+        "summary": "B02-2 取得登入者所有工作區清單",
         "description": "",
         "parameters": [
           {
@@ -867,11 +987,113 @@
             "type": "string"
           }
         ],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "string",
+                  "example": "true"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "查詢成功"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "type": "string",
+                        "example": "6489c2b26ae0a5420e741762"
+                      },
+                      "title": {
+                        "type": "string",
+                        "example": "露易莎工作區"
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "欄位輸入錯誤，請重新輸入",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "欄位輸入錯誤，請重新輸入"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "401": {
+            "description": "身分驗證不通過",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "錯誤訊息"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "系統錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "系統錯誤，請洽管理員"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     },
     "/work-space/{wID}": {
-      "get": {
+      "patch": {
+        "tags": [
+          "WorkSpace"
+        ],
+        "summary": "B02-3 修改單一工作區資料(含權限)",
         "description": "",
         "parameters": [
           {
@@ -884,11 +1106,123 @@
             "name": "authorization",
             "in": "header",
             "type": "string"
+          },
+          {
+            "name": "parameter_name",
+            "in": "body",
+            "description": "B02-3 修改單一工作區資料(含權限)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "example": "工作區123"
+                },
+                "discribe": {
+                  "type": "string",
+                  "example": "修改工作區修改12344"
+                },
+                "viewSet": {
+                  "type": "string",
+                  "example": "private"
+                },
+                "status": {
+                  "type": "string",
+                  "example": "open"
+                }
+              }
+            }
           }
         ],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "string",
+                  "example": "true"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "修改成功"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "欄位輸入錯誤，請重新輸入",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "欄位輸入錯誤，請重新輸入"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "401": {
+            "description": "身分驗證不通過",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "錯誤訊息"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "系統錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "系統錯誤，請洽管理員"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       },
       "delete": {
+        "tags": [
+          "WorkSpace"
+        ],
+        "summary": "B02-4 刪除單一工作區",
         "description": "",
         "parameters": [
           {
@@ -903,9 +1237,95 @@
             "type": "string"
           }
         ],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "string",
+                  "example": "true"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "刪除成功"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "欄位輸入錯誤，請重新輸入",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "欄位輸入錯誤，請重新輸入"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "401": {
+            "description": "身分驗證不通過",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "錯誤訊息"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "系統錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "系統錯誤，請洽管理員"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       },
-      "patch": {
+      "get": {
+        "tags": [
+          "WorkSpace"
+        ],
+        "summary": "B03-5 取得單一看板：除了工作區資訊外，會回傳 yourRole角色: visitor/admin/editor,yourPermission 瀏覽權限: viewOnly/edit。",
         "description": "",
         "parameters": [
           {
@@ -913,37 +1333,224 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
           }
         ],
-        "responses": {}
-      }
-    },
-    "/work-space/{wID}/invitation-link": {
-      "post": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "wID",
-            "in": "path",
-            "required": true,
-            "type": "string"
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "string",
+                  "example": "true"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "查詢成功，此為公開工作區"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string",
+                      "example": "6489c2b26ae0a5420e741762"
+                    },
+                    "title": {
+                      "type": "string",
+                      "example": "露易莎工作區"
+                    },
+                    "discribe": {
+                      "type": "string",
+                      "example": "露易莎工作區"
+                    },
+                    "viewSet": {
+                      "type": "string",
+                      "example": "public"
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "open"
+                    },
+                    "members": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "userId": {
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "type": "string",
+                                "example": "647344a57b31b0e84736f169"
+                              },
+                              "name": {
+                                "type": "string",
+                                "example": "testmm2"
+                              },
+                              "email": {
+                                "type": "string",
+                                "example": "testmm2@gmail.com"
+                              },
+                              "avatar": {
+                                "type": "string",
+                                "example": "#EDD8AB"
+                              }
+                            }
+                          },
+                          "role": {
+                            "type": "string",
+                            "example": "editor"
+                          },
+                          "_id": {
+                            "type": "string",
+                            "example": "6489def7f7798604825aa0b2"
+                          }
+                        }
+                      }
+                    },
+                    "inviteHashData": {
+                      "type": "string",
+                      "example": "883038357333"
+                    },
+                    "boards": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "example": "648d16677ed2700baed4a899"
+                          },
+                          "title": {
+                            "type": "string",
+                            "example": "測試看板"
+                          },
+                          "coverPath": {
+                            "type": "string",
+                            "example": ""
+                          }
+                        }
+                      }
+                    },
+                    "createUser": {
+                      "type": "string",
+                      "example": "64743a4e5ac3abf5a47ae523"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "2023-06-14T13:37:54.216Z"
+                    },
+                    "__v": {
+                      "type": "number",
+                      "example": 7
+                    },
+                    "yourRole": {
+                      "type": "string",
+                      "example": "admin"
+                    },
+                    "yourPermission": {
+                      "type": "string",
+                      "example": "edit"
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
+          "400": {
+            "description": "您的請求參數有誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "您的請求參數有誤"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "401": {
+            "description": "此為私人看板，需先驗證",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "此為私人看板，訪客請先登入"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "403": {
+            "description": "此為私人看板，無權限",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "此為私人看板，您不是看板成員，不可查看"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "系統錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "系統錯誤，請洽管理員"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
-        ],
-        "responses": {}
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     },
     "/work-space/{wID}/members": {
       "get": {
+        "tags": [
+          "WorkSpace Member Setting"
+        ],
+        "summary": "B02-6 取得單一工作區成員",
         "description": "",
         "parameters": [
           {
@@ -958,9 +1565,145 @@
             "type": "string"
           }
         ],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "string",
+                  "example": "true"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "查詢成功"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "露易莎工作區"
+                    },
+                    "viewSet": {
+                      "type": "string",
+                      "example": "public"
+                    },
+                    "members": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "userId": {
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "type": "string",
+                                "example": "647344a57b31b0e84736f169"
+                              },
+                              "name": {
+                                "type": "string",
+                                "example": "testmm2"
+                              },
+                              "email": {
+                                "type": "string",
+                                "example": "testmm2@gmail.com"
+                              },
+                              "avatar": {
+                                "type": "string",
+                                "example": "#EDD8AB"
+                              }
+                            }
+                          },
+                          "role": {
+                            "type": "string",
+                            "example": "editor"
+                          },
+                          "_id": {
+                            "type": "string",
+                            "example": "6489def7f7798604825aa0b2"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "欄位輸入錯誤，請重新輸入",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "欄位輸入錯誤，請重新輸入"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "401": {
+            "description": "身分驗證不通過",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "錯誤訊息"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "系統錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "系統錯誤，請洽管理員"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       },
       "patch": {
+        "tags": [
+          "WorkSpace Member Setting"
+        ],
+        "summary": "B02-10 單一工作區設定單一成員權限",
         "description": "",
         "parameters": [
           {
@@ -973,11 +1716,165 @@
             "name": "authorization",
             "in": "header",
             "type": "string"
+          },
+          {
+            "name": "parameter_name",
+            "in": "body",
+            "description": "B02-3 修改單一工作區資料(含權限)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "role": {
+                  "type": "string",
+                  "example": "admin"
+                },
+                "userId": {
+                  "type": "string",
+                  "example": "6464dc2e33d57ab33b4f9105"
+                }
+              }
+            }
           }
         ],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "string",
+                  "example": "true"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "查詢成功"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "露易莎工作區"
+                    },
+                    "viewSet": {
+                      "type": "string",
+                      "example": "public"
+                    },
+                    "members": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "userId": {
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "type": "string",
+                                "example": "647344a57b31b0e84736f169"
+                              },
+                              "name": {
+                                "type": "string",
+                                "example": "testmm2"
+                              },
+                              "email": {
+                                "type": "string",
+                                "example": "testmm2@gmail.com"
+                              },
+                              "avatar": {
+                                "type": "string",
+                                "example": "#EDD8AB"
+                              }
+                            }
+                          },
+                          "role": {
+                            "type": "string",
+                            "example": "editor"
+                          },
+                          "_id": {
+                            "type": "string",
+                            "example": "6489def7f7798604825aa0b2"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "欄位輸入錯誤，請重新輸入",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "欄位輸入錯誤，請重新輸入"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "401": {
+            "description": "身分驗證不通過",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "錯誤訊息"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "系統錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "系統錯誤，請洽管理員"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       },
       "delete": {
+        "tags": [
+          "WorkSpace Member Setting"
+        ],
+        "summary": "B02-11 單一工作區刪除單一成員",
         "description": "",
         "parameters": [
           {
@@ -990,13 +1887,263 @@
             "name": "authorization",
             "in": "header",
             "type": "string"
+          },
+          {
+            "name": "parameter_name",
+            "in": "body",
+            "description": "B02-3 修改單一工作區資料(含權限)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "type": "string",
+                  "example": "647344a57b31b0e84736f169"
+                }
+              }
+            }
           }
         ],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "string",
+                  "example": "true"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "刪除成功"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "欄位輸入錯誤，請重新輸入",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "欄位輸入錯誤，請重新輸入"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "401": {
+            "description": "身分驗證不通過",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "錯誤訊息"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "系統錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "系統錯誤，請洽管理員"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/work-space/{wID}/invitation-data": {
+      "get": {
+        "tags": [
+          "WorkSpace Member Setting"
+        ],
+        "summary": "B02-7 單一工作區產生邀請連結",
+        "description": "",
+        "parameters": [
+          {
+            "name": "wID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "string",
+                  "example": "true"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "查詢成功"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "露易莎工作區"
+                    },
+                    "viewSet": {
+                      "type": "string",
+                      "example": "public"
+                    },
+                    "members": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "userId": {
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "type": "string",
+                                "example": "647344a57b31b0e84736f169"
+                              },
+                              "name": {
+                                "type": "string",
+                                "example": "testmm2"
+                              },
+                              "email": {
+                                "type": "string",
+                                "example": "testmm2@gmail.com"
+                              },
+                              "avatar": {
+                                "type": "string",
+                                "example": "#EDD8AB"
+                              }
+                            }
+                          },
+                          "role": {
+                            "type": "string",
+                            "example": "editor"
+                          },
+                          "_id": {
+                            "type": "string",
+                            "example": "6489def7f7798604825aa0b2"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "欄位輸入錯誤，請重新輸入",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "欄位輸入錯誤，請重新輸入"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "401": {
+            "description": "身分驗證不通過",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "錯誤訊息"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "系統錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "系統錯誤，請洽管理員"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     },
     "/work-space/{wID}/members/{hashData}": {
       "post": {
+        "tags": [
+          "WorkSpace Member Setting"
+        ],
+        "summary": "B02-9 單一工作區新增成員",
         "description": "",
         "parameters": [
           {
@@ -1017,11 +2164,147 @@
             "type": "string"
           }
         ],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "string",
+                  "example": "true"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "查詢成功"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "露易莎工作區"
+                    },
+                    "viewSet": {
+                      "type": "string",
+                      "example": "public"
+                    },
+                    "members": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "userId": {
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "type": "string",
+                                "example": "647344a57b31b0e84736f169"
+                              },
+                              "name": {
+                                "type": "string",
+                                "example": "testmm2"
+                              },
+                              "email": {
+                                "type": "string",
+                                "example": "testmm2@gmail.com"
+                              },
+                              "avatar": {
+                                "type": "string",
+                                "example": "#EDD8AB"
+                              }
+                            }
+                          },
+                          "role": {
+                            "type": "string",
+                            "example": "editor"
+                          },
+                          "_id": {
+                            "type": "string",
+                            "example": "6489def7f7798604825aa0b2"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "欄位輸入錯誤，請重新輸入",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "欄位輸入錯誤，請重新輸入"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "401": {
+            "description": "身分驗證不通過",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "錯誤訊息"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "系統錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "系統錯誤，請洽管理員"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     },
-    "/work-space/{wID}/invitation-data": {
-      "get": {
+    "/work-space/{wID}/invitation-link": {
+      "post": {
+        "tags": [
+          "WorkSpace Member Setting"
+        ],
+        "summary": "B02-12 取得工作區邀請資料-",
         "description": "",
         "parameters": [
           {
@@ -1029,9 +2312,96 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
           }
         ],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "string",
+                  "example": "true"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "刪除成功"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "欄位輸入錯誤，請重新輸入",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "欄位輸入錯誤，請重新輸入"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "401": {
+            "description": "身分驗證不通過",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "錯誤訊息"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "系統錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "系統錯誤，請洽管理員"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     },
     "/board/{bID}/list": {
@@ -4360,11 +5730,6 @@
             "name": "cardID",
             "in": "path",
             "required": true,
-            "type": "string"
-          },
-          {
-            "name": "authorization",
-            "in": "header",
             "type": "string"
           }
         ],

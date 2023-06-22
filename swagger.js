@@ -12,9 +12,10 @@ const doc = {
   tags: [
     { name: "User", description: "使用者相關" },
     { name: "WorkSpace", description: "工作區相關" },
+    { name: "WorkSpace Member Setting", description: "工作區成員相關" },
     { name: "Board", description: "看板相關" },
     { name: "Board Tag", description: "看板標籤相關" },
-    { name: "Board Member Setting", description: "看板成員事項相關" },
+    { name: "Board Member Setting", description: "看板成員相關" },
     { name: "List", description: "列表相關" },
     { name: "Card", description: "卡片相關" },
     { name: "Card Tag Setting", description: "卡片標籤設定相關" },
