@@ -150,28 +150,97 @@ const workSpace = {
   // //B02-5	取得單一工作區----------------------------------------------------------------------------------
   // async getOneWorkSpace(req, res, next) {
   //   const workSpaceID = req.params.wID;
+  //   let userID = "";
+  //   let yourRole = "visitor";
+  //   let yourPermission = "viewOnly";
+  //   let message = "查詢成功，此為公開工作區";
+
+  //   if (workSpaceID.length < 24) {
+  //     return appError(400, "您的請求參數有誤", next);
+  //   }
   //   const findWorkSpace = await WorkSpaceModel.findById(workSpaceID)
   //     // .populate({
-  //     //   path: "members.userId",
-  //     //   select: "name",
+  //     //   path: "lists",
+  //     //   select: "title position",
   //     // })
   //     .populate({
-  //       path: "boards",
-  //       select: "title",
+  //       path: "members.userId",
+  //       select: "name email avatar",
   //     })
-  //     .select("title discribe viewSet status boards");
+  //     .populate({
+  //       path: "boards",
+  //       select: "title coverPath",
+  //     });
+  //   if (!findWorkSpace || findWorkSpace.length == 0) {
+  //     return appError(400, "查無此工作區", next);
+  //   }
 
-  //   if (!findWorkSpace) {
-  //     return appError(400, "工作區不存在", next);
+  //   //#region  檢查使用者權限  訪客/成員/管理員
+  //   //確認token是否存在
+  //   let token;
+  //   if (
+  //     req.headers.authorization &&
+  //     req.headers.authorization.startsWith("Bearer")
+  //   ) {
+  //     token = req.headers.authorization.split(" ")[1];
+  //   }
+  //   if (token) {
+  //     //驗證token的正確性
+  //     const decoded = await new Promise((resolve, reject) => {
+  //       jwt.verify(token, process.env.JWT_SECRET, (err, payload) => {
+  //         if (err) {
+  //           reject(err);
+  //         } else {
+  //           resolve(payload);
+  //         }
+  //       });
+  //     });
+
+  //     //decoded.id回傳resolve(payload)
+  //     const currentUser = await User.findById(decoded.id);
+  //     // if (!currentUser) {
+  //     //   return next(appError(401, "查無此使用者，請重新登入", next));
+  //     // }
+  //     // if (currentUser.token == "") {
+  //     //   return next(appError(401, "您目前為登出狀態請先登入", next));
+  //     // }
+  //     if (currentUser) {
+  //       userID = currentUser._id;
+  //     }
+  //   }
+
+  //   //#endregion
+
+  //   if (userID) {
+  //     const index = findWorkSpace.members.findIndex(
+  //       (element) => element.userId._id.toString() == userID.toString()
+  //     );
+  //     if (index !== -1) {
+  //       yourRole = findWorkSpace.members[index].role;
+  //       yourPermission = "edit";
+  //     }
+  //   }
+
+  //   if (findWorkSpace.viewSet == "private") {
+  //     if (yourRole == "visitor" && userID == "") {
+  //       return next(appError(401, "此為私人工作區，訪客請先登入", next));
+  //     }
+  //     if (yourRole == "visitor" && userID != "") {
+  //       return next(
+  //         appError(403, "此為私人工作區，您不是工作區成員，不可查看", next)
+  //       );
+  //     } else {
+  //       message = "查詢成功，此為私人工作區，您有編輯權限";
+  //     }
   //   }
 
   //   const finalRes = {
   //     ...findWorkSpace._doc,
-  //     yourRole: req.workSpaceRole,
-  //     yourPermission: "edit",
+  //     yourRole: yourRole,
+  //     yourPermission: yourPermission,
   //   };
 
-  //   handleSuccess(res, "查詢成功", finalRes);
+  //   handleSuccess(res, message, finalRes);
   // },
 
   // //B02-5	取得單一工作區----------------------------------------------------------------------------------
@@ -182,25 +251,11 @@ const workSpace = {
     let yourPermission = "viewOnly";
     let message = "查詢成功，此為公開工作區";
 
-    if (workSpaceID.length < 24) {
-      return appError(400, "您的請求參數有誤", next);
-    }
-    const findWorkSpace = await WorkSpaceModel.findById(workSpaceID)
-      // .populate({
-      //   path: "lists",
-      //   select: "title position",
-      // })
-      .populate({
-        path: "members.userId",
-        select: "name email avatar",
-      })
-      .populate({
-        path: "boards",
-        select: "title coverPath",
-      });
-    if (!findWorkSpace || findWorkSpace.length == 0) {
-      return appError(400, "查無此工作區", next);
-    }
+    //預設所有看板
+    let filterBoard = {
+      path: "boards",
+      select: "title coverPath",
+    };
 
     //#region  檢查使用者權限  訪客/成員/管理員
     //確認token是否存在
@@ -233,10 +288,34 @@ const workSpace = {
       // }
       if (currentUser) {
         userID = currentUser._id;
+
+        //有userID只顯示是成員的看板
+        filterBoard = {
+          path: "boards",
+          match: {
+            $or: [{ "members.userId": { $in: userID } }],
+          },
+
+          select: "title coverPath",
+        };
       }
     }
 
     //#endregion
+
+    if (workSpaceID.length < 24) {
+      return appError(400, "您的請求參數有誤", next);
+    }
+    const findWorkSpace = await WorkSpaceModel.findById(workSpaceID)
+      .populate({
+        path: "members.userId",
+        select: "name email avatar",
+      })
+      .populate(filterBoard);
+
+    if (!findWorkSpace || findWorkSpace.length == 0) {
+      return appError(400, "查無此工作區", next);
+    }
 
     if (userID) {
       const index = findWorkSpace.members.findIndex(
