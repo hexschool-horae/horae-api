@@ -25,8 +25,8 @@ const BoardSchema = new mongoose.Schema({
   },
   covercolor: {
     type: String,
-    enum: ["theme1", "theme2", "theme3"],
-    default: "theme1",
+    // enum: ["theme1", "theme2", "theme3"],
+    // default: "theme1",
   },
   status: {
     type: String,

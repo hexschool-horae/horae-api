@@ -830,9 +830,9 @@ const board = {
     if (!covercolor) {
       return appError(400, "欄位輸入錯誤，請重新輸入", next);
     }
-    if (!["theme1", "theme2", "theme3"].includes(covercolor)) {
-      return appError(400, "不正確的看板主題設定！", next);
-    }
+    // if (!["theme1", "theme2", "theme3"].includes(covercolor)) {
+    //   return appError(400, "不正確的看板主題設定！", next);
+    // }
     //修改
     const updateBoard = await BoardModel.findOneAndUpdate(
       {
