@@ -827,7 +827,7 @@ const board = {
     const boardId = req.params.bID;
     const userID = req.user.id;
     const { covercolor } = req.body;
-    if (!covercolor) {
+    if (covercolor == undefined) {
       return appError(400, "欄位輸入錯誤，請重新輸入", next);
     }
     // if (!["theme1", "theme2", "theme3"].includes(covercolor)) {
